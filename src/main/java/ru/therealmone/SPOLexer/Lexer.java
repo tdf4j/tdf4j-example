@@ -2,17 +2,20 @@ package ru.therealmone.SPOLexer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.*;
 
-public class Lexer {
+class Lexer {
     ArrayList<Token> tokens = new ArrayList<Token>();
     Map<String, Pattern> lexemes = new HashMap<String, Pattern>();
+    private Map<String, Integer> priority = new HashMap<String, Integer>();
 
-    void addLexeme(String type, String pattern) {
-        if (!lexemes.containsKey(type))
+    void addLexeme(String type, String pattern, Integer priority) {
+        if (!lexemes.containsKey(type)) {
             this.lexemes.put(type, Pattern.compile(pattern));
-        else
+            this.priority.put(type, priority);
+        } else
             System.out.println("Lexeme " + type + " already exists!");
     }
 
@@ -24,7 +27,7 @@ public class Lexer {
 
     void generateTokens(String input) {
 
-        boolean expectSuccsess = true;
+        boolean expectSuccess = true;
         boolean passed = false;
         tokens.clear();
         String tempString = "";
@@ -32,18 +35,18 @@ public class Lexer {
         while(!input.equals("$")) {
             input = input.trim();
             tempString += input.charAt(tempString.length());
-            String passedLexeme = "";
+            List<String> passedLexemes = new ArrayList<String>();
 
             for(Map.Entry<String, Pattern> entry: lexemes.entrySet()) {
                 if(this.compile(entry.getKey(), tempString)) {
                     passed = true;
-                    passedLexeme = entry.getKey();
+                    passedLexemes.add(entry.getKey());
                 }
             }
 
-            if(expectSuccsess) {
+            if(expectSuccess) {
                 if(passed) {
-                    expectSuccsess = false;
+                    expectSuccess = false;
                     passed = false;
                 } else {
                     System.out.println("ERROR: Unexpected first symbol!");
@@ -54,15 +57,30 @@ public class Lexer {
                 if(passed) {
                     passed = false;
                 } else {
-                    expectSuccsess = true;
+                    expectSuccess = true;
                     tempString = String.copyValueOf(tempString.toCharArray(), 0, tempString.length() - 1);
-                    tokens.add(new Token(passedLexeme, tempString));
+                    if(passedLexemes.size() == 1) {
+                        tokens.add(new Token(passedLexemes.get(0), tempString));
+                    } else if(passedLexemes.size() != 0){
+                        tokens.add(new Token(checkPassedLexemes(passedLexemes), tempString));
+                    } else {
+                        System.out.println("ERROR: No passed lexeme found!");
+                    }
                     input = String.copyValueOf(input.toCharArray(), tempString.length(), input.length() - tempString.length());
                     tempString = "";
                 }
             }
         }
 
+    }
+
+    private String checkPassedLexemes(List<String> list) {
+        String tmp = list.get(0);
+        for(String lexeme: list) {
+            if(priority.get(lexeme) > priority.get(tmp))
+                tmp = lexeme;
+        }
+        return tmp;
     }
 
     void showTokens() {

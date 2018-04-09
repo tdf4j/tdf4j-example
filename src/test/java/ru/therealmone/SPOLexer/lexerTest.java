@@ -9,10 +9,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class lexerTest {
 
     private void addLexemes(Lexer lexer) {
-        lexer.addLexeme("VAR", "^[a-z]+$");
-        lexer.addLexeme("DIGIT", "^0|([1-9][0-9]*)");
-        lexer.addLexeme("ASSIGN_OP", "^=$");
-        lexer.addLexeme("OP", "^[\\+\\-\\/\\*]$");
+        lexer.addLexeme("VAR", "^[a-z]+$", 4);
+        lexer.addLexeme("DIGIT", "^0|([1-9][0-9]*)",3);
+        lexer.addLexeme("ASSIGN_OP", "^=$", 2);
+        lexer.addLexeme("OP", "^[\\+\\-\\/\\*]$", 1);
     }
 
     @Test
