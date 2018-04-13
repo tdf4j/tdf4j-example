@@ -31,11 +31,11 @@ class Lexer {
         boolean passed = false;
         tokens.clear();
         String tempString = "";
+        List<String> passedLexemes = new ArrayList<String>();
 
         while(!input.equals("$")) {
             input = input.trim();
             tempString += input.charAt(tempString.length());
-            List<String> passedLexemes = new ArrayList<String>();
 
             for(Map.Entry<String, Pattern> entry: lexemes.entrySet()) {
                 if(this.compile(entry.getKey(), tempString)) {
@@ -68,6 +68,7 @@ class Lexer {
                     }
                     input = String.copyValueOf(input.toCharArray(), tempString.length(), input.length() - tempString.length());
                     tempString = "";
+                    passedLexemes.clear();
                 }
             }
         }
