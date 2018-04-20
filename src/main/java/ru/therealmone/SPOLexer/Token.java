@@ -1,6 +1,6 @@
 package ru.therealmone.SPOLexer;
 
-public class Token {
+class Token {
     private String type;
     private String value;
 
@@ -9,11 +9,11 @@ public class Token {
         this.value = value;
     }
 
-    public String getType() {
+    String getType() {
         return(this.type);
     }
 
-    public String getValue() {
+    String getValue() {
         return(this.value);
     }
 }
