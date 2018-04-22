@@ -1,2 +1,0 @@
-# SPOLexer
-Lexeme analizator
