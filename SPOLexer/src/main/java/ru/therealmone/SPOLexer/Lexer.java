@@ -1,5 +1,12 @@
 package ru.therealmone.SPOLexer;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +17,34 @@ class Lexer {
     ArrayList<Token> tokens = new ArrayList<>();
     Map<String, Pattern> lexemes = new HashMap<>();
     private Map<String, Integer> priority = new HashMap<>();
+    private Document doc;
+
+    Lexer(boolean loadFromXML) {
+        if(loadFromXML) {
+            try {
+                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+                DocumentBuilder docBuilder = dbf.newDocumentBuilder();
+                doc = docBuilder.parse("SPOLexer/src/main/resources/lexemes.xml");
+
+                Node root = doc.getDocumentElement();
+                NodeList childes = root.getChildNodes();
+
+                for (int i = 0; i < childes.getLength(); i++) {
+                    Node node = childes.item(i);
+
+                    if (node.getNodeType() == Node.ELEMENT_NODE) {
+                        Element element = (Element) node;
+                        String type = element.getElementsByTagName("type").item(0).getTextContent();
+                        String template = element.getElementsByTagName("template").item(0).getTextContent();
+                        String priority = element.getAttribute("priority");
+                        addLexeme(type, template, Integer.parseInt(priority));
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     void addLexeme(String type, String pattern, Integer priority) {
         if (!lexemes.containsKey(type)) {
@@ -21,7 +56,7 @@ class Lexer {
 
     void showLexemes() {
         for(Map.Entry<String, Pattern> entry: lexemes.entrySet()) {
-            System.out.println(entry.getKey() + " --> " + entry.getValue().pattern());
+            System.out.println("[" + priority.get(entry.getKey()) + "] " + entry.getKey() + " --> " + entry.getValue().pattern());
         }
     }
 

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<lexemes_list>
+    <lexeme priority="4">
+        <type>VAR</type>
+        <template>^[a-z]+$</template>
+    </lexeme>
+
+    <lexeme priority="3">
+        <type>DIGIT</type>
+        <template>^0|([1-9][0-9]*)$</template>
+    </lexeme>
+
+    <lexeme priority="2">
+        <type>ASSIGN_OP</type>
+        <template>^=$</template>
+    </lexeme>
+
+    <lexeme priority="1">
+        <type>OP</type>
+        <template>^[\+\-\/\*]$</template>
+    </lexeme>
+</lexemes_list>
