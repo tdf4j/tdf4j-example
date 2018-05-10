@@ -14,27 +14,27 @@ public class lexerTest {
 
     @Test
     public void testGenerate() {
-        Lexer lexer = new Lexer();
+        Lexer lexer = new Lexer(false);
         addLexemes(lexer);
 
         //Success tests
-        lexer.generateTokens("value$");
+        lexer.generateTokens("value");
         assertEquals(1, lexer.tokens.size());
         assertEquals("VAR", lexer.tokens.get(0).getType());
 
-        lexer.generateTokens("0$");
+        lexer.generateTokens("0");
         assertEquals(1, lexer.tokens.size());
         assertEquals("DIGIT", lexer.tokens.get(0).getType());
 
-        lexer.generateTokens("=$");
+        lexer.generateTokens("=");
         assertEquals(1, lexer.tokens.size());
         assertEquals("ASSIGN_OP", lexer.tokens.get(0).getType());
 
-        lexer.generateTokens("+$");
+        lexer.generateTokens("+");
         assertEquals(1, lexer.tokens.size());
         assertEquals("OP", lexer.tokens.get(0).getType());
 
-        lexer.generateTokens("value = 15 + 0$");
+        lexer.generateTokens("value = 15 + 0");
         assertEquals(5, lexer.tokens.size());
         assertEquals("VAR", lexer.tokens.get(0).getType());
         assertEquals("ASSIGN_OP", lexer.tokens.get(1).getType());
@@ -42,7 +42,7 @@ public class lexerTest {
         assertEquals("OP", lexer.tokens.get(3).getType());
         assertEquals("DIGIT", lexer.tokens.get(4).getType());
 
-        lexer.generateTokens("15 = value - 10$");
+        lexer.generateTokens("15 = value - 10");
         assertEquals(5, lexer.tokens.size());
         assertEquals("DIGIT", lexer.tokens.get(0).getType());
         assertEquals("ASSIGN_OP", lexer.tokens.get(1).getType());
@@ -50,14 +50,14 @@ public class lexerTest {
         assertEquals("OP", lexer.tokens.get(3).getType());
         assertEquals("DIGIT", lexer.tokens.get(4).getType());
 
-        lexer.generateTokens("= value / 0$");
+        lexer.generateTokens("= value / 0");
         assertEquals(4, lexer.tokens.size());
         assertEquals("ASSIGN_OP", lexer.tokens.get(0).getType());
         assertEquals("VAR", lexer.tokens.get(1).getType());
         assertEquals("OP", lexer.tokens.get(2).getType());
         assertEquals("DIGIT", lexer.tokens.get(3).getType());
 
-        lexer.generateTokens("* = value - 100000$");
+        lexer.generateTokens("* = value - 100000");
         assertEquals(5, lexer.tokens.size());
         assertEquals("OP", lexer.tokens.get(0).getType());
         assertEquals("ASSIGN_OP", lexer.tokens.get(1).getType());
@@ -65,7 +65,7 @@ public class lexerTest {
         assertEquals("OP", lexer.tokens.get(3).getType());
         assertEquals("DIGIT", lexer.tokens.get(4).getType());
 
-        lexer.generateTokens("value = a + b - c / 0 * 10045645 = value1 = value2 = - * + /$");
+        lexer.generateTokens("value = a + b - c / 0 * 10045645 = value1 = value2 = - * + /");
         assertEquals(22, lexer.tokens.size());
         assertEquals("VAR", lexer.tokens.get(0).getType());
         assertEquals("ASSIGN_OP", lexer.tokens.get(1).getType());
@@ -90,7 +90,7 @@ public class lexerTest {
         assertEquals("OP", lexer.tokens.get(20).getType());
         assertEquals("OP", lexer.tokens.get(21).getType());
 
-        lexer.generateTokens("= - * + / value1 = value2 = a + b * 0 - 9999 = 10000 - 10000 * = value$");
+        lexer.generateTokens("= - * + / value1 = value2 = a + b * 0 - 9999 = 10000 - 10000 * = value");
         assertEquals(25, lexer.tokens.size());
         assertEquals("ASSIGN_OP", lexer.tokens.get(0).getType());
         assertEquals("OP", lexer.tokens.get(1).getType());
@@ -118,7 +118,7 @@ public class lexerTest {
         assertEquals("ASSIGN_OP", lexer.tokens.get(23).getType());
         assertEquals("VAR", lexer.tokens.get(24).getType());
 
-        lexer.generateTokens("= = = = = = = = = = = 10000 100 10 1 0 v a l u e * * * * - - - - / / /$");
+        lexer.generateTokens("= = = = = = = = = = = 10000 100 10 1 0 v a l u e * * * * - - - - / / /");
         assertEquals(32, lexer.tokens.size());
         assertEquals("ASSIGN_OP", lexer.tokens.get(0).getType());
         assertEquals("ASSIGN_OP", lexer.tokens.get(1).getType());
@@ -160,7 +160,7 @@ public class lexerTest {
 
     @Test
     public void testLexemes() {
-        Lexer lexer = new Lexer();
+        Lexer lexer = new Lexer(false);
         addLexemes(lexer);
 
         assertEquals(4, lexer.lexemes.size());
@@ -168,68 +168,68 @@ public class lexerTest {
 
     @Test
     public void testCompile() {
-        Lexer lexer = new Lexer();
+        Lexer lexer = new Lexer(false);
         addLexemes(lexer);
 
         //Success tests
-        assertTrue(lexer.compile("VAR", "value"));
-        assertTrue(lexer.compile("VAR", "v"));
-        assertTrue(lexer.compile("VAR", "z"));
-        assertTrue(lexer.compile("VAR", "va"));
-        assertTrue(lexer.compile("VAR", "valuevaluevalue"));
+        assertTrue(lexer.match("VAR", "value"));
+        assertTrue(lexer.match("VAR", "v"));
+        assertTrue(lexer.match("VAR", "z"));
+        assertTrue(lexer.match("VAR", "va"));
+        assertTrue(lexer.match("VAR", "valuevaluevalue"));
 
-        assertTrue(lexer.compile("DIGIT", "0"));
-        assertTrue(lexer.compile("DIGIT", "1"));
-        assertTrue(lexer.compile("DIGIT", "9"));
-        assertTrue(lexer.compile("DIGIT", "100000"));
-        assertTrue(lexer.compile("DIGIT", "100009"));
-        assertTrue(lexer.compile("DIGIT", "19"));
+        assertTrue(lexer.match("DIGIT", "0"));
+        assertTrue(lexer.match("DIGIT", "1"));
+        assertTrue(lexer.match("DIGIT", "9"));
+        assertTrue(lexer.match("DIGIT", "100000"));
+        assertTrue(lexer.match("DIGIT", "100009"));
+        assertTrue(lexer.match("DIGIT", "19"));
 
-        assertTrue(lexer.compile("ASSIGN_OP", "="));
+        assertTrue(lexer.match("ASSIGN_OP", "="));
 
-        assertTrue(lexer.compile("OP", "+"));
-        assertTrue(lexer.compile("OP", "-"));
-        assertTrue(lexer.compile("OP", "/"));
-        assertTrue(lexer.compile("OP", "*"));
+        assertTrue(lexer.match("OP", "+"));
+        assertTrue(lexer.match("OP", "-"));
+        assertTrue(lexer.match("OP", "/"));
+        assertTrue(lexer.match("OP", "*"));
 
         //Failure tests
-        assertFalse(lexer.compile("VAR", "A"));
-        assertFalse(lexer.compile("VAR", "Z"));
-        assertFalse(lexer.compile("VAR", "value "));
-        assertFalse(lexer.compile("VAR", " value"));
-        assertFalse(lexer.compile("VAR", " value "));
-        assertFalse(lexer.compile("VAR", " a "));
-        assertFalse(lexer.compile("VAR", "valuE"));
-        assertFalse(lexer.compile("VAR", "Value"));
-        assertFalse(lexer.compile("VAR", "vaLue"));
-        assertFalse(lexer.compile("VAR", "valuevalue value"));
+        assertFalse(lexer.match("VAR", "A"));
+        assertFalse(lexer.match("VAR", "Z"));
+        assertFalse(lexer.match("VAR", "value "));
+        assertFalse(lexer.match("VAR", " value"));
+        assertFalse(lexer.match("VAR", " value "));
+        assertFalse(lexer.match("VAR", " a "));
+        assertFalse(lexer.match("VAR", "valuE"));
+        assertFalse(lexer.match("VAR", "Value"));
+        assertFalse(lexer.match("VAR", "vaLue"));
+        assertFalse(lexer.match("VAR", "valuevalue value"));
 
-        assertFalse(lexer.compile("DIGIT", "09"));
-        assertFalse(lexer.compile("DIGIT", "000000"));
+        assertFalse(lexer.match("DIGIT", "09"));
+        assertFalse(lexer.match("DIGIT", "000000"));
 
-        assertFalse(lexer.compile("ASSIGN_OP", "=="));
-        assertFalse(lexer.compile("ASSIGN_OP", ":="));
-        assertFalse(lexer.compile("ASSIGN_OP", "!="));
+        assertFalse(lexer.match("ASSIGN_OP", "=="));
+        assertFalse(lexer.match("ASSIGN_OP", ":="));
+        assertFalse(lexer.match("ASSIGN_OP", "!="));
 
-        assertFalse(lexer.compile("OP", "+-"));
-        assertFalse(lexer.compile("OP", "/*"));
-        assertFalse(lexer.compile("OP", "+*"));
-        assertFalse(lexer.compile("OP", "="));
-        assertFalse(lexer.compile("OP", "=="));
+        assertFalse(lexer.match("OP", "+-"));
+        assertFalse(lexer.match("OP", "/*"));
+        assertFalse(lexer.match("OP", "+*"));
+        assertFalse(lexer.match("OP", "="));
+        assertFalse(lexer.match("OP", "=="));
     }
 
     @Test
     public void testPriority() {
-        Lexer lexer = new Lexer();
+        Lexer lexer = new Lexer(false);
         lexer.addLexeme("L1", "^[a-z]+", 4);
         lexer.addLexeme("L2", "^[a-z]+", 3);
         lexer.addLexeme("L3", "^[a-z]*[0-9]+", 2);
         lexer.addLexeme("L4", "^[0-9]+", 1);
 
-        lexer.generateTokens("value$"); // L1 - L2
+        lexer.generateTokens("value"); // L1 - L2
         assertEquals("L1", lexer.tokens.get(0).getType());
 
-        lexer.generateTokens("099$"); // L3 - L4
+        lexer.generateTokens("099"); // L3 - L4
         assertEquals("L3", lexer.tokens.get(0).getType());
     }
 }
