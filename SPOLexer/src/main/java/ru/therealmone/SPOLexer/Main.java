@@ -1,17 +1,28 @@
 package ru.therealmone.SPOLexer;
 
 import ru.therealmone.SPOParser.Parser;
+import ru.therealmone.TranslatorAPI.Token;
+
+import java.util.HashSet;
+
+import static ru.therealmone.SPOParser.Parser.ERROR;
 
 public class Main {
     public static void main(String[] args) {
         Lexer lexer = new Lexer(true);
-
-        System.out.println("LEXEMES: ");
-        lexer.showLexemes();
-
-        lexer.generateTokens("value = a + b - c / 0 * 10045645 = value1 = value2 = - * + /$");
-        System.out.println("TOKENS: ");
+        lexer.generateTokens("c = a + 3;$");
         lexer.showTokens();
-        lexer.tokens.get(0).accept(new Parser());
+
+        Parser parser = new Parser(new HashSet<>(lexer.lexemes.keySet()));
+
+        for(Token token: lexer.tokens) {
+            token.accept(parser);
+            if(ERROR) {
+                System.out.println("ERROR: Unexpected token " + token.getType());
+                System.exit(1);
+            }
+        }
+
+        System.out.println("Successfully parsed!");
     }
 }

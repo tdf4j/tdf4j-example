@@ -19,4 +19,9 @@
         <type>OP</type>
         <template>^[\+\-\/\*]$</template>
     </lexeme>
+
+    <lexeme priority="1">
+        <type>DEL</type>
+        <template>^[;]$</template>
+    </lexeme>
 </lexemes_list>

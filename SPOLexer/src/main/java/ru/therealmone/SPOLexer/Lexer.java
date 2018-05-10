@@ -4,12 +4,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import ru.therealmone.TranslatorAPI.Token;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.*;
 
@@ -18,6 +18,8 @@ class Lexer {
     Map<String, Pattern> lexemes = new HashMap<>();
     private Map<String, Integer> priority = new HashMap<>();
     private Document doc;
+
+    private static final char END_SYMBOL = '$';
 
     Lexer(boolean loadFromXML) {
         if(loadFromXML) {
@@ -44,6 +46,9 @@ class Lexer {
                 e.printStackTrace();
             }
         }
+        System.out.println("----------------------------------LEXER-----------------------------------------");
+        showLexemes();
+        System.out.println("--------------------------------------------------------------------------------");
     }
 
     void addLexeme(String type, String pattern, Integer priority) {
@@ -54,86 +59,70 @@ class Lexer {
             System.out.println("Lexeme " + type + " already exists!");
     }
 
-    void showLexemes() {
+    private void showLexemes() {
         for(Map.Entry<String, Pattern> entry: lexemes.entrySet()) {
-            System.out.println("[" + priority.get(entry.getKey()) + "] " + entry.getKey() + " --> " + entry.getValue().pattern());
+            System.out.println("Lexeme №" + priority.get(entry.getKey()) + ": " + entry.getKey() + " --> " + entry.getValue().pattern());
         }
     }
 
     void generateTokens(String input) {
-        if(input.charAt(input.length() - 1) == '$') {
+            input = input.replaceAll("\\$", "");
+            input += END_SYMBOL;
 
-            boolean expectSuccess = true;
-            boolean passed = false;
             tokens.clear();
             StringBuilder tempString = new StringBuilder();
-            List<String> passedLexemes = new ArrayList<>();
 
-            while (!input.equals("$")) {
+            while(input.charAt(0) != END_SYMBOL) {
                 input = input.trim();
                 tempString.append(input.charAt(tempString.length()));
-
-                for (Map.Entry<String, Pattern> entry : lexemes.entrySet()) {
-                    if (this.compile(entry.getKey(), tempString.toString())) {
-                        passed = true;
-                        break;
-                    }
-                }
-
-                if (expectSuccess) {
-                    if (passed) {
-                        expectSuccess = false;
-                        passed = false;
-                    } else {
-                        System.out.println("ERROR: Unexpected first symbol!");
-                        System.out.println("Current input: " + input);
-                        break;
-                    }
-
-                } else {
-                    if (passed) {
-                        passed = false;
-                    } else {
-                        expectSuccess = true;
+                
+                if(!checkLexemes(tempString.toString())) {
+                    if(tempString.length() > 1) {
                         tempString.deleteCharAt(tempString.length() - 1);
-
-                        for(Map.Entry<String, Pattern> entry: lexemes.entrySet()) {
-                            if(this.compile(entry.getKey(), tempString.toString())) {
-                                passedLexemes.add(entry.getKey());
-                            }
-                        }
-
-                        tokens.add(new Token(checkPassedLexemes(passedLexemes), tempString.toString()));
-
-                        input = String.copyValueOf(input.toCharArray(), tempString.length(), input.length() - tempString.length());
+                        tokens.add(new Token(chooseLexeme(tempString.toString()), tempString.toString()));
+                        input = input.substring(tempString.length());
                         tempString.delete(0, tempString.length());
-                        passedLexemes.clear();
+                    } else {
+                        System.out.println("Unexpected first symbol in current input string: \n\t" + input);
+                        break;
                     }
                 }
             }
 
-        } else {
-            System.out.println("ERROR: String doesn't contain '&' at the end!");
-        }
-
+            tokens.add(new Token("$", "$"));
+    }
+    
+    private boolean checkLexemes(String str) {
+       for(Map.Entry<String, Pattern> entry: lexemes.entrySet()) {
+           if(match(entry.getKey(), str))
+               return true;
+       }
+       return false;
     }
 
-    private String checkPassedLexemes(List<String> list) {
-        String tmp = list.get(0);
-        for(String lexeme: list) {
-            if(priority.get(lexeme) > priority.get(tmp))
-                tmp = lexeme;
+    private String chooseLexeme(String str) {
+        int tmpPriv = 0;
+        String lexType = "";
+
+        for(Map.Entry<String, Pattern> entry: lexemes.entrySet()) {
+            if(match(entry.getKey(), str)) {
+                if(priority.get(entry.getKey()) > tmpPriv) {
+                    lexType = entry.getKey();
+                    tmpPriv = priority.get(entry.getKey());
+                }
+            }
         }
-        return tmp;
+        return lexType;
     }
 
     void showTokens() {
+        System.out.println("GENERATED TOKENS: ");
         for(Token token: tokens) {
             System.out.println("Token №" + tokens.indexOf(token) + " : " + token.getType() + " --> " + token.getValue());
         }
     }
 
-    boolean compile(String lexeme, String string) {
+    boolean match(String lexeme, String string) {
         Pattern p = lexemes.get(lexeme);
         Matcher m = p.matcher(string);
         return m.matches();

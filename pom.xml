@@ -11,6 +11,7 @@
 	<modules>
 		<module>SPOLexer</module>
 		<module>SPOParser</module>
+        <module>TranslatorAPI</module>
     </modules>
 
     <dependencies>

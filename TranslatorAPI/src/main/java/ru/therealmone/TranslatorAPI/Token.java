@@ -1,26 +1,24 @@
-package ru.therealmone.SPOLexer;
-
-import ru.therealmone.SPOParser.Visitor;
+package ru.therealmone.TranslatorAPI;
 
 public class Token implements Visitable {
     private String type;
     private String value;
 
-    Token(String type, String value) {
+    public Token(String type, String value) {
         this.type = type;
         this.value = value;
     }
 
-    String getType() {
+    public String getType() {
         return(this.type);
     }
 
-    String getValue() {
+    public String getValue() {
         return(this.value);
     }
 
     @Override
     public void accept(Visitor v){
-        v.visit(this.type, this.value);
+        v.visit(this);
     }
 }
