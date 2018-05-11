@@ -55,10 +55,7 @@ public class Parser implements Visitor {
         }
 
         System.out.println("----------------------------------PARSER----------------------------------------");
-        System.out.println("LANG RULES; ");
-        for(Map.Entry<Integer, String[]> entry: langRules.entrySet()) {
-            System.out.println("Lang rule №" + entry.getKey() + ": " + Arrays.toString(entry.getValue()));
-        }
+        showLangRules();
         System.out.println("--------------------------------------------------------------------------------");
     }
 
@@ -66,11 +63,18 @@ public class Parser implements Visitor {
         while(!terminals.contains(stack.peek())) {
             openNonTerminal(token);
         }
-
         return stack.pop().equals(token.getType());
     }
 
+    public void showLangRules() {
+        System.out.println("LANG RULES; ");
+        for(Map.Entry<Integer, String[]> entry: langRules.entrySet()) {
+            System.out.println("Lang rule №" + entry.getKey() + ": " + Arrays.toString(entry.getValue()));
+        }
+    }
+        //TODO: Сформировать синтаксическое дерево
     private void openNonTerminal(Token token) {
+        String peek = stack.peek();
         try {
             String[] tmp = langRules.get(analyzeTable.get(stack.pop()).get(token.getType()));
             for (int i = tmp.length - 1; i >= 0; i--) {
@@ -79,8 +83,9 @@ public class Parser implements Visitor {
                 }
             }
         } catch (NullPointerException e) {
-            System.out.println("Seems like tables aren't complete");
+            System.out.println("Seems like tables aren't complete \nCan't find rule for " + peek + " (token = " + token.getType() + ")");
             e.printStackTrace();
+            System.exit(1);
         }
 
     }

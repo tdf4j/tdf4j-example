@@ -1,13 +1,13 @@
 NUMBER,PROD,VALUE
 1,lang,expr + $
 2,lang,EMPTY
-3,expr,while_loop + DEL +expr
+3,expr,while_loop + DEL + expr
 4,expr,for_loop + DEL + expr
 5,expr,if_statement + DEL + expr
 6,expr,do_while_loop + DEL + expr
 7,expr,assign_expr + DEL + expr
 8,expr,EMPTY
-9,while_loop,WHILE + LR + condition + RB + FLB + expr + FRB
+9,while_loop,WHILE + LB + condition + RB + FLB + expr + FRB
 10,for_loop,????
 11,if_statement,IF + LB + condition + RB + FLB + expr + FRB + else
 12,assign_expr,VAR + ASSIGN_OP + value_expr
@@ -18,7 +18,7 @@ NUMBER,PROD,VALUE
 17,condition_without_br,compare_expr
 18,condition_continue,EMPTY
 19,condition_continue,LOP + condition
-20,compare_expr,value_expr COP value_expr
+20,compare_expr,value_expr + COP + value_expr
 21,value_expr,value_expr_with_br
 22,value_expr,value_expr_without_br
 23,value_expr_with_br,LB + value_expr + RB
@@ -27,3 +27,5 @@ NUMBER,PROD,VALUE
 26,value,DIGIT
 27,value_expr_continue,OP + value_expr
 28,value_expr_continue,EMPTY
+29,else,EMPTY
+30,else,FLB + expr + FRB

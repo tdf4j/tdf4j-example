@@ -10,7 +10,7 @@ import static ru.therealmone.SPOParser.Parser.ERROR;
 public class Main {
     public static void main(String[] args) {
         Lexer lexer = new Lexer(true);
-        lexer.generateTokens("c = a + 3;$");
+        lexer.generateTokens("integer : 10 + 155;$");
         lexer.showTokens();
 
         Parser parser = new Parser(new HashSet<>(lexer.lexemes.keySet()));
@@ -22,7 +22,6 @@ public class Main {
                 System.exit(1);
             }
         }
-
         System.out.println("Successfully parsed!");
     }
 }

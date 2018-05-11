@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <lexemes_list>
-    <lexeme priority="4">
+    <lexeme priority="1">
         <type>VAR</type>
         <template>^[a-z]+$</template>
     </lexeme>
 
-    <lexeme priority="3">
+    <lexeme priority="1">
         <type>DIGIT</type>
         <template>^0|([1-9][0-9]*)$</template>
     </lexeme>
 
-    <lexeme priority="2">
+    <lexeme priority="1">
         <type>ASSIGN_OP</type>
-        <template>^=$</template>
+        <template>^:$</template>
     </lexeme>
 
     <lexeme priority="1">
@@ -22,6 +22,56 @@
 
     <lexeme priority="1">
         <type>DEL</type>
-        <template>^[;]$</template>
+        <template>^;$</template>
+    </lexeme>
+
+    <lexeme priority="2">
+        <type>WHILE</type>
+        <template>^while$</template>
+    </lexeme>
+
+    <lexeme priority="2">
+        <type>IF</type>
+        <template>^if$</template>
+    </lexeme>
+
+    <lexeme priority="2">
+        <type>DO</type>
+        <template>^do$</template>
+    </lexeme>
+
+    <lexeme priority="2">
+        <type>FOR</type>
+        <template>^for$</template>
+    </lexeme>
+
+    <lexeme priority="2">
+        <type>LOP</type>
+        <template>^&amp; | \\| | \\^$</template>
+    </lexeme>
+
+    <lexeme priority="2">
+        <type>COP</type>
+        <template>^[=&lt;>]|(&lt;=)|(>=)$</template>
+    </lexeme>
+
+    <lexeme priority="1">
+        <type>LB</type>
+        <template>^\($</template>
+    </lexeme>
+
+    <lexeme priority="2">
+        <type>RB</type>
+        <template>^\)$</template>
+    </lexeme>
+
+    <lexeme priority="1">
+        <type>FLB</type>
+        <template>^\{$</template>
+    </lexeme>
+
+    <lexeme priority="1">
+        <type>FRB</type>
+        <template>^\}$</template>
     </lexeme>
 </lexemes_list>
