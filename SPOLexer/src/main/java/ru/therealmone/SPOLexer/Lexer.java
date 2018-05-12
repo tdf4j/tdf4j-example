@@ -25,7 +25,7 @@ class Lexer {
             try {
                 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
                 DocumentBuilder docBuilder = dbf.newDocumentBuilder();
-                Document doc = docBuilder.parse("SPOLexer/src/main/resources/lexemes.xml");
+                Document doc = docBuilder.parse("src/main/resources/lexemes.xml");
 
                 Node root = doc.getDocumentElement();
                 NodeList childes = root.getChildNodes();

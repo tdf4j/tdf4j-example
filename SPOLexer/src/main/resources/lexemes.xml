@@ -12,7 +12,7 @@
 
     <lexeme priority="1">
         <type>ASSIGN_OP</type>
-        <template>^:$</template>
+        <template>^=$</template>
     </lexeme>
 
     <lexeme priority="1">
@@ -36,6 +36,11 @@
     </lexeme>
 
     <lexeme priority="2">
+        <type>ELSE</type>
+        <template>^else$</template>
+    </lexeme>
+
+    <lexeme priority="2">
         <type>DO</type>
         <template>^do$</template>
     </lexeme>
@@ -47,12 +52,12 @@
 
     <lexeme priority="2">
         <type>LOP</type>
-        <template>^&amp; | \\| | \\^$</template>
+        <template>^[&amp;\\|\\^]$</template>
     </lexeme>
 
     <lexeme priority="2">
         <type>COP</type>
-        <template>^[=&lt;>]|(&lt;=)|(>=)$</template>
+        <template>^[&lt;>]|(&lt;=)|(>=)|(==)$</template>
     </lexeme>
 
     <lexeme priority="1">

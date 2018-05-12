@@ -3,7 +3,7 @@ package ru.therealmone.SPOLexer;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class lexerTest {
+public class LexerTest {
 
     private void addLexemes(Lexer lexer) {
         lexer.addLexeme("VAR", "^[a-z]+$", 4);

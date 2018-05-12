@@ -2,31 +2,44 @@ package ru.therealmone.SPOParser;
 
 import com.opencsv.CSVReader;
 import ru.therealmone.TranslatorAPI.Token;
+import ru.therealmone.TranslatorAPI.Visitable;
 import ru.therealmone.TranslatorAPI.Visitor;
+import ru.therealmone.TranslatorAPI.Node;
 
 import java.io.FileReader;
 import java.util.*;
 
-public class Parser implements Visitor {
+public class Parser implements Visitor, Visitable {
 
     private Stack<String> stack = new Stack<>();
     private Map<Integer, String[]> langRules = new HashMap<>();
     private Map<String, Map<String, Integer>> analyzeTable = new HashMap<>();
     private HashSet<String> terminals;
-    public static boolean ERROR = false;
+    public boolean ERROR = false;
+    private Node root;
 
     @Override
     public void visit(Token token) {
         ERROR = !parse(token);
     }
 
+    @Override
+    public void visit(Node root) {}
+
+    @Override
+    public void accept(Visitor v) {
+
+    }
+
     public Parser(HashSet<String> terminals) {
         this.terminals = terminals;
         terminals.add("$");
+
         stack.push("lang");
+        root = new Node("lang");
 
         try {
-            CSVReader csvReader = new CSVReader(new FileReader("SPOParser/src/main/resources/langRules.csv"));
+            CSVReader csvReader = new CSVReader(new FileReader("D:/JavaProjects/SPOTranslator/SPOParser/src/main/resources/langRules.csv"));
             String[] nextLine;
             csvReader.readNext();
 
@@ -39,7 +52,7 @@ public class Parser implements Visitor {
             }
             csvReader.close();
 
-            csvReader = new CSVReader(new FileReader("SPOParser/src/main/resources/analyzeTable.csv"));
+            csvReader = new CSVReader(new FileReader("D:/JavaProjects/SPOTranslator/SPOParser/src/main/resources/analyzeTable.csv"));
             String[] description = csvReader.readNext();
 
             while((nextLine = csvReader.readNext()) != null) {

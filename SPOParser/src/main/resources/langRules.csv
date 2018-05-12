@@ -1,31 +1,32 @@
 NUMBER,PROD,VALUE
-1,lang,expr + $
-2,lang,EMPTY
-3,expr,while_loop + DEL + expr
-4,expr,for_loop + DEL + expr
-5,expr,if_statement + DEL + expr
-6,expr,do_while_loop + DEL + expr
-7,expr,assign_expr + DEL + expr
-8,expr,EMPTY
-9,while_loop,WHILE + LB + condition + RB + FLB + expr + FRB
-10,for_loop,????
-11,if_statement,IF + LB + condition + RB + FLB + expr + FRB + else
-12,assign_expr,VAR + ASSIGN_OP + value_expr
-13,do_while_loop,DO + FLB + expr + FRB + WHILE + LB + condition + RB
-14,condition,condition_with_br + condition_continue
-15,condition,condition_without_br + condition_continue
-16,condition_with_br,LB + condition + RB
-17,condition_without_br,compare_expr
-18,condition_continue,EMPTY
-19,condition_continue,LOP + condition
-20,compare_expr,value_expr + COP + value_expr
-21,value_expr,value_expr_with_br
-22,value_expr,value_expr_without_br
-23,value_expr_with_br,LB + value_expr + RB
-24,value_expr_without_br,value + value_expr_continue
-25,value,VAR
-26,value,DIGIT
-27,value_expr_continue,OP + value_expr
-28,value_expr_continue,EMPTY
-29,else,EMPTY
-30,else,FLB + expr + FRB
+1,lang,expr + expr_continue + $
+2,lang,$
+3,expr,while_loop + DEL
+4,expr,for_loop + DEL
+5,expr,if_statement + DEL
+6,expr,do_while_loop + DEL
+7,expr,assign_expr + DEL
+8,expr_continue,expr
+9,expr_continue,EMPTY
+10,while_loop,WHILE + LB + condition + RB + FLB + expr_continue + FRB
+11,for_loop,FOR + LB + assign_expr + DEL + condition + DEL + assign_expr + RB + FLB + expr_continue + FRB
+12,if_statement,IF + LB + condition + RB + FLB + expr_continue + FRB + else
+13,assign_expr,VAR + ASSIGN_OP + value_expr
+14,do_while_loop,DO + FLB + expr_continue + FRB + WHILE + LB + condition + RB
+15,condition,condition_with_br + condition_continue
+16,condition,condition_without_br + condition_continue
+17,condition_with_br,LB + condition + RB
+18,condition_without_br,compare_expr
+19,condition_continue,EMPTY
+20,condition_continue,LOP + condition
+21,compare_expr,value_expr + COP + value_expr
+22,value_expr,value_expr_with_br + value_expr_continue
+23,value_expr,value_expr_without_br + value_expr_continue
+24,value_expr_with_br,LB + value_expr + RB
+25,value_expr_without_br,value + value_expr_continue
+26,value,VAR
+27,value,DIGIT
+28,value_expr_continue,OP + value_expr
+29,value_expr_continue,EMPTY
+30,else,EMPTY
+31,else,ELSE + FLB + expr_continue + FRB
