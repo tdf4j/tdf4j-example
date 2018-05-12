@@ -17,7 +17,6 @@ class Lexer {
     ArrayList<Token> tokens = new ArrayList<>();
     Map<String, Pattern> lexemes = new HashMap<>();
     private Map<String, Integer> priority = new HashMap<>();
-    private Document doc;
 
     private static final char END_SYMBOL = '$';
 
@@ -26,7 +25,7 @@ class Lexer {
             try {
                 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
                 DocumentBuilder docBuilder = dbf.newDocumentBuilder();
-                doc = docBuilder.parse("SPOLexer/src/main/resources/lexemes.xml");
+                Document doc = docBuilder.parse("D:/JavaProjects/SPOTranslator/SPOLexer/src/main/resources/lexemes.xml");
 
                 Node root = doc.getDocumentElement();
                 NodeList childes = root.getChildNodes();
@@ -59,9 +58,9 @@ class Lexer {
             System.out.println("Lexeme " + type + " already exists!");
     }
 
-    private void showLexemes() {
+    public void showLexemes() {
         for(Map.Entry<String, Pattern> entry: lexemes.entrySet()) {
-            System.out.println("Lexeme №" + priority.get(entry.getKey()) + ": " + entry.getKey() + " --> " + entry.getValue().pattern());
+            System.out.println("Lexeme #" + priority.get(entry.getKey()) + ": " + entry.getKey() + " --> " + entry.getValue().pattern());
         }
     }
 
