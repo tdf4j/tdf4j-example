@@ -9,7 +9,7 @@ import java.util.HashSet;
 public class Main {
     public static void main(String[] args) {
         Lexer lexer = new Lexer(true);
-        lexer.generateTokens("while((a + b < c) & y == 10) {if(a + b == c) {} else {};};$");
+        lexer.generateTokens("a = b;$");
         lexer.showTokens();
 
         Parser parser = new Parser(new HashSet<>(lexer.lexemes.keySet()));

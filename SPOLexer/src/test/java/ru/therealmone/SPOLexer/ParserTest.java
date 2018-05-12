@@ -15,95 +15,98 @@ public class ParserTest {
         HashSet<String> terminals = new HashSet<>(lexer.lexemes.keySet());
 
         //while tests
-        lexer.generateTokens("while() {};");
+        lexer.generateTokens("while() {}");
         assertFalse(check(lexer.tokens, new Parser(terminals)));
 
-        lexer.generateTokens("while(a > b) {};");
+        lexer.generateTokens("while(a > b) {}");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
-        lexer.generateTokens("while((a > b) & (c < d)) {};");
+        lexer.generateTokens("while((a > b) & (c < d)) {}");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
-        lexer.generateTokens("while((((((a > b))))) & (((((c < d)))))) {};");
+        lexer.generateTokens("while((((((a > b))))) & (((((c < d)))))) {}");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
-        lexer.generateTokens("while((a == b) & (c < d * (5 + 1)) | ((10 *(s + 150) <= 300))){};");
+        lexer.generateTokens("while((a == b) & (c < d * (5 + 1)) | ((10 *(s + 150) <= 300))){}");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
-        lexer.generateTokens("while(((((((((((c < d))))))))))) {};");
+        lexer.generateTokens("while(((((((((((c < d))))))))))) {}");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
-        lexer.generateTokens("while(a < b & c > d) {};");
+        lexer.generateTokens("while(a < b & c > d) {}");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
-        lexer.generateTokens("while(a == b & c < d * (5 + 1) | 10 * (s + 150) <= 300){};");
+        lexer.generateTokens("while(a == b & c < d * (5 + 1) | 10 * (s + 150) <= 300){}");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
         //if tests
-        lexer.generateTokens("if() {};");
+        lexer.generateTokens("if() {}");
         assertFalse(check(lexer.tokens, new Parser(terminals)));
 
-        lexer.generateTokens("if(a > b) {};");
+        lexer.generateTokens("if(a > b) {}");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
-        lexer.generateTokens("if((a > b) & (c < d)) {};");
+        lexer.generateTokens("if((a > b) & (c < d)) {}");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
-        lexer.generateTokens("if((((((a > b))))) & (((((c < d)))))) {};");
+        lexer.generateTokens("if((((((a > b))))) & (((((c < d)))))) {}");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
-        lexer.generateTokens("if((a == b) & (c < d * (5 + 1)) | ((10 *(s + 150) <= 300))){};");
+        lexer.generateTokens("if((a == b) & (c < d * (5 + 1)) | ((10 *(s + 150) <= 300))){}");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
-        lexer.generateTokens("if(((((((((((c < d))))))))))) {};");
+        lexer.generateTokens("if(((((((((((c < d))))))))))) {}");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
-        lexer.generateTokens("if(a < b & c > d) {};");
+        lexer.generateTokens("if(a < b & c > d) {}");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
-        lexer.generateTokens("if(a == b & c < d * (5 + 1) | 10 * (s + 150) <= 300){};");
+        lexer.generateTokens("if(a == b & c < d * (5 + 1) | 10 * (s + 150) <= 300){}");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
         //for tests
-        lexer.generateTokens("for(i = 0; ; i = i + 1){};");
+        lexer.generateTokens("for(i = 0; ; i = i + 1){}");
         assertFalse(check(lexer.tokens, new Parser(terminals)));
 
-        lexer.generateTokens("for(i = 0; i < 100; i = i + 1) {};");
+        lexer.generateTokens("for(i = 0; i < 100; i = i + 1) {}");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
-        lexer.generateTokens("for(i = (((((a + b))))) * (((((c + d))))); i > 100; i = i + 1){};");
+        lexer.generateTokens("for(i = (((((a + b))))) * (((((c + d))))); i > 100; i = i + 1){}");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
-        lexer.generateTokens("for(i = (((1 + 1) * (1 + 2)) * (1 + 1)) * (100 - 10); i > 100; i = i + 1){};");
+        lexer.generateTokens("for(i = (((1 + 1) * (1 + 2)) * (1 + 1)) * (100 - 10); i > 100; i = i + 1){}");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
         //do-while tests
-        lexer.generateTokens("do{}while();");
+        lexer.generateTokens("do{}while()");
         assertFalse(check(lexer.tokens, new Parser(terminals)));
 
-        lexer.generateTokens("do{}while(a > b);");
+        lexer.generateTokens("do{}while(a > b)");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
-        lexer.generateTokens("do{}while((a > b) & (c < d));");
+        lexer.generateTokens("do{}while((a > b) & (c < d))");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
-        lexer.generateTokens("do{}while((((((a > b))))) & (((((c < d))))));");
+        lexer.generateTokens("do{}while((((((a > b))))) & (((((c < d))))))");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
-        lexer.generateTokens("do{}while((a == b) & (c < d * (5 + 1)) | ((10 *(s + 150) <= 300)));");
+        lexer.generateTokens("do{}while((a == b) & (c < d * (5 + 1)) | ((10 *(s + 150) <= 300)))");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
-        lexer.generateTokens("do{}while(((((((((((c < d)))))))))));");
+        lexer.generateTokens("do{}while(((((((((((c < d)))))))))))");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
-        lexer.generateTokens("do{}while(a < b & c > d);");
+        lexer.generateTokens("do{}while(a < b & c > d)");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
-        lexer.generateTokens("do{}while(a == b & c < d * (5 + 1) | 10 * (s + 150) <= 300);");
+        lexer.generateTokens("do{}while(a == b & c < d * (5 + 1) | 10 * (s + 150) <= 300)");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
         //Combinations
-        lexer.generateTokens("while(a > b) {if (a < d) {do{i = i;}while(a < b);} else {for(i = i; i < 100; i = i + 1){i = i;};};};");
+        lexer.generateTokens("while(a > b) {if (a < d) {do{i = i;}while(a < b)} else {for(i = i; i < 100; i = i + 1){i = i;}}}");
+        assertTrue(check(lexer.tokens, new Parser(terminals)));
+
+        lexer.generateTokens("a = b; c = a; a = a;");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
     }
 

@@ -25,7 +25,7 @@ class Lexer {
             try {
                 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
                 DocumentBuilder docBuilder = dbf.newDocumentBuilder();
-                Document doc = docBuilder.parse("src/main/resources/lexemes.xml");
+                Document doc = docBuilder.parse("D:/JavaProjects/SPOTranslator/SPOLexer/src/main/resources/lexemes.xml");
 
                 Node root = doc.getDocumentElement();
                 NodeList childes = root.getChildNodes();
@@ -60,7 +60,7 @@ class Lexer {
 
     public void showLexemes() {
         for(Map.Entry<String, Pattern> entry: lexemes.entrySet()) {
-            System.out.println("Lexeme №" + priority.get(entry.getKey()) + ": " + entry.getKey() + " --> " + entry.getValue().pattern());
+            System.out.println("Lexeme #" + priority.get(entry.getKey()) + ": " + entry.getKey() + " --> " + entry.getValue().pattern());
         }
     }
 

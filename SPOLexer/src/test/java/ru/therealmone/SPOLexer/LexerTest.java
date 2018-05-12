@@ -19,23 +19,23 @@ public class LexerTest {
 
         //Success tests
         lexer.generateTokens("value");
-        assertEquals(1, lexer.tokens.size());
+        assertEquals(2, lexer.tokens.size());
         assertEquals("VAR", lexer.tokens.get(0).getType());
 
         lexer.generateTokens("0");
-        assertEquals(1, lexer.tokens.size());
+        assertEquals(2, lexer.tokens.size());
         assertEquals("DIGIT", lexer.tokens.get(0).getType());
 
         lexer.generateTokens("=");
-        assertEquals(1, lexer.tokens.size());
+        assertEquals(2, lexer.tokens.size());
         assertEquals("ASSIGN_OP", lexer.tokens.get(0).getType());
 
         lexer.generateTokens("+");
-        assertEquals(1, lexer.tokens.size());
+        assertEquals(2, lexer.tokens.size());
         assertEquals("OP", lexer.tokens.get(0).getType());
 
         lexer.generateTokens("value = 15 + 0");
-        assertEquals(5, lexer.tokens.size());
+        assertEquals(6, lexer.tokens.size());
         assertEquals("VAR", lexer.tokens.get(0).getType());
         assertEquals("ASSIGN_OP", lexer.tokens.get(1).getType());
         assertEquals("DIGIT", lexer.tokens.get(2).getType());
@@ -43,7 +43,7 @@ public class LexerTest {
         assertEquals("DIGIT", lexer.tokens.get(4).getType());
 
         lexer.generateTokens("15 = value - 10");
-        assertEquals(5, lexer.tokens.size());
+        assertEquals(6, lexer.tokens.size());
         assertEquals("DIGIT", lexer.tokens.get(0).getType());
         assertEquals("ASSIGN_OP", lexer.tokens.get(1).getType());
         assertEquals("VAR", lexer.tokens.get(2).getType());
@@ -51,14 +51,14 @@ public class LexerTest {
         assertEquals("DIGIT", lexer.tokens.get(4).getType());
 
         lexer.generateTokens("= value / 0");
-        assertEquals(4, lexer.tokens.size());
+        assertEquals(5, lexer.tokens.size());
         assertEquals("ASSIGN_OP", lexer.tokens.get(0).getType());
         assertEquals("VAR", lexer.tokens.get(1).getType());
         assertEquals("OP", lexer.tokens.get(2).getType());
         assertEquals("DIGIT", lexer.tokens.get(3).getType());
 
         lexer.generateTokens("* = value - 100000");
-        assertEquals(5, lexer.tokens.size());
+        assertEquals(6, lexer.tokens.size());
         assertEquals("OP", lexer.tokens.get(0).getType());
         assertEquals("ASSIGN_OP", lexer.tokens.get(1).getType());
         assertEquals("VAR", lexer.tokens.get(2).getType());
@@ -66,7 +66,7 @@ public class LexerTest {
         assertEquals("DIGIT", lexer.tokens.get(4).getType());
 
         lexer.generateTokens("value = a + b - c / 0 * 10045645 = value1 = value2 = - * + /");
-        assertEquals(22, lexer.tokens.size());
+        assertEquals(23, lexer.tokens.size());
         assertEquals("VAR", lexer.tokens.get(0).getType());
         assertEquals("ASSIGN_OP", lexer.tokens.get(1).getType());
         assertEquals("VAR", lexer.tokens.get(2).getType());
@@ -91,7 +91,7 @@ public class LexerTest {
         assertEquals("OP", lexer.tokens.get(21).getType());
 
         lexer.generateTokens("= - * + / value1 = value2 = a + b * 0 - 9999 = 10000 - 10000 * = value");
-        assertEquals(25, lexer.tokens.size());
+        assertEquals(26, lexer.tokens.size());
         assertEquals("ASSIGN_OP", lexer.tokens.get(0).getType());
         assertEquals("OP", lexer.tokens.get(1).getType());
         assertEquals("OP", lexer.tokens.get(2).getType());
@@ -119,7 +119,7 @@ public class LexerTest {
         assertEquals("VAR", lexer.tokens.get(24).getType());
 
         lexer.generateTokens("= = = = = = = = = = = 10000 100 10 1 0 v a l u e * * * * - - - - / / /");
-        assertEquals(32, lexer.tokens.size());
+        assertEquals(33, lexer.tokens.size());
         assertEquals("ASSIGN_OP", lexer.tokens.get(0).getType());
         assertEquals("ASSIGN_OP", lexer.tokens.get(1).getType());
         assertEquals("ASSIGN_OP", lexer.tokens.get(2).getType());
@@ -155,7 +155,7 @@ public class LexerTest {
 
 
         lexer.generateTokens("$");
-        assertEquals(0, lexer.tokens.size());
+        assertEquals(1, lexer.tokens.size());
     }
 
     @Test

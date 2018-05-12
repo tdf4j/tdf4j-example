@@ -1,12 +1,12 @@
 NUMBER,PROD,VALUE
 1,lang,expr + expr_continue + $
 2,lang,$
-3,expr,while_loop + DEL
-4,expr,for_loop + DEL
-5,expr,if_statement + DEL
-6,expr,do_while_loop + DEL
+3,expr,while_loop
+4,expr,for_loop
+5,expr,if_statement
+6,expr,do_while_loop
 7,expr,assign_expr + DEL
-8,expr_continue,expr
+8,expr_continue,expr + expr_continue
 9,expr_continue,EMPTY
 10,while_loop,WHILE + LB + condition + RB + FLB + expr_continue + FRB
 11,for_loop,FOR + LB + assign_expr + DEL + condition + DEL + assign_expr + RB + FLB + expr_continue + FRB
