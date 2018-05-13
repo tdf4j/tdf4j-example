@@ -10,8 +10,7 @@ import java.util.HashSet;
 public class Main {
     public static void main(String[] args) {
         Lexer lexer = new Lexer(true);
-        lexer.generateTokens("while(a == b & c < d * (5 + 1) | 10 * (s + 150) <= 300){}");
-        lexer.showTokens();
+        lexer.generateTokens("while(a > b) {if (a < d) {do{i = i;}while(a < b)} else {for(i = i; i < 100; i = i + 1){i = i;}}}");
 
         Parser parser = new Parser(new HashSet<>(lexer.lexemes.keySet()));
 
@@ -24,7 +23,6 @@ public class Main {
         }
         System.out.println("Successfully parsed!");
 
-        String tmp = OPNConverter.convertToOPN(parser.getRoot());
         System.out.println("OPN: " + OPNConverter.convertToOPN(parser.getRoot()));
     }
 }

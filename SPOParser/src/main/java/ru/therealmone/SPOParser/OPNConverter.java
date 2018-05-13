@@ -21,6 +21,7 @@ public final class OPNConverter {
     private static Stack<String> stack = new Stack<>();
     private static StringBuilder out = new StringBuilder();
 
+    //TODO: Переделать код
     public static String convertToOPN(Node root) {
         priority.clear();
         stack.clear();
@@ -63,6 +64,7 @@ public final class OPNConverter {
                 case "while_loop" : {while_loop(child); break;}
                 case "if_statement" : {if_statement(child); break;}
                 case "do_while_loop" : {do_while_loop(child); break;}
+                case "for_loop" : {for_loop(child); break;}
                 case "assign_expr" : {assign_expr(child); break;}
                 case "DEL" : {
                     while (stack.size() != 0) {
@@ -142,7 +144,71 @@ public final class OPNConverter {
     }
 
     private static void do_while_loop(Node root) {
+        for(Node child: root.getChildes()) {
+            switch (child.getValue()) {
+                case "DO" : break;
+                case "FLB" : break;
+                case "expr_continue" : {expr_continue(child); break;}
+                case "FRB" : break;
+                case "WHILE" : break;
+                case "LB" : break;
+                case "condition" : {condition(child); break;}
+                case "RB" : {
+                    while (stack.size() != 0) {
+                        out.append(stack.pop());
+                    }
+                    out.append("!F@p");
+                }
+            }
+        }
+    }
 
+    private static void for_loop(Node root) {
+        Node condition = new Node("");
+        Node assign = new Node("");
+        Node increment = new Node("");
+        Node expr_continue = new Node("");
+
+        for(Node child: root.getChildes()) {
+            switch (child.getValue()) {
+                case "FOR" : break;
+                case "LB" : break;
+                case "assign_expr" : {
+                    if(assign.getValue().equals(""))
+                        assign = child;
+                    else
+                        increment = child;
+                    break;
+                }
+                case "DEL" : break;
+                case "condition" : {condition = child; break;}
+                case "FLB" : break;
+                case "expr_continue" : {expr_continue = child; break;}
+                case "FRB" : break;
+            }
+        }
+
+        assign_expr(assign);
+        while (stack.size() != 0) {
+            out.append(stack.pop());
+        }
+
+        condition(condition);
+        while (stack.size() != 0) {
+            out.append(stack.pop());
+        }
+        out.append("!F@p");
+
+        expr_continue(expr_continue);
+        while (stack.size() != 0) {
+            out.append(stack.pop());
+        }
+
+        assign_expr(increment);
+        while (stack.size() != 0) {
+            out.append(stack.pop());
+        }
+        out.append("!@p");
     }
 
     private static void condition(Node root) {

@@ -64,9 +64,9 @@ public class Parser implements Visitor {
             e.printStackTrace();
         }
 
-        System.out.println("----------------------------------PARSER----------------------------------------");
-        showLangRules();
-        System.out.println("--------------------------------------------------------------------------------");
+//        System.out.println("----------------------------------PARSER----------------------------------------");
+//        showLangRules();
+//        System.out.println("--------------------------------------------------------------------------------");
     }
 
     public void showLangRules() {
