@@ -184,6 +184,10 @@ public class StackMachine implements Visitor {
                 continue;
             }
 
+            if(str[i].contains("$")) {
+                break;
+            }
+
             try{
                 stack.push(String.valueOf(Integer.parseInt(str[i])));
             } catch (Exception e) {
