@@ -2,14 +2,13 @@ package ru.therealmone.SPOParser;
 
 import com.opencsv.CSVReader;
 import ru.therealmone.TranslatorAPI.Token;
-import ru.therealmone.TranslatorAPI.Visitable;
 import ru.therealmone.TranslatorAPI.Visitor;
 import ru.therealmone.TranslatorAPI.Node;
 
 import java.io.FileReader;
 import java.util.*;
 
-public class Parser implements Visitor, Visitable {
+public class Parser implements Visitor {
 
     private Stack<String> stack = new Stack<>();
     private Stack<Integer> stackForCNReturns = new Stack<>();
@@ -27,11 +26,6 @@ public class Parser implements Visitor, Visitable {
 
     @Override
     public void visit(Node root) {}
-
-    @Override
-    public void accept(Visitor v) {
-
-    }
 
     public Parser(HashSet<String> terminals) {
         this.terminals = terminals;
@@ -70,9 +64,9 @@ public class Parser implements Visitor, Visitable {
             e.printStackTrace();
         }
 
-        System.out.println("----------------------------------PARSER----------------------------------------");
-        showLangRules();
-        System.out.println("--------------------------------------------------------------------------------");
+//        System.out.println("----------------------------------PARSER----------------------------------------");
+//        showLangRules();
+//        System.out.println("--------------------------------------------------------------------------------");
     }
 
     public void showLangRules() {
@@ -144,4 +138,7 @@ public class Parser implements Visitor, Visitable {
 
     }
 
+    public Node getRoot() {
+        return this.root;
+    }
 }

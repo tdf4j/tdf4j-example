@@ -45,9 +45,9 @@ class Lexer {
                 e.printStackTrace();
             }
         }
-        System.out.println("----------------------------------LEXER-----------------------------------------");
-        showLexemes();
-        System.out.println("--------------------------------------------------------------------------------");
+//        System.out.println("----------------------------------LEXER-----------------------------------------");
+//        showLexemes();
+//        System.out.println("--------------------------------------------------------------------------------");
     }
 
     void addLexeme(String type, String pattern, Integer priority) {
