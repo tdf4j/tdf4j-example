@@ -14,7 +14,7 @@ public class LexerTest {
 
     @Test
     public void testGenerate() {
-        Lexer lexer = new Lexer();
+        Lexer lexer = new Lexer(false);
         addLexemes(lexer);
 
         //Success tests
@@ -160,7 +160,7 @@ public class LexerTest {
 
     @Test
     public void testLexemes() {
-        Lexer lexer = new Lexer();
+        Lexer lexer = new Lexer(false);
         addLexemes(lexer);
 
         assertEquals(4, lexer.lexemes.size());
@@ -168,7 +168,7 @@ public class LexerTest {
 
     @Test
     public void testCompile() {
-        Lexer lexer = new Lexer();
+        Lexer lexer = new Lexer(false);
         addLexemes(lexer);
 
         //Success tests
@@ -220,7 +220,7 @@ public class LexerTest {
 
     @Test
     public void testPriority() {
-        Lexer lexer = new Lexer();
+        Lexer lexer = new Lexer(false);
         lexer.addLexeme("L1", "^[a-z]+", 4);
         lexer.addLexeme("L2", "^[a-z]+", 3);
         lexer.addLexeme("L3", "^[a-z]*[0-9]+", 2);
