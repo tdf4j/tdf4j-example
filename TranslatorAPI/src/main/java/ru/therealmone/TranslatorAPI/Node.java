@@ -1,49 +1,42 @@
 package ru.therealmone.TranslatorAPI;
 
-import java.util.ArrayList;
-
 public class Node {
-    private ArrayList<Node> childes;
-    private String value;
+    private String name;
+    private Node next;
     private Node parent;
-    private Token token;
 
-    public Node(String value) {
-        this.value = value;
-        this.childes = new ArrayList<>();
+    public Node() {}
+
+    public Node(String name) {
+        this.name = name;
     }
 
-    public Node(String value, Node parent) {
-        this.value = value;
+    public Node(String name, Node parent) {
+        this.name = name;
         this.parent = parent;
-        this.childes = new ArrayList<>();
     }
 
-    public void addChild(Node child) {
-        this.childes.add(child);
-    }
-
-    public Token getToken() {
-        return this.token;
-    }
-
-    public void setToken(Token token) {
-        this.token = token;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Node getParent() {
         return this.parent;
     }
 
-    public ArrayList<Node> getChildes() {
-        return this.childes;
+    public void setParent(Node parent) {
+        this.parent = parent;
     }
 
-    public String getValue() {
-        return this.value;
+    public String getName() {
+        return this.name;
+    }
+
+    public void setNext(Node next) {
+        this.next = next;
+    }
+
+    public Node getNext() {
+        return this.next;
     }
 }

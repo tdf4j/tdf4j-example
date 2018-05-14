@@ -2,13 +2,13 @@ package ru.therealmone.SPOParser;
 
 import com.opencsv.CSVReader;
 import ru.therealmone.TranslatorAPI.Token;
+import ru.therealmone.TranslatorAPI.Visitable;
 import ru.therealmone.TranslatorAPI.Visitor;
-import ru.therealmone.TranslatorAPI.Node;
 
 import java.io.FileReader;
 import java.util.*;
 
-public class Parser implements Visitor {
+public class Parser implements Visitor, Visitable {
 
     private Stack<String> stack = new Stack<>();
     private Stack<Integer> stackForCNReturns = new Stack<>();
@@ -16,8 +16,8 @@ public class Parser implements Visitor {
     private Map<String, Map<String, Integer>> analyzeTable = new HashMap<>();
     private HashSet<String> terminals;
     public boolean ERROR = false;
-    private Node root;
-    private Node currentNode;
+    private TreeNode root;
+    private TreeNode currentTreeNode;
 
     @Override
     public void visit(Token token) {
@@ -25,18 +25,23 @@ public class Parser implements Visitor {
     }
 
     @Override
-    public void visit(Node root) {}
+    public void visit(String opn) {}
+
+    @Override
+    public void accept(Visitor v) {
+        v.visit(OPNConverter.convertToOPN(root));
+    }
 
     public Parser(HashSet<String> terminals) {
         this.terminals = terminals;
         terminals.add("$");
 
         stack.push("lang");
-        root = new Node("lang");
-        currentNode = root;
+        root = new TreeNode("lang");
+        currentTreeNode = root;
 
         try {
-            CSVReader csvReader = new CSVReader(new FileReader("D:/JavaProjects/SPOTranslator/SPOParser/src/main/resources/langRules.csv"));
+            CSVReader csvReader = new CSVReader(new FileReader("langRules.csv"));
             String[] nextLine;
             csvReader.readNext();
 
@@ -49,7 +54,7 @@ public class Parser implements Visitor {
             }
             csvReader.close();
 
-            csvReader = new CSVReader(new FileReader("D:/JavaProjects/SPOTranslator/SPOParser/src/main/resources/analyzeTable.csv"));
+            csvReader = new CSVReader(new FileReader("analyzeTable.csv"));
             String[] description = csvReader.readNext();
 
             while((nextLine = csvReader.readNext()) != null) {
@@ -80,9 +85,9 @@ public class Parser implements Visitor {
         while(!terminals.contains(stack.peek())) {
 
             if(!stack.peek().equals("lang")) {
-                for(Node child: currentNode.getChildes()) {
-                    if(child.getValue().equals(stack.peek()) && child.getChildes().size() == 0) {
-                        currentNode = child;
+                for(TreeNode child: currentTreeNode.getChildes()) {
+                    if(child.getName().equals(stack.peek()) && child.getChildes().size() == 0) {
+                        currentTreeNode = child;
                         break;
                     }
                 }
@@ -91,11 +96,11 @@ public class Parser implements Visitor {
         }
 
         if(stack.peek().equals(token.getType())) {
-            for(Node child: currentNode.getChildes()) {
-                if(child.getValue().equals(token.getType()) && child.getToken() == null) {
+            for(TreeNode child: currentTreeNode.getChildes()) {
+                if(child.getName().equals(token.getType()) && child.getToken() == null) {
                     moveCN();
                     child.setToken(token);
-                    System.out.println("Success " + token.getValue());
+                    //System.out.println("Success " + token.getValue());
                     stack.pop();
                     return true;
                 }
@@ -109,7 +114,7 @@ public class Parser implements Visitor {
         if(eleCount != 0) {
             stackForCNReturns.push(eleCount);
         } else if(stackForCNReturns.size() != 0) {
-            currentNode = currentNode.getParent();
+            currentTreeNode = (TreeNode) currentTreeNode.getParent();
             moveCN();
         }
     }
@@ -124,7 +129,7 @@ public class Parser implements Visitor {
             for (int i = 0; i < tmp.length; i++) {
                 if(!tmp[i].equals("EMPTY")) {
                     stack.push(tmp[tmp.length - i - 1]);
-                    currentNode.addChild(new Node(tmp[i], currentNode));
+                    currentTreeNode.addChild(new TreeNode(tmp[i], currentTreeNode));
                 } else {
                     moveCN();
                 }
@@ -138,7 +143,11 @@ public class Parser implements Visitor {
 
     }
 
-    public Node getRoot() {
+    public TreeNode getRoot() {
         return this.root;
+    }
+
+    public String getOPN() {
+        return OPNConverter.convertToOPN(root);
     }
 }
