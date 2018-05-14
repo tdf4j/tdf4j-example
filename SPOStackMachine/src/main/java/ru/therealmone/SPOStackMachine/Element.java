@@ -16,6 +16,8 @@ class Element extends Node {
         return this.value;
     }
 
+    void setValue(int value) {this.value = value;}
+
     int getHashCode() {
         return this.hashCode;
     }

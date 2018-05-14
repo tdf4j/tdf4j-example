@@ -100,7 +100,7 @@ public class Parser implements Visitor, Visitable {
                 if(child.getName().equals(token.getType()) && child.getToken() == null) {
                     moveCN();
                     child.setToken(token);
-                    System.out.println("Success " + token.getValue());
+                    //System.out.println("Success " + token.getValue());
                     stack.pop();
                     return true;
                 }

@@ -16,21 +16,16 @@ class HashMap {
     }
 
     void add(String key, int value) throws KeyAlreadyExistsException {
-        try {
-            get(key);
-            throw new KeyAlreadyExistsException();
-
-        } catch (NoSuchElementException e) {
-
+        if(!contains(key)) {
             int index = getIndex(key);
 
-            while(buckets[index].getEleCount() >= MAX_ELEMENTS_IN_BUCKET) {
+            while (buckets[index].getEleCount() >= MAX_ELEMENTS_IN_BUCKET) {
                 resize();
                 index = getIndex(key);
             }
 
             putToBucket(index, new Element(key, value));
-        }
+        } else {throw new KeyAlreadyExistsException();}
     }
 
     int get(String key) throws NoSuchElementException {
@@ -49,19 +44,55 @@ class HashMap {
         throw new NoSuchElementException();
     }
 
-    void delete(String key) throws NoSuchElementException {
-        get(key);
-
+    boolean contains(String key) {
         int index = getIndex(key);
+        if(buckets[index].getEleCount() == 0) {return false;}
+
         Element current = (Element) buckets[index].getNext();
 
-        while(!(current.getName().equals(key) && current.getHashCode() == key.hashCode())) {
+        while(current != null) {
+            if(current.getName().equals(key) && current.getHashCode() == key.hashCode()) {
+                return true;
+            }
             current = (Element) current.getNext();
         }
 
-        current.getNext().setParent(current.getParent());
-        current.getParent().setNext(current.getNext());
-        buckets[index].decCount();
+        return false;
+    }
+
+    void delete(String key) throws NoSuchElementException {
+        if(contains(key)) {
+
+            int index = getIndex(key);
+            Element current = (Element) buckets[index].getNext();
+
+            while (!(current.getName().equals(key) && current.getHashCode() == key.hashCode())) {
+                current = (Element) current.getNext();
+            }
+
+            current.getNext().setParent(current.getParent());
+            current.getParent().setNext(current.getNext());
+            buckets[index].decCount();
+        } else {throw new NoSuchElementException();}
+    }
+
+    void rewrite(String key, int value) throws NoSuchElementException {
+        if(contains(key)) {
+
+            int index = getIndex(key);
+            Element current = (Element) buckets[index].getNext();
+
+            while (current != null) {
+                if (current.getName().equals(key) && current.getHashCode() == key.hashCode()) {
+                    current.setValue(value);
+                    break;
+                }
+                current = (Element) current.getNext();
+            }
+
+        } else {
+            throw new NoSuchElementException();
+        }
     }
 
     private void resize() {
@@ -89,5 +120,15 @@ class HashMap {
 
     private int getIndex(String key) {
         return Math.abs(key.hashCode() % BUCKET_COUNT);
+    }
+
+    void show() {
+        for (int i = 0; i < BUCKET_COUNT; i++) {
+            Element current = (Element) buckets[i].getNext();
+            while(current != null) {
+                System.out.println(current.getName() + " -> " + current.getValue());
+                current = (Element) current.getNext();
+            }
+        }
     }
 }
