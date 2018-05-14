@@ -41,7 +41,7 @@ public class Parser implements Visitor, Visitable {
         currentTreeNode = root;
 
         try {
-            CSVReader csvReader = new CSVReader(new FileReader("D:/JavaProjects/SPOTranslator/SPOParser/src/main/resources/langRules.csv"));
+            CSVReader csvReader = new CSVReader(new FileReader("langRules.csv"));
             String[] nextLine;
             csvReader.readNext();
 
@@ -54,7 +54,7 @@ public class Parser implements Visitor, Visitable {
             }
             csvReader.close();
 
-            csvReader = new CSVReader(new FileReader("D:/JavaProjects/SPOTranslator/SPOParser/src/main/resources/analyzeTable.csv"));
+            csvReader = new CSVReader(new FileReader("analyzeTable.csv"));
             String[] description = csvReader.readNext();
 
             while((nextLine = csvReader.readNext()) != null) {

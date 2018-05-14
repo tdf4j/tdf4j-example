@@ -25,7 +25,7 @@ public class StackMachine implements Visitor {
         ops = new HashMap();
 
         try {
-            CSVReader csvReader = new CSVReader(new FileReader("D:/JavaProjects/SPOTranslator/SPOStackMachine/src/main/resources/context.csv"));
+            CSVReader csvReader = new CSVReader(new FileReader("context.csv"));
             String[] nextLine;
             csvReader.readNext();
 
@@ -155,7 +155,13 @@ public class StackMachine implements Visitor {
                 }
 
                 case "=" : {
-                    int value = Integer.parseInt(stack.pop());
+                    int value;
+                    try {
+                        value = Integer.parseInt(stack.peek());
+                        stack.pop();
+                    } catch (Exception e) {
+                        value = variables.get(stack.pop());
+                    }
                     String var = stack.pop();
                     variables.rewrite(var, value);
                     stack.push(var);
@@ -164,17 +170,17 @@ public class StackMachine implements Visitor {
             }
 
             if(str[i].contains("!F@")) {
-                i = Boolean.valueOf(stack.pop()) ? i : Integer.parseInt(str[i].substring(3, str[i].length()));
+                i = Boolean.valueOf(stack.pop()) ? i : Integer.parseInt(str[i].substring(3, str[i].length())) - 1;
                 continue;
             }
 
             if(str[i].contains("!@")) {
-                i = Integer.parseInt(str[i].substring(2, str[i].length()));
+                i = Integer.parseInt(str[i].substring(2, str[i].length())) - 1;
                 continue;
             }
 
             if(str[i].contains("!T@")) {
-                i = !Boolean.valueOf(stack.pop()) ? i : Integer.parseInt(str[i].substring(3, str[i].length()));
+                i = !Boolean.valueOf(stack.pop()) ? i : Integer.parseInt(str[i].substring(3, str[i].length())) - 1;
                 continue;
             }
 

@@ -37,7 +37,7 @@ public class Main {
         StringBuilder out = new StringBuilder();
 
         try {
-            BufferedReader reader = new BufferedReader(new FileReader("D:/JavaProjects/SPOTranslator/SPOLexer/src/main/resources/program.txt"));
+            BufferedReader reader = new BufferedReader(new FileReader("program.txt"));
             String line;
             while ((line = reader.readLine()) != null) {
                 out.append(line);
