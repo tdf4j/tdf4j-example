@@ -21,6 +21,12 @@
 
 		<dependency>
 			<groupId>ru.therealmone</groupId>
+			<artifactId>SPOStackMachine</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ru.therealmone</groupId>
 			<artifactId>TranslatorAPI</artifactId>
 			<version>1.0</version>
 		</dependency>

@@ -23,9 +23,9 @@ NUMBER,PROD,VALUE
 22,value_expr,value_expr_with_br + value_expr_continue
 23,value_expr,value_expr_without_br + value_expr_continue
 24,value_expr_with_br,LB + value_expr + RB
-25,value_expr_without_br,value + value_expr_continue
-26,value,VAR
-27,value,DIGIT
+25,value_expr_without_br,name + value_expr_continue
+26,name,VAR
+27,name,DIGIT
 28,value_expr_continue,OP + value_expr
 29,value_expr_continue,EMPTY
 30,else,EMPTY
