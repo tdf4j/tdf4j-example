@@ -22,7 +22,6 @@ final class OPNConverter implements Visitable {
     private static Stack<String> stack = new Stack<>();
     private static StringBuilder out = new StringBuilder();
 
-    //TODO: Переделать код
     static String convertToOPN(TreeNode root) {
         priority.clear();
         stack.clear();
@@ -91,47 +90,89 @@ final class OPNConverter implements Visitable {
     }
 
     private static void while_loop(TreeNode root) {
+        //while(a < b) {a + b} -> (index1)ab<!F@pab+!@p(index2) ; !@Fp - to index2 , !@p - to index1
+        int index1 = 0; //at a
+        int index2 = 0; //after !@p
+        int iteration = Thread.getAllStackTraces().hashCode();
+
         for(TreeNode child: root.getChildes()) {
             switch (child.getName()) {
                 case "WHILE" : break;
                 case "LB" : break;
-                case "condition" : {condition(child); break;}
+                case "condition" : {
+                    index1 = out.toString().split(",").length - 1;
+                    condition(child);
+                    break;
+                }
                 case "RB" : {
                     while (stack.size() != 0) {
                         out.append(stack.pop()).append(",");
                     }
-                    out.append("!F@p").append(",");
+                    out.append("!F@p").append(iteration).append(",");
+                    break;
                 }
                 case "FLB" : break;
-                case "expr_continue" : {expr_continue(child); out.append("!@p").append(","); break;}
+                case "expr_continue" : {
+                    expr_continue(child);
+                    break;
+                }
+                case "FRB" : {
+                    out.append("!@p").append(iteration).append(",");
+                    index2 = out.toString().split(",").length;
+                    break;
+                }
             }
         }
+
+        out.replace(out.indexOf("!F@p" + iteration) + 3, out.indexOf("!F@p" + iteration) + 4 + String.valueOf(iteration).length(), "" + index2);
+        out.replace(out.indexOf("!@p" + iteration) + 2, out.indexOf("!@p" + iteration) + 3 + String.valueOf(iteration).length(), "" + index1);
+
     }
 
     private static void if_statement(TreeNode root) {
+        //if (a < b) {a + b} -> ab<!F@pab+!@p (index1) ' else ' (index2) ; !F@p - to index1 , !@p - to index2 // if no else, then index2 = index1
+        int index1 = 0;
+        int index2 = 0;
+        int iteration = Thread.getAllStackTraces().hashCode();
+
         for(TreeNode child: root.getChildes()) {
             switch (child.getName()) {
                 case "IF" : break;
                 case "LB" : break;
-                case "condition" : {condition(child); break;}
+                case "condition" : {
+                    condition(child);
+                    break;
+                }
                 case "RB" : {
                     while (stack.size() != 0) {
                         out.append(stack.pop()).append(",");
                     }
-                    out.append("!F@p").append(",");
+                    out.append("!F@p").append(iteration).append(",");
                 }
                 case "FLB" : break;
                 case "expr_continue" : {expr_continue(child); break;}
-                case "FRB" : break;
-                case "else" : {else_(child); break;}
+                case "FRB" : {
+                    out.append("!@p").append(iteration).append(",");
+                    index1 = out.toString().split(",").length;
+                    index2 = index1;
+                    break;
+                }
+                case "else" : {
+                    else_(child);
+                    index2 = out.toString().split(",").length;
+                    break;
+                }
             }
         }
+
+        out.replace(out.indexOf("!F@p" + iteration) + 3, out.indexOf("!F@p" + iteration) + 4 + String.valueOf(iteration).length(), "" + index1);
+        out.replace(out.indexOf("!@p" + iteration) + 2, out.indexOf("!@p" + iteration) + 3 + String.valueOf(iteration).length(), "" + index2);
     }
 
     private static void else_(TreeNode root) {
         for(TreeNode child: root.getChildes()) {
             switch (child.getName()) {
-                case "ELSE" : {out.append("!@p").append(","); break;}
+                case "ELSE" : break;
                 case "FLB" : break;
                 case "expr_continue" : {expr_continue(child); break;}
                 case "FRB" : break;
@@ -150,11 +191,19 @@ final class OPNConverter implements Visitable {
     }
 
     private static void do_while_loop(TreeNode root) {
+        //do {a + b} while (a < b) -> (index1)ab+ab<!@T ; !@T - to index1
+        int iteration = Thread.getAllStackTraces().hashCode();
+        int index1 = 0;
+
         for(TreeNode child: root.getChildes()) {
             switch (child.getName()) {
                 case "DO" : break;
                 case "FLB" : break;
-                case "expr_continue" : {expr_continue(child); break;}
+                case "expr_continue" : {
+                    index1 = out.toString().split(",").length - 1;
+                    expr_continue(child);
+                    break;
+                }
                 case "FRB" : break;
                 case "WHILE" : break;
                 case "LB" : break;
@@ -163,13 +212,20 @@ final class OPNConverter implements Visitable {
                     while (stack.size() != 0) {
                         out.append(stack.pop()).append(",");
                     }
-                    out.append("!F@p").append(",");
+                    out.append("!T@p").append(iteration).append(",");
                 }
             }
         }
+
+        out.replace(out.indexOf("!T@p" + iteration) + 3, out.indexOf("!T@p" + iteration) + 4 + String.valueOf(iteration).length(), "" + index1);
     }
 
     private static void for_loop(TreeNode root) {
+        //for(i = 1; i < 1; i = i + 1) {a = 0;} -> i1= (index1) i1<!F@pa0=ii1+=!@p (index2) ; !@Fp - to index2, !@p - to index1
+        int iteration = Thread.getAllStackTraces().hashCode();
+        int index1 = 0; //at i
+        int index2 = 0; //after !@p
+
         TreeNode condition = new TreeNode("");
         TreeNode assign = new TreeNode("");
         TreeNode increment = new TreeNode("");
@@ -199,11 +255,12 @@ final class OPNConverter implements Visitable {
             out.append(stack.pop()).append(",");
         }
 
+        index1 = out.toString().split(",").length;
         condition(condition);
         while (stack.size() != 0) {
             out.append(stack.pop()).append(",");
         }
-        out.append("!F@p").append(",");
+        out.append("!F@p").append(iteration).append(",");
 
         expr_continue(expr_continue);
         while (stack.size() != 0) {
@@ -214,7 +271,11 @@ final class OPNConverter implements Visitable {
         while (stack.size() != 0) {
             out.append(stack.pop()).append(",");
         }
-        out.append("!@p").append(",");
+        out.append("!@p").append(iteration).append(",");
+        index2 = out.toString().split(",").length;
+
+        out.replace(out.indexOf("!F@p" + iteration) + 3, out.indexOf("!F@p" + iteration) + 4 + String.valueOf(iteration).length(), "" + index2);
+        out.replace(out.indexOf("!@p" + iteration) + 2, out.indexOf("!@p" + iteration) + 3 + String.valueOf(iteration).length(), "" + index1);
     }
 
     private static void condition(TreeNode root) {

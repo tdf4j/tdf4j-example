@@ -19,13 +19,9 @@ public class StackMachine implements Visitor {
     }
 
     private void calculate(String opn) {
-        variables.add("y", 1);
-        variables.add("x", 2);
-        variables.add("z", 3);
-        variables.add("n", 4);
-        variables.add("a", 5);
-        variables.add("b", 6);
-        variables.add("o", 7);
-        System.out.println(variables.get("a"));
+        for (int i = 0; i < 8; i++) {
+            variables.add("var" + i + "able" + i, i);
+        }
+        System.out.println(variables.get("var5able5"));
     }
 }

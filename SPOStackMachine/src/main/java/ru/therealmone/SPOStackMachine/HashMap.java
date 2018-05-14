@@ -4,8 +4,8 @@ import javax.management.openmbean.KeyAlreadyExistsException;
 import java.util.NoSuchElementException;
 
 class HashMap {
-    private int BUCKET_COUNT = 16;
-    private static final int MAX_ELEMENTS_IN_BUCKET = 8;
+    private int BUCKET_COUNT = 17;
+    private static final int MAX_ELEMENTS_IN_BUCKET = 7;
     private Bucket[] buckets;
 
     HashMap() {
@@ -65,6 +65,7 @@ class HashMap {
     }
 
     private void resize() {
+        //TODO: Реализовать
         System.out.println("Resized");
     }
 
