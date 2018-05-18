@@ -183,7 +183,7 @@ final class OPNConverter implements Visitable {
     private static void assign_expr(TreeNode root) {
         for(TreeNode child: root.getChildes()) {
             switch (child.getName()) {
-                case "VAR" : {out.append(child.getToken().getValue()).append(","); break;}
+                case "VAR" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
                 case "ASSIGN_OP" : {stack.push(child.getToken().getValue()); break;}
                 case "value_expr" : {value_expr(child); break;}
             }

@@ -1,6 +1,8 @@
 package ru.therealmone.SPOLexer;
 
 import org.junit.Test;
+import ru.therealmone.TranslatorAPI.UnexpectedSymbolException;
+
 import static org.junit.Assert.*;
 
 public class LexerTest {
@@ -14,7 +16,7 @@ public class LexerTest {
 
     @Test
     public void testGenerate() {
-        Lexer lexer = new Lexer(false);
+        Lexer lexer = new Lexer("D:/JavaProjects/SPOTranslator/SPOLexer/src/main/resources/lexemes.xml");
         addLexemes(lexer);
 
         //Success tests
@@ -158,17 +160,10 @@ public class LexerTest {
         assertEquals(1, lexer.tokens.size());
     }
 
-    @Test
-    public void testLexemes() {
-        Lexer lexer = new Lexer(false);
-        addLexemes(lexer);
-
-        assertEquals(4, lexer.lexemes.size());
-    }
 
     @Test
     public void testCompile() {
-        Lexer lexer = new Lexer(false);
+        Lexer lexer = new Lexer("D:/JavaProjects/SPOTranslator/SPOLexer/src/main/resources/lexemes.xml");
         addLexemes(lexer);
 
         //Success tests
@@ -220,7 +215,7 @@ public class LexerTest {
 
     @Test
     public void testPriority() {
-        Lexer lexer = new Lexer(false);
+        Lexer lexer = new Lexer("D:/JavaProjects/SPOTranslator/SPOLexer/src/main/resources/lexemes.xml");
         lexer.addLexeme("L1", "^[a-z]+", 4);
         lexer.addLexeme("L2", "^[a-z]+", 3);
         lexer.addLexeme("L3", "^[a-z]*[0-9]+", 2);

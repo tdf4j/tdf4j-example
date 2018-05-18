@@ -1,7 +1,7 @@
 package ru.therealmone.SPOStackMachine;
 
-import javax.management.openmbean.KeyAlreadyExistsException;
-import java.util.NoSuchElementException;
+import ru.therealmone.TranslatorAPI.KeyAlreadyExistsException;
+import ru.therealmone.TranslatorAPI.NoSuchElementException;
 
 class HashMap {
     private int BUCKET_COUNT = 17;
@@ -15,7 +15,7 @@ class HashMap {
         }
     }
 
-    void add(String key, int value) throws KeyAlreadyExistsException {
+    void add(String key, double value) throws KeyAlreadyExistsException {
         if(!contains(key)) {
             int index = getIndex(key);
 
@@ -25,12 +25,12 @@ class HashMap {
             }
 
             putToBucket(index, new Element(key, value));
-        } else {throw new KeyAlreadyExistsException();}
+        } else {throw new KeyAlreadyExistsException(key);}
     }
 
-    int get(String key) throws NoSuchElementException {
+    double get(String key) throws NoSuchElementException {
         int index = getIndex(key);
-        if(buckets[index].getEleCount() == 0) {throw new NoSuchElementException();}
+        if(buckets[index].getEleCount() == 0) {throw new NoSuchElementException(key);}
 
         Element current = (Element) buckets[index].getNext();
 
@@ -41,7 +41,7 @@ class HashMap {
             current = (Element) current.getNext();
         }
 
-        throw new NoSuchElementException();
+        throw new NoSuchElementException(key);
     }
 
     boolean contains(String key) {
@@ -73,10 +73,10 @@ class HashMap {
             current.getNext().setParent(current.getParent());
             current.getParent().setNext(current.getNext());
             buckets[index].decCount();
-        } else {throw new NoSuchElementException();}
+        } else {throw new NoSuchElementException(key);}
     }
 
-    void rewrite(String key, int value) throws NoSuchElementException {
+    void rewrite(String key, double value) throws NoSuchElementException {
         if(contains(key)) {
 
             int index = getIndex(key);
@@ -91,7 +91,8 @@ class HashMap {
             }
 
         } else {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException(key
+            );
         }
     }
 
