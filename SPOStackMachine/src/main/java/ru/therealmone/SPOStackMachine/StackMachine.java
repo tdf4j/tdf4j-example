@@ -1,15 +1,19 @@
 package ru.therealmone.SPOStackMachine;
 
 import com.opencsv.CSVReader;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import ru.therealmone.TranslatorAPI.Token;
 import ru.therealmone.TranslatorAPI.Visitor;
 
 import java.io.FileReader;
+import ru.therealmone.TranslatorAPI.NoSuchElementException;
+import ru.therealmone.TranslatorAPI.KeyAlreadyExistsException;
+
+import java.io.IOException;
 import java.util.Stack;
 
 public class StackMachine implements Visitor {
     private HashMap variables;
-    private HashMap ops;
     private Stack<String> stack = new Stack<>();
 
     @Override
@@ -17,182 +21,165 @@ public class StackMachine implements Visitor {
 
     @Override
     public void visit(String opn) {
-        calculate(opn);
+        try {
+            calculate(opn);
+        } catch (NumberFormatException e) {
+            System.out.println("Unexpected value type: " + stack.peek());
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
-    public StackMachine() {
+    public StackMachine(String contextDir) {
         variables = new HashMap();
-        ops = new HashMap();
 
         try {
-            CSVReader csvReader = new CSVReader(new FileReader("context.csv"));
+            CSVReader csvReader = new CSVReader(new FileReader(contextDir));
             String[] nextLine;
             csvReader.readNext();
 
             while((nextLine = csvReader.readNext()) != null) {
-                try {
-                    variables.add(nextLine[0], Integer.parseInt(nextLine[1]));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                variables.add(nextLine[0], Integer.parseInt(nextLine[1]));
             }
             csvReader.close();
 
-        } catch (Exception e) {
+        } catch (KeyAlreadyExistsException e) {
+            e.message();
+            System.exit(1);
+        } catch (IOException e) {
             e.printStackTrace();
+            System.exit(-1);
         }
-
-        ops.add("/", 5);
-        ops.add("*", 5);
-        ops.add("+", 4);
-        ops.add("-", 4);
-        ops.add("<", 3);
-        ops.add(">", 3);
-        ops.add("<=", 3);
-        ops.add(">=", 3);
-        ops.add("==", 3);
-        ops.add("&", 2);
-        ops.add("|", 2);
-        ops.add("^", 2);
     }
 
-    private void calculate(String opn) {
+    private void calculate(String opn) throws NumberFormatException {
         String[] str = opn.split(",");
 
         for (int i = 0; i < str.length; i++) {
-            if (variables.contains(str[i])) {
-                stack.push(str[i]);
-                continue;
-            }
+            try {
+                double tmp = Double.parseDouble(str[i]);
+                stack.push("" + tmp);
 
-            if(ops.contains(str[i])) {
-                int op1;
-                int op2;
-
-                try {
-                    op1 = Integer.parseInt(stack.peek());
-                    stack.pop();
-                } catch (Exception e) {
-                    op1 = variables.get(stack.pop());
-                }
-
-                try {
-                    op2 = Integer.parseInt(stack.peek());
-                    stack.pop();
-                } catch (Exception e) {
-                    op2 = variables.get(stack.pop());
-                }
+            } catch (NumberFormatException e) {
 
                 switch (str[i]) {
-                    case "/" : {
-                        stack.push(String.valueOf(op1 / op2));
+                    case "/": {
+                        double p2 = Double.parseDouble(stack.pop());
+                        double p1 = Double.parseDouble(stack.pop());
+                        stack.push("" + (p1 / p2));
                         break;
                     }
 
-                    case "*" : {
-                        stack.push(String.valueOf(op1 * op2));
+                    case "*": {
+                        double p2 = Double.parseDouble(stack.pop());
+                        double p1 = Double.parseDouble(stack.pop());
+                        stack.push("" + (p1 * p2));
                         break;
                     }
 
-                    case "+" : {
-                        stack.push(String.valueOf(op1 + op2));
+                    case "+": {
+                        double p2 = Double.parseDouble(stack.pop());
+                        double p1 = Double.parseDouble(stack.pop());
+                        stack.push("" + (p1 + p2));
                         break;
                     }
 
-                    case "-" : {
-                        stack.push(String.valueOf(op1 - op2));
+                    case "-": {
+                        double p2 = Double.parseDouble(stack.pop());
+                        double p1 = Double.parseDouble(stack.pop());
+                        stack.push("" + (p1 - p2));
                         break;
                     }
 
-                    case "<" : {
-                        stack.push(String.valueOf(op1 > op2));
+                    case "<": {
+                        double p2 = Double.parseDouble(stack.pop());
+                        double p1 = Double.parseDouble(stack.pop());
+                        stack.push("" + (p1 < p2));
                         break;
                     }
 
-                    case ">" : {
-                        stack.push(String.valueOf(op1 < op2));
+                    case ">": {
+                        double p2 = Double.parseDouble(stack.pop());
+                        double p1 = Double.parseDouble(stack.pop());
+                        stack.push("" + (p1 > p2));
                         break;
                     }
 
-                    case ">=" : {
-                        stack.push(String.valueOf(op1 <= op2));
+                    case "<=": {
+                        double p2 = Double.parseDouble(stack.pop());
+                        double p1 = Double.parseDouble(stack.pop());
+                        stack.push("" + (p1 <= p2));
                         break;
                     }
 
-                    case "<=" : {
-                        stack.push(String.valueOf(op1 >= op2));
+                    case ">=": {
+                        double p2 = Double.parseDouble(stack.pop());
+                        double p1 = Double.parseDouble(stack.pop());
+                        stack.push("" + (p1 >= p2));
                         break;
                     }
 
-                    case "==" : {
-                        stack.push(String.valueOf(op1 == op2));
+                    case "==": {
+                        double p2 = Double.parseDouble(stack.pop());
+                        double p1 = Double.parseDouble(stack.pop());
+                        stack.push("" + (p1 == p2));
+                        break;
+                    }
+
+                    case "&": {
+                        boolean p2 = Boolean.parseBoolean(stack.pop());
+                        boolean p1 = Boolean.parseBoolean(stack.pop());
+                        stack.push("" + (p1 && p2));
+                        break;
+                    }
+
+                    case "|": {
+                        boolean p2 = Boolean.parseBoolean(stack.pop());
+                        boolean p1 = Boolean.parseBoolean(stack.pop());
+                        stack.push("" + (p1 || p2));
+                        break;
+                    }
+
+                    case "^": {
+                        boolean p2 = Boolean.parseBoolean(stack.pop());
+                        boolean p1 = Boolean.parseBoolean(stack.pop());
+                        stack.push("" + (p1 ^ p2));
+                        break;
+                    }
+
+                    case "=": {
+                        double p2 = Double.parseDouble(stack.pop());
+                        String variable = stack.pop();
+                        try {
+                            variables.rewrite(variable, p2);
+                        } catch (NoSuchElementException e1) {
+                            e1.message();
+                            System.exit(1);
+                        }
+                        break;
+                    }
+
+                    default: {
+                        if (str[i].contains("!F@")) {
+                            i = Boolean.valueOf(stack.pop()) ? i : Integer.parseInt(str[i].substring(3, str[i].length())) - 1;
+                        } else if (str[i].contains("!@")) {
+                            i = Integer.parseInt(str[i].substring(2, str[i].length())) - 1;
+                        } else if (str[i].contains("!T@")) {
+                            i = !Boolean.valueOf(stack.pop()) ? i : Integer.parseInt(str[i].substring(3, str[i].length())) - 1;
+                        } else if (str[i].contains("#")) {
+                            String tmp = str[i].substring(1, str[i].length());
+                            stack.push(tmp);
+                        } else if (!str[i].equals("$")) {
+                            try {
+                                stack.push("" + variables.get(str[i]));
+                            } catch (NoSuchElementException e1) {
+                                e1.message();
+                                System.exit(1);
+                            }
+                        }
                         break;
                     }
                 }
-                continue;
-            }
-
-            switch(str[i]) {
-                case "&" : {
-                    boolean op1 = Boolean.valueOf(stack.pop());
-                    boolean op2 = Boolean.valueOf(stack.pop());
-                    stack.push(String.valueOf(op1 && op2));
-                    continue;
-                }
-
-                case "|" : {
-                    boolean op1 = Boolean.valueOf(stack.pop());
-                    boolean op2 = Boolean.valueOf(stack.pop());
-                    stack.push(String.valueOf(op1 || op2));
-                    continue;
-                }
-
-                case "^" : {
-                    boolean op1 = Boolean.valueOf(stack.pop());
-                    boolean op2 = Boolean.valueOf(stack.pop());
-                    stack.push(String.valueOf(op1 ^ op2));
-                    continue;
-                }
-
-                case "=" : {
-                    int value;
-                    try {
-                        value = Integer.parseInt(stack.peek());
-                        stack.pop();
-                    } catch (Exception e) {
-                        value = variables.get(stack.pop());
-                    }
-                    String var = stack.pop();
-                    variables.rewrite(var, value);
-                    stack.push(var);
-                    continue;
-                }
-            }
-
-            if(str[i].contains("!F@")) {
-                i = Boolean.valueOf(stack.pop()) ? i : Integer.parseInt(str[i].substring(3, str[i].length())) - 1;
-                continue;
-            }
-
-            if(str[i].contains("!@")) {
-                i = Integer.parseInt(str[i].substring(2, str[i].length())) - 1;
-                continue;
-            }
-
-            if(str[i].contains("!T@")) {
-                i = !Boolean.valueOf(stack.pop()) ? i : Integer.parseInt(str[i].substring(3, str[i].length())) - 1;
-                continue;
-            }
-
-            if(str[i].contains("$")) {
-                break;
-            }
-
-            try{
-                stack.push(String.valueOf(Integer.parseInt(str[i])));
-            } catch (Exception e) {
-                System.out.println("Unknown command: " + str[i]);
-                System.exit(1);
             }
         }
     }

@@ -1,1 +1,1 @@
-while (ff < fs) {}
+while (ff < fs & ff < fs) {ff = ff + 1;}

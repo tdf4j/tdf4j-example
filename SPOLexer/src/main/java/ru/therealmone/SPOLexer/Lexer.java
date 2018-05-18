@@ -4,10 +4,15 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 import ru.therealmone.TranslatorAPI.Token;
+import ru.therealmone.TranslatorAPI.UnexpectedSymbolException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,12 +25,11 @@ class Lexer {
 
     private static final char END_SYMBOL = '$';
 
-    Lexer(boolean loadFromXML) {
-        if(loadFromXML) {
+    Lexer(String fileDir) {
             try {
                 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
                 DocumentBuilder docBuilder = dbf.newDocumentBuilder();
-                Document doc = docBuilder.parse("lexemes.xml");
+                Document doc = docBuilder.parse(fileDir);
 
                 Node root = doc.getDocumentElement();
                 NodeList childes = root.getChildNodes();
@@ -41,13 +45,22 @@ class Lexer {
                         addLexeme(type, template, Integer.parseInt(priority));
                     }
                 }
-            } catch (Exception e) {
+            } catch (FileNotFoundException e) {
+                System.out.println("Can't find lexemes.xml file in: \n" + fileDir);
                 e.printStackTrace();
+                System.exit(1);
+            } catch (ParserConfigurationException e) {
+                System.out.println("DocumentBuilder cannot be created which satisfies the configuration requested.");
+                e.printStackTrace();
+                System.exit(1);
+            } catch(SAXException e) {
+                System.out.println("XML parse error.");
+                e.printStackTrace();
+                System.exit(1);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.exit(-1);
             }
-        }
-//        System.out.println("----------------------------------LEXER-----------------------------------------");
-//        showLexemes();
-//        System.out.println("--------------------------------------------------------------------------------");
     }
 
     void addLexeme(String type, String pattern, Integer priority) {
@@ -59,36 +72,42 @@ class Lexer {
     }
 
     public void showLexemes() {
+        System.out.println("LEXEMES: ");
         for(Map.Entry<String, Pattern> entry: lexemes.entrySet()) {
             System.out.println("Lexeme #" + priority.get(entry.getKey()) + ": " + entry.getKey() + " --> " + entry.getValue().pattern());
         }
     }
 
     void generateTokens(String input) {
+        try {
             input = input.replaceAll("\\$", "");
             input += END_SYMBOL;
 
             tokens.clear();
             StringBuilder tempString = new StringBuilder();
 
-            while(input.charAt(0) != END_SYMBOL) {
+            while (input.charAt(0) != END_SYMBOL) {
                 input = input.trim();
                 tempString.append(input.charAt(tempString.length()));
-                
-                if(!checkLexemes(tempString.toString())) {
-                    if(tempString.length() > 1) {
+
+                if (!checkLexemes(tempString.toString())) {
+                    if (tempString.length() > 1) {
                         tempString.deleteCharAt(tempString.length() - 1);
                         tokens.add(new Token(chooseLexeme(tempString.toString()), tempString.toString()));
                         input = input.substring(tempString.length());
                         tempString.delete(0, tempString.length());
                     } else {
-                        System.out.println("Unexpected first symbol in current input string: \n\t" + input);
-                        break;
+                        throw new UnexpectedSymbolException(input, tokens);
                     }
                 }
             }
 
             tokens.add(new Token("$", "$"));
+
+        } catch (UnexpectedSymbolException e) {
+            e.message();
+            System.exit(1);
+        }
     }
     
     private boolean checkLexemes(String str) {

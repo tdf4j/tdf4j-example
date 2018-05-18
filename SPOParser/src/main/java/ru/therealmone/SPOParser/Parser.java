@@ -1,11 +1,11 @@
 package ru.therealmone.SPOParser;
 
 import com.opencsv.CSVReader;
-import ru.therealmone.TranslatorAPI.Token;
-import ru.therealmone.TranslatorAPI.Visitable;
-import ru.therealmone.TranslatorAPI.Visitor;
+import ru.therealmone.TranslatorAPI.*;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 public class Parser implements Visitor, Visitable {
@@ -15,13 +15,13 @@ public class Parser implements Visitor, Visitable {
     private Map<Integer, String[]> langRules = new HashMap<>();
     private Map<String, Map<String, Integer>> analyzeTable = new HashMap<>();
     private HashSet<String> terminals;
-    public boolean ERROR = false;
     private TreeNode root;
     private TreeNode currentTreeNode;
+    private StringBuilder history = new StringBuilder();
 
     @Override
     public void visit(Token token) {
-        ERROR = !parse(token);
+        parse(token);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class Parser implements Visitor, Visitable {
         v.visit(OPNConverter.convertToOPN(root));
     }
 
-    public Parser(HashSet<String> terminals) {
+    public Parser(String langRulesDir, String analyzeTableDir, HashSet<String> terminals) {
         this.terminals = terminals;
         terminals.add("$");
 
@@ -41,7 +41,8 @@ public class Parser implements Visitor, Visitable {
         currentTreeNode = root;
 
         try {
-            CSVReader csvReader = new CSVReader(new FileReader("langRules.csv"));
+
+            CSVReader csvReader = new CSVReader(new FileReader(langRulesDir));
             String[] nextLine;
             csvReader.readNext();
 
@@ -52,9 +53,10 @@ public class Parser implements Visitor, Visitable {
                         e.printStackTrace();
                 }
             }
+
             csvReader.close();
 
-            csvReader = new CSVReader(new FileReader("analyzeTable.csv"));
+            csvReader = new CSVReader(new FileReader(analyzeTableDir));
             String[] description = csvReader.readNext();
 
             while((nextLine = csvReader.readNext()) != null) {
@@ -64,14 +66,16 @@ public class Parser implements Visitor, Visitable {
                 }
                 analyzeTable.put(nextLine[0], tmp);
             }
-            csvReader.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-//        System.out.println("----------------------------------PARSER----------------------------------------");
-//        showLangRules();
-//        System.out.println("--------------------------------------------------------------------------------");
+            csvReader.close();
+
+        } catch (FileNotFoundException e) {
+            System.out.println("Can't find file in: \n" + langRulesDir + "\n or: \n" + analyzeTableDir);
+            System.exit(1);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
     }
 
     public void showLangRules() {
@@ -81,32 +85,40 @@ public class Parser implements Visitor, Visitable {
         }
     }
 
-    private boolean parse(Token token) {
-        while(!terminals.contains(stack.peek())) {
+    private void parse(Token token) {
+        try {
+            while (!terminals.contains(stack.peek())) {
 
-            if(!stack.peek().equals("lang")) {
-                for(TreeNode child: currentTreeNode.getChildes()) {
-                    if(child.getName().equals(stack.peek()) && child.getChildes().size() == 0) {
-                        currentTreeNode = child;
+                if (!stack.peek().equals("lang")) {
+                    for (TreeNode child : currentTreeNode.getChildes()) {
+                        if (child.getName().equals(stack.peek()) && child.getChildes().size() == 0) {
+                            currentTreeNode = child;
+                            break;
+                        }
+                    }
+                }
+                openNonTerminal(token);
+            }
+
+            if (stack.peek().equals(token.getType())) {
+                for (TreeNode child : currentTreeNode.getChildes()) {
+                    if (child.getName().equals(token.getType()) && child.getToken() == null) {
+                        moveCN();
+                        child.setToken(token);
+                        System.out.println("Success " + token.getValue());
+                        history.append(token.getValue()).append(" ");
+                        stack.pop();
                         break;
                     }
                 }
+            } else {
+                throw new UnexpectedTokenException(token, stack.peek(), history.toString());
             }
-            openNonTerminal(token);
-        }
 
-        if(stack.peek().equals(token.getType())) {
-            for(TreeNode child: currentTreeNode.getChildes()) {
-                if(child.getName().equals(token.getType()) && child.getToken() == null) {
-                    moveCN();
-                    child.setToken(token);
-                    //System.out.println("Success " + token.getValue());
-                    stack.pop();
-                    return true;
-                }
-            }
+        } catch (UnexpectedTokenException e) {
+            e.message();
+            System.exit(1);
         }
-        return false;
     }
 
     private void moveCN() {
@@ -136,15 +148,11 @@ public class Parser implements Visitor, Visitable {
             }
 
         } catch (NullPointerException e) {
-            System.out.println("Seems like tables aren't complete \nCan't find rule for " + peek + " (token = " + token.getType() + ")");
+            System.out.println("Seems like tables aren't complete. \nCan't find rule for " + peek + " (token = " + token.getType() + ").");
             e.printStackTrace();
             System.exit(1);
         }
 
-    }
-
-    public TreeNode getRoot() {
-        return this.root;
     }
 
     public String getOPN() {
