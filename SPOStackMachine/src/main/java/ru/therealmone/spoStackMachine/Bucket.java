@@ -1,6 +1,6 @@
-package ru.therealmone.SPOStackMachine;
+package ru.therealmone.spoStackMachine;
 
-import ru.therealmone.TranslatorAPI.Node;
+import ru.therealmone.translatorAPI.Node;
 
 class Bucket extends Node {
     private int eleCount;

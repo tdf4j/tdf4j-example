@@ -1,10 +1,8 @@
-package ru.therealmone.SPOLexer;
+package ru.therealmone.spoLexer;
 
-import ru.therealmone.SPOParser.Parser;
-import ru.therealmone.TranslatorAPI.Token;
-import ru.therealmone.SPOStackMachine.StackMachine;
-import ru.therealmone.TranslatorAPI.UnexpectedSymbolException;
-import ru.therealmone.TranslatorAPI.UnexpectedTokenException;
+import ru.therealmone.spoParser.Parser;
+import ru.therealmone.translatorAPI.Token;
+import ru.therealmone.spoStackMachine.StackMachine;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -13,11 +11,11 @@ import java.util.HashSet;
 
 
 public class Main {
-    private static final String LEXEMES_DIR = "SPOLexer/src/main/resources/lexemes.xml";
-    private static final String LANG_RULES_DIR = "SPOParser/src/main/resources/langRules.csv";
-    private static final String ANALYZE_TABLE_DIR = "SPOParser/src/main/resources/analyzeTable.csv";
-    private static final String CONTEXT_DIR = "SPOStackMachine/src/main/resources/context.csv";
-    private static final String PROGRAM_DIR = "SPOLexer/src/main/resources/program.txt";
+    private static final String LEXEMES_DIR = "lexemes.xml";
+    private static final String LANG_RULES_DIR = "langRules.csv";
+    private static final String ANALYZE_TABLE_DIR = "analyzeTable.csv";
+    private static final String CONTEXT_DIR = "context.csv";
+    private static final String PROGRAM_DIR = "program.txt";
 
     public static void main(String[] args) {
 

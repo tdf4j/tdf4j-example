@@ -1,13 +1,12 @@
-package ru.therealmone.SPOStackMachine;
+package ru.therealmone.spoStackMachine;
 
 import com.opencsv.CSVReader;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import ru.therealmone.TranslatorAPI.Token;
-import ru.therealmone.TranslatorAPI.Visitor;
+import ru.therealmone.translatorAPI.Token;
+import ru.therealmone.translatorAPI.Visitor;
 
 import java.io.FileReader;
-import ru.therealmone.TranslatorAPI.NoSuchElementException;
-import ru.therealmone.TranslatorAPI.KeyAlreadyExistsException;
+import ru.therealmone.translatorAPI.NoSuchElementException;
+import ru.therealmone.translatorAPI.KeyAlreadyExistsException;
 
 import java.io.IOException;
 import java.util.Stack;

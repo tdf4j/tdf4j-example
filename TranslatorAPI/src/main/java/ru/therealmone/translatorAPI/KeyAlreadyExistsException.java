@@ -1,4 +1,4 @@
-package ru.therealmone.TranslatorAPI;
+package ru.therealmone.translatorAPI;
 
 public class KeyAlreadyExistsException extends Exception{
     private String key;

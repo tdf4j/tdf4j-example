@@ -1,7 +1,7 @@
-package ru.therealmone.SPOParser;
+package ru.therealmone.spoParser;
 
 import com.opencsv.CSVReader;
-import ru.therealmone.TranslatorAPI.*;
+import ru.therealmone.translatorAPI.*;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

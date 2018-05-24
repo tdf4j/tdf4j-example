@@ -1,18 +1,18 @@
-package ru.therealmone.SPOLexer;
+package ru.therealmone.spoParser;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
-import ru.therealmone.SPOParser.Parser;
-import ru.therealmone.TranslatorAPI.Token;
-import ru.therealmone.TranslatorAPI.UnexpectedSymbolException;
+
+import ru.therealmone.spoLexer.Lexer;
+import ru.therealmone.translatorAPI.Token;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
 public class ParserTest {
-    private static final String LEXEMES_DIR = "D:/JavaProjects/SPOTranslator/SPOLexer/src/main/resources/lexemes.xml";
-    private static final String LANG_RULES_DIR = "D:/JavaProjects/SPOTranslator/SPOParser/src/main/resources/langRules.csv";
-    private static final String ANALYZE_TABLE_DIR = "D:/JavaProjects/SPOTranslator/SPOParser/src/main/resources/analyzeTable.csv";
+    private static final String LEXEMES_DIR = "D:/JavaProjects/SPOTranslator/spoLexer/src/main/resources/lexemes.xml";
+    private static final String LANG_RULES_DIR = "D:/JavaProjects/SPOTranslator/spoParser/src/main/resources/langRules.csv";
+    private static final String ANALYZE_TABLE_DIR = "D:/JavaProjects/SPOTranslator/spoParser/src/main/resources/analyzeTable.csv";
 
     @Test
     public void parserTests() {

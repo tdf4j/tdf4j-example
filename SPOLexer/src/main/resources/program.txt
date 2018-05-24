@@ -1,1 +1,7 @@
-while (ff < fs & ff < fs) {ff = ff + 1;}
+for (i = 0; i < count; i = i + 1) {
+    if (ff == fs) {
+        fs = fs + 1;
+    } else {
+        ff = fs;
+    }
+}

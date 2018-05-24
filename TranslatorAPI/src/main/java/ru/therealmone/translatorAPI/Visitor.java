@@ -1,4 +1,4 @@
-package ru.therealmone.TranslatorAPI;
+package ru.therealmone.translatorAPI;
 
 public interface Visitor {
     void visit(Token token);

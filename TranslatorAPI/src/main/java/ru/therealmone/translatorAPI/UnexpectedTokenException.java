@@ -1,4 +1,4 @@
-package ru.therealmone.TranslatorAPI;
+package ru.therealmone.translatorAPI;
 
 public class UnexpectedTokenException extends Exception {
     private String expected;

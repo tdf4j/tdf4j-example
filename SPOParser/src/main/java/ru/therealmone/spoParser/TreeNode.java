@@ -1,7 +1,7 @@
-package ru.therealmone.SPOParser;
+package ru.therealmone.spoParser;
 
-import ru.therealmone.TranslatorAPI.Node;
-import ru.therealmone.TranslatorAPI.Token;
+import ru.therealmone.translatorAPI.Node;
+import ru.therealmone.translatorAPI.Token;
 
 import java.util.ArrayList;
 

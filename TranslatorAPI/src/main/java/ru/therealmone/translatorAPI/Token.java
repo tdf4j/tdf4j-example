@@ -1,4 +1,4 @@
-package ru.therealmone.TranslatorAPI;
+package ru.therealmone.translatorAPI;
 
 public class Token implements Visitable {
     private String type;

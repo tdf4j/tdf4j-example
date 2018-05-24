@@ -1,10 +1,10 @@
-package ru.therealmone.SPOStackMachine;
+package ru.therealmone.spoStackMachine;
 
-import ru.therealmone.TranslatorAPI.KeyAlreadyExistsException;
-import ru.therealmone.TranslatorAPI.NoSuchElementException;
+import ru.therealmone.translatorAPI.KeyAlreadyExistsException;
+import ru.therealmone.translatorAPI.NoSuchElementException;
 
 class HashMap {
-    private int BUCKET_COUNT = 17;
+    int BUCKET_COUNT = 17;
     private static final int MAX_ELEMENTS_IN_BUCKET = 7;
     private Bucket[] buckets;
 
@@ -35,7 +35,7 @@ class HashMap {
         Element current = (Element) buckets[index].getNext();
 
         while(current != null) {
-            if(current.getName().equals(key) && current.getHashCode() == key.hashCode()) {
+            if(current.getHashCode() == key.hashCode() && current.getName().equals(key)) {
                 return current.getValue();
             }
             current = (Element) current.getNext();
@@ -51,7 +51,7 @@ class HashMap {
         Element current = (Element) buckets[index].getNext();
 
         while(current != null) {
-            if(current.getName().equals(key) && current.getHashCode() == key.hashCode()) {
+            if(current.getHashCode() == key.hashCode() && current.getName().equals(key)) {
                 return true;
             }
             current = (Element) current.getNext();
@@ -66,11 +66,14 @@ class HashMap {
             int index = getIndex(key);
             Element current = (Element) buckets[index].getNext();
 
-            while (!(current.getName().equals(key) && current.getHashCode() == key.hashCode())) {
+            while (!(current.getHashCode() == key.hashCode() && current.getName().equals(key))) {
                 current = (Element) current.getNext();
             }
 
-            current.getNext().setParent(current.getParent());
+            if(current.getNext() != null) {
+                current.getNext().setParent(current.getParent());
+            }
+
             current.getParent().setNext(current.getNext());
             buckets[index].decCount();
         } else {throw new NoSuchElementException(key);}
@@ -83,7 +86,7 @@ class HashMap {
             Element current = (Element) buckets[index].getNext();
 
             while (current != null) {
-                if (current.getName().equals(key) && current.getHashCode() == key.hashCode()) {
+                if (current.getHashCode() == key.hashCode() && current.getName().equals(key)) {
                     current.setValue(value);
                     break;
                 }
@@ -91,14 +94,31 @@ class HashMap {
             }
 
         } else {
-            throw new NoSuchElementException(key
-            );
+            throw new NoSuchElementException(key);
         }
     }
 
     private void resize() {
-        //TODO: Реализовать
-        System.out.println("Resized");
+        BUCKET_COUNT++;
+        Bucket[] tempBucketsArray = buckets;
+        buckets = new Bucket[BUCKET_COUNT];
+
+        for (int i = 0; i < BUCKET_COUNT; i++) {
+            buckets[i] = new Bucket();
+        }
+
+        for (Bucket bucket : tempBucketsArray) {
+            Element current = (Element) bucket.getNext();
+
+            while (current != null) {
+                int newIndex = getIndex(current.getName());
+                putToBucket(newIndex, current);
+
+                Element tempCurrent = (Element) current.getNext();
+                current.setNext(null);
+                current = tempCurrent;
+            }
+        }
     }
 
     private void putToBucket(int index, Element element) {

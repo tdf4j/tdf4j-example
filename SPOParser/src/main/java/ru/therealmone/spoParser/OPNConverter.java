@@ -1,8 +1,8 @@
-package ru.therealmone.SPOParser;
+package ru.therealmone.spoParser;
 
-import ru.therealmone.TranslatorAPI.Token;
-import ru.therealmone.TranslatorAPI.Visitable;
-import ru.therealmone.TranslatorAPI.Visitor;
+import ru.therealmone.translatorAPI.Token;
+import ru.therealmone.translatorAPI.Visitable;
+import ru.therealmone.translatorAPI.Visitor;
 
 import java.util.EmptyStackException;
 import java.util.HashMap;

@@ -1,12 +1,12 @@
-package ru.therealmone.SPOLexer;
+package ru.therealmone.spoLexer;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import ru.therealmone.TranslatorAPI.Token;
-import ru.therealmone.TranslatorAPI.UnexpectedSymbolException;
+import ru.therealmone.translatorAPI.Token;
+import ru.therealmone.translatorAPI.UnexpectedSymbolException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,14 +18,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.*;
 
-class Lexer {
-    ArrayList<Token> tokens = new ArrayList<>();
-    Map<String, Pattern> lexemes = new HashMap<>();
+public class Lexer {
+    public ArrayList<Token> tokens = new ArrayList<>();
+    public Map<String, Pattern> lexemes = new HashMap<>();
     private Map<String, Integer> priority = new HashMap<>();
 
     private static final char END_SYMBOL = '$';
 
-    Lexer(String fileDir) {
+    public Lexer(String fileDir) {
             try {
                 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
                 DocumentBuilder docBuilder = dbf.newDocumentBuilder();
@@ -78,7 +78,7 @@ class Lexer {
         }
     }
 
-    void generateTokens(String input) {
+    public void generateTokens(String input) {
         try {
             input = input.replaceAll("\\$", "");
             input += END_SYMBOL;
@@ -133,7 +133,7 @@ class Lexer {
         return lexType;
     }
 
-    void showTokens() {
+    public void showTokens() {
         System.out.println("GENERATED TOKENS: ");
         for(Token token: tokens) {
             System.out.println("Token №" + tokens.indexOf(token) + " : " + token.getType() + " --> " + token.getValue());
