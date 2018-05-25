@@ -6,27 +6,39 @@ NUMBER,PROD,VALUE
 5,expr,if_statement
 6,expr,do_while_loop
 7,expr,assign_expr + DEL
-8,expr_continue,expr + expr_continue
-9,expr_continue,EMPTY
-10,while_loop,WHILE + LB + condition + RB + FLB + expr_continue + FRB
-11,for_loop,FOR + LB + assign_expr + DEL + condition + DEL + assign_expr + RB + FLB + expr_continue + FRB
-12,if_statement,IF + LB + condition + RB + FLB + expr_continue + FRB + else
-13,assign_expr,VAR + ASSIGN_OP + value_expr
-14,do_while_loop,DO + FLB + expr_continue + FRB + WHILE + LB + condition + RB
-15,condition,condition_with_br + condition_continue
-16,condition,condition_without_br + condition_continue
-17,condition_with_br,LB + condition + RB
-18,condition_without_br,compare_expr
-19,condition_continue,EMPTY
-20,condition_continue,LOP + condition
-21,compare_expr,value_expr + COP + value_expr
-22,value_expr,value_expr_with_br + value_expr_continue
-23,value_expr,value_expr_without_br + value_expr_continue
-24,value_expr_with_br,LB + value_expr + RB
-25,value_expr_without_br,value + value_expr_continue
-26,value,VAR
-27,value,DIGIT
-28,value_expr_continue,OP + value_expr
-29,value_expr_continue,EMPTY
-30,else,EMPTY
-31,else,ELSE + FLB + expr_continue + FRB
+8,expr,init_expr + DEL
+9,expr,put_expr + DEL
+10,expr,remove_expr + DEL
+11,expr,rewrite_expr + DEL
+12,expr_continue,expr + expr_continue
+13,expr_continue,EMPTY
+14,while_loop,WHILE + LB + condition + RB + FLB + expr_continue + FRB
+15,for_loop,FOR + LB + assign_expr + DEL + condition + DEL + assign_expr + RB + FLB + expr_continue + FRB
+16,if_statement,IF + LB + condition + RB + FLB + expr_continue + FRB + else
+17,assign_expr,VAR + ASSIGN_OP + value_expr
+18,do_while_loop,DO + FLB + expr_continue + FRB + WHILE + LB + condition + RB
+19,put_expr,PUT + LB + VAR + COMMA + VAR + RB
+20,remove_expr,REMOVE + LB + VAR + COMMA + VAR + RB
+21,rewrite_expr,REWRITE + LB + VAR + COMMA + VAR + COMMA + value_expr + RB
+22,init_expr,NEW + VAR + init_expr_continue
+23,init_expr_continue,TYPEOF + type
+24,init_expr_continue,ASSIGN_OP + value_expr
+25,type,HASHMAP
+26,condition,condition_with_br + condition_continue
+27,condition,condition_without_br + condition_continue
+28,condition_with_br,LB + condition + RB
+29,condition_without_br,compare_expr
+30,condition_continue,EMPTY
+31,condition_continue,LOP + condition
+32,compare_expr,value_expr + COP + value_expr
+33,value_expr,value_expr_with_br + value_expr_continue
+34,value_expr,value_expr_without_br + value_expr_continue
+35,value_expr_with_br,LB + value_expr + RB
+36,value_expr_without_br,value + value_expr_continue
+37,value_expr_without_br,GET + LB + VAR + COMMA + VAR + RB + value_expr_continue
+38,value,VAR
+39,value,DIGIT
+40,value_expr_continue,OP + value_expr
+41,value_expr_continue,EMPTY
+42,else,EMPTY
+43,else,ELSE + FLB + expr_continue + FRB

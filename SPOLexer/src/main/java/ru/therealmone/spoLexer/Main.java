@@ -11,11 +11,11 @@ import java.util.HashSet;
 
 
 public class Main {
-    private static final String LEXEMES_DIR = "lexemes.xml";
-    private static final String LANG_RULES_DIR = "langRules.csv";
-    private static final String ANALYZE_TABLE_DIR = "analyzeTable.csv";
-    private static final String CONTEXT_DIR = "context.csv";
-    private static final String PROGRAM_DIR = "program.txt";
+    private static final String LEXEMES_DIR = "spoLexer/src/main/resources/lexemes.xml";
+    private static final String LANG_RULES_DIR = "spoParser/src/main/resources/langRules.csv";
+    private static final String ANALYZE_TABLE_DIR = "spoParser/src/main/resources/analyzeTable.csv";
+    private static final String CONTEXT_DIR = "spoStackMachine/src/main/resources/context.csv";
+    private static final String PROGRAM_DIR = "spoLexer/src/main/resources/program.txt";
 
     public static void main(String[] args) {
 

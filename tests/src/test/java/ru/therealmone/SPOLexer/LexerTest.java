@@ -6,17 +6,9 @@ import static org.junit.Assert.*;
 
 public class LexerTest {
 
-    private void addLexemes(Lexer lexer) {
-        lexer.addLexeme("VAR", "^[a-z]+$", 4);
-        lexer.addLexeme("DIGIT", "^0|([1-9][0-9]*)",3);
-        lexer.addLexeme("ASSIGN_OP", "^=$", 2);
-        lexer.addLexeme("OP", "^[\\+\\-\\/\\*]$", 1);
-    }
-
     @Test
     public void testGenerate() {
         Lexer lexer = new Lexer("D:/JavaProjects/SPOTranslator/spoLexer/src/main/resources/lexemes.xml");
-        addLexemes(lexer);
 
         //Success tests
         lexer.generateTokens("value");
@@ -163,7 +155,6 @@ public class LexerTest {
     @Test
     public void testCompile() {
         Lexer lexer = new Lexer("D:/JavaProjects/SPOTranslator/spoLexer/src/main/resources/lexemes.xml");
-        addLexemes(lexer);
 
         //Success tests
         assertTrue(lexer.match("VAR", "value"));

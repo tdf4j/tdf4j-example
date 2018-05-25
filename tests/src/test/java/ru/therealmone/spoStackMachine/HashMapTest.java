@@ -46,7 +46,7 @@ public class HashMapTest {
             hashMap.add("1", 1);
             hashMap.add("2", 2);
             hashMap.add("qwerty", 100);
-            hashMap.delete("qwerty");
+            hashMap.remove("qwerty");
             hashMap.get("qwerty");
         } catch (KeyAlreadyExistsException e) {
             fail();

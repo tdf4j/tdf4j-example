@@ -105,7 +105,7 @@ public class ParserTest {
     }
 
     @Test
-    public void OPNTests() {
+    public void opnTests() {
         //TODO: Протестировать обратную польскую нотацию
     }
 

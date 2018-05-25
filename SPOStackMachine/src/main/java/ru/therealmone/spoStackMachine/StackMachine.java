@@ -51,6 +51,7 @@ public class StackMachine implements Visitor {
         }
     }
 
+    //TODO: Реализовать typeof, get, put, remove, rewrite
     private void calculate(String opn) throws NumberFormatException {
         String[] str = opn.split(",");
 

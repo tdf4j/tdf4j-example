@@ -60,7 +60,7 @@ class HashMap {
         return false;
     }
 
-    void delete(String key) throws NoSuchElementException {
+    void remove(String key) throws NoSuchElementException {
         if(contains(key)) {
 
             int index = getIndex(key);

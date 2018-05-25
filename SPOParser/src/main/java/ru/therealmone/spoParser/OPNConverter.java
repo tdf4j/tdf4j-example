@@ -42,6 +42,11 @@ final class OPNConverter implements Visitable {
         priority.put("(", 1);
         priority.put(")", 1);
         priority.put("=", 0);
+        priority.put("typeof", 0);
+        priority.put("put", 0);
+        priority.put("get", 6);
+        priority.put("remove", 0);
+        priority.put("rewrite", 0);
 
         lang(root);
         return out.toString();
@@ -71,6 +76,10 @@ final class OPNConverter implements Visitable {
                 case "do_while_loop" : {do_while_loop(child); break;}
                 case "for_loop" : {for_loop(child); break;}
                 case "assign_expr" : {assign_expr(child); break;}
+                case "init_expr" : {init_expr(child); break;}
+                case "put_expr" : {put_expr(child); break;}
+                case "remove_expr" : {remove_expr(child); break;}
+                case "rewrite_expr" : {rewrite_expr(child); break;}
                 case "DEL" : {
                     while (stack.size() != 0) {
                         out.append(stack.pop()).append(",");
@@ -278,6 +287,73 @@ final class OPNConverter implements Visitable {
         out.replace(out.indexOf("!@p" + iteration) + 2, out.indexOf("!@p" + iteration) + 3 + String.valueOf(iteration).length(), "" + index1);
     }
 
+    private static void init_expr(TreeNode root) {
+        for(TreeNode child: root.getChildes()) {
+            switch (child.getName()) {
+                case "NEW" : {break;}
+                case "VAR" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
+                case "init_expr_continue" : {init_expr_continue(child); break;}
+            }
+        }
+    }
+
+    private static void init_expr_continue(TreeNode root) {
+        for(TreeNode child: root.getChildes()) {
+            switch (child.getName()) {
+                case "TYPEOF" : {pushOP(child.getToken()); break;}
+                case "type" : {type(child); break;}
+                case "ASSIGN_OP" : {pushOP(child.getToken()); break;}
+                case "value_expr" : {value_expr(child); break;}
+            }
+        }
+    }
+
+    private static void type(TreeNode root) {
+        for(TreeNode child: root.getChildes()) {
+            switch (child.getName()) {
+                case "HASHMAP" : {out.append(child.getToken().getValue()).append(","); break;}
+            }
+        }
+    }
+
+    private static void put_expr(TreeNode root) {
+        for(TreeNode child: root.getChildes()) {
+            switch (child.getName()) {
+                case "PUT" : {pushOP(child.getToken());}
+                case "LB" : break;
+                case "VAR" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
+                case "COMMA" : break;
+                case "RB" : break;
+            }
+        }
+    }
+
+    private static void remove_expr(TreeNode root) {
+        for(TreeNode child: root.getChildes()) {
+            switch (child.getName()) {
+                case "REMOVE" : {pushOP(child.getToken()); break;}
+                case "LB" : break;
+                case "VAR" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
+                case "COMMA" : break;
+                case "RB" : break;
+            }
+        }
+    }
+
+    private static void rewrite_expr(TreeNode root) {
+        for(TreeNode child: root.getChildes()) {
+            switch (child.getName()) {
+                case "REWRITE" : pushOP(child.getToken());
+                case "LB" : break;
+                case "VAR" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
+                case "COMMA" : break;
+                case "value_expr" : {value_expr(child); break;}
+                case "RB" : break;
+            }
+        }
+    }
+
+
     private static void condition(TreeNode root) {
         for(TreeNode child: root.getChildes()) {
             switch (child.getName()) {
@@ -349,6 +425,11 @@ final class OPNConverter implements Visitable {
             switch (child.getName()) {
                 case "value" : {value(child); break;}
                 case "value_expr_continue" : {value_expr_continue(child); break;}
+
+                case "GET" : {pushOP(child.getToken()); break;}
+                case "LB" : break;
+                case "VAR" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
+                case "COMMA" : break;
             }
         }
     }

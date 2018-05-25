@@ -1,7 +1,1 @@
-for (i = 0; i < count; i = i + 1) {
-    if (ff == fs) {
-        fs = fs + 1;
-    } else {
-        ff = fs;
-    }
-}
+rewrite(a, i, get(b, i) * (50 - 13));
