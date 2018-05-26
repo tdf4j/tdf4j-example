@@ -1,8 +1,8 @@
 package ru.therealmone.spoStackMachine;
 
 import org.junit.Test;
-import ru.therealmone.translatorAPI.KeyAlreadyExistsException;
-import ru.therealmone.translatorAPI.NoSuchElementException;
+import ru.therealmone.translatorAPI.Exceptions.KeyAlreadyExistsException;
+import ru.therealmone.translatorAPI.Exceptions.NoSuchElementException;
 
 import static org.junit.Assert.*;
 
