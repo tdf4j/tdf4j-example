@@ -42,7 +42,7 @@
 
 					<archive>
 						<manifest>
-							<mainClass>ru.therealmone.SPOLexer.Main</mainClass>
+							<mainClass>ru.therealmone.spoLexer.Main</mainClass>
 						</manifest>
 					</archive>
 

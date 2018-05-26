@@ -1,1 +1,1 @@
-while (ff < fs & ff < fs) {ff = ff + 1;}
+new a typeof hashmap;

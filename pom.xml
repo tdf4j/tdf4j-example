@@ -13,6 +13,7 @@
 		<module>SPOParser</module>
         <module>TranslatorAPI</module>
         <module>SPOStackMachine</module>
+        <module>Tests</module>
     </modules>
 
     <dependencies>

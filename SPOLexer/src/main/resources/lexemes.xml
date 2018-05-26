@@ -5,6 +5,46 @@
         <template>^[a-z]+$</template>
     </lexeme>
 
+    <lexeme priority="2">
+        <type>NEW</type>
+        <template>^new$</template>
+    </lexeme>
+
+    <lexeme priority="2">
+        <type>TYPEOF</type>
+        <template>^typeof$</template>
+    </lexeme>
+
+    <lexeme priority="2">
+        <type>HASHMAP</type>
+        <template>^hashmap$</template>
+    </lexeme>
+
+    <lexeme priority="2">
+        <type>GET</type>
+        <template>^get$</template>
+    </lexeme>
+
+    <lexeme priority="2">
+        <type>PUT</type>
+        <template>^put$</template>
+    </lexeme>
+
+    <lexeme priority="2">
+        <type>REMOVE</type>
+        <template>^remove$</template>
+    </lexeme>
+
+    <lexeme priority="2">
+        <type>REWRITE</type>
+        <template>^rewrite$</template>
+    </lexeme>
+
+    <lexeme priority="1">
+        <type>COMMA</type>
+        <template>^,$</template>
+    </lexeme>
+
     <lexeme priority="1">
         <type>DIGIT</type>
         <template>^0|([1-9][0-9]*)$</template>
