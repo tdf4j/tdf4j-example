@@ -16,6 +16,10 @@ public class Node {
         this.parent = parent;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Node getParent() {
         return this.parent;
     }

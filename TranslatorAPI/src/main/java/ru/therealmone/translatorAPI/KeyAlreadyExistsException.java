@@ -1,13 +1,12 @@
-package ru.therealmone.translatorAPI.Exceptions;
+package ru.therealmone.translatorAPI;
 
-public class KeyAlreadyExistsException extends Exception implements ExceptionInterface {
+public class KeyAlreadyExistsException extends Exception{
     private String key;
 
     public KeyAlreadyExistsException(String key) {
         this.key = key;
     }
 
-    @Override
     public void message() {
         System.out.println("Key " + key + " already exists.");
     }

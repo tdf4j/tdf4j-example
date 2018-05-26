@@ -1,13 +1,12 @@
-package ru.therealmone.translatorAPI.Exceptions;
+package ru.therealmone.translatorAPI;
 
-public class NoSuchElementException extends Exception implements ExceptionInterface {
+public class NoSuchElementException extends Exception{
     private String key;
 
     public NoSuchElementException(String key) {
         this.key = key;
     }
 
-    @Override
     public void message() {
         System.out.println("Can't find key " + key + ".");
     }

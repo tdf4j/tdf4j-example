@@ -1,1 +1,1 @@
-new a typeof hashmap;
+rewrite(a, i, get(b, i) * (50 - 13));

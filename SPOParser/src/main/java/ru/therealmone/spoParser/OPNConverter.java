@@ -1,59 +1,61 @@
 package ru.therealmone.spoParser;
 
 import ru.therealmone.translatorAPI.Token;
+import ru.therealmone.translatorAPI.Visitable;
+import ru.therealmone.translatorAPI.Visitor;
 
 import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
-/**
- * priorities of operators:
- *
- * 7 - get
- * 6 - / , *
- * 5 - + , -
- * 4 - < , > , <= , >= , ==
- * 3 - & , | , ^
- * 2 - ( , )
- * 1 - =. typeof, put, get, remove, rewrite
- * 0 - new
-**/
+/* 5 - / , *
+*  4 - + , -
+*  3 - < , > , <= , >= , ==
+*  2 - & , | , ^
+*  1 - ( , )
+*  0 - =
+* */
 
-final class OPNConverter {
-    private static Map<String, Integer> priority = new HashMap<String, Integer>(){{
-        put("/", 6);
-        put("*", 6);
-        put("+", 5);
-        put("-", 5);
-        put("<", 4);
-        put(">", 4);
-        put("<=", 4);
-        put(">=", 4);
-        put("==", 4);
-        put("&", 3);
-        put("|", 3);
-        put("^", 3);
-        put("(", 2);
-        put(")", 2);
-        put("=", 1);
-        put("typeof", 1);
-        put("put", 1);
-        put("get", 7);
-        put("remove", 1);
-        put("rewrite", 1);
-        put("new", 0); //TODO: Убрать из выражения --new a typeof hashmap-- команду new (Бесполезная?)
-    }};
-
+final class OPNConverter implements Visitable {
+    private static Map<String, Integer> priority = new HashMap<>();
     private static Stack<String> stack = new Stack<>();
     private static StringBuilder out = new StringBuilder();
 
     static String convertToOPN(TreeNode root) {
+        priority.clear();
         stack.clear();
         out.delete(0, out.length());
 
+        priority.put("/", 5);
+        priority.put("*", 5);
+        priority.put("+", 4);
+        priority.put("-", 4);
+        priority.put("<", 3);
+        priority.put(">", 3);
+        priority.put("<=", 3);
+        priority.put(">=", 3);
+        priority.put("==", 3);
+        priority.put("&", 2);
+        priority.put("|", 2);
+        priority.put("^", 2);
+        priority.put("(", 1);
+        priority.put(")", 1);
+        priority.put("=", 0);
+        priority.put("typeof", 0);
+        priority.put("put", 0);
+        priority.put("get", 6);
+        priority.put("remove", 0);
+        priority.put("rewrite", 0);
+
         lang(root);
         return out.toString();
+
+    }
+
+    @Override
+    public void accept(Visitor v) {
+        v.visit(out.toString());
     }
 
     private static void lang(TreeNode root) {
@@ -230,8 +232,8 @@ final class OPNConverter {
     private static void for_loop(TreeNode root) {
         //for(i = 1; i < 1; i = i + 1) {a = 0;} -> i1= (index1) i1<!F@pa0=ii1+=!@p (index2) ; !@Fp - to index2, !@p - to index1
         int iteration = Thread.getAllStackTraces().hashCode();
-        int index1; //at i
-        int index2; //after !@p
+        int index1 = 0; //at i
+        int index2 = 0; //after !@p
 
         TreeNode condition = new TreeNode("");
         TreeNode assign = new TreeNode("");
@@ -288,7 +290,7 @@ final class OPNConverter {
     private static void init_expr(TreeNode root) {
         for(TreeNode child: root.getChildes()) {
             switch (child.getName()) {
-                case "NEW" : {pushOP(child.getToken()); break;}
+                case "NEW" : {break;}
                 case "VAR" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
                 case "init_expr_continue" : {init_expr_continue(child); break;}
             }

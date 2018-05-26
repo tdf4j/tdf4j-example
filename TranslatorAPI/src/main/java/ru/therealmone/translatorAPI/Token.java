@@ -1,8 +1,5 @@
 package ru.therealmone.translatorAPI;
 
-import ru.therealmone.translatorAPI.Interfaces.Visitable;
-import ru.therealmone.translatorAPI.Interfaces.Visitor;
-
 public class Token implements Visitable {
     private String type;
     private String value;
@@ -23,10 +20,5 @@ public class Token implements Visitable {
     @Override
     public void accept(Visitor v){
         v.visit(this);
-    }
-
-    @Override
-    public String toString() {
-        return this.type + " --> " + this.value;
     }
 }

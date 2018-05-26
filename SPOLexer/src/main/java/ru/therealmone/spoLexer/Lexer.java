@@ -6,7 +6,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import ru.therealmone.translatorAPI.Token;
-import ru.therealmone.translatorAPI.Exceptions.UnexpectedSymbolException;
+import ru.therealmone.translatorAPI.UnexpectedSymbolException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -33,7 +33,6 @@ public class Lexer {
 
                 Node root = doc.getDocumentElement();
                 NodeList childes = root.getChildNodes();
-
 
                 for (int i = 0; i < childes.getLength(); i++) {
                     Node node = childes.item(i);
@@ -74,7 +73,9 @@ public class Lexer {
 
     public void showLexemes() {
         System.out.println("LEXEMES: ");
-        lexemes.forEach( (lexeme, pattern) -> System.out.println(lexeme + " --> " + pattern));
+        for(Map.Entry<String, Pattern> entry: lexemes.entrySet()) {
+            System.out.println("Lexeme #" + priority.get(entry.getKey()) + ": " + entry.getKey() + " --> " + entry.getValue().pattern());
+        }
     }
 
     public void generateTokens(String input) {
@@ -110,11 +111,11 @@ public class Lexer {
     }
     
     private boolean checkLexemes(String str) {
-        for(Map.Entry<String, Pattern> entry: lexemes.entrySet()) {
+       for(Map.Entry<String, Pattern> entry: lexemes.entrySet()) {
            if(match(entry.getKey(), str))
                return true;
-        }
-        return false;
+       }
+       return false;
     }
 
     private String chooseLexeme(String str) {
@@ -134,7 +135,9 @@ public class Lexer {
 
     public void showTokens() {
         System.out.println("GENERATED TOKENS: ");
-        tokens.forEach(System.out::println);
+        for(Token token: tokens) {
+            System.out.println("Token №" + tokens.indexOf(token) + " : " + token.getType() + " --> " + token.getValue());
+        }
     }
 
     boolean match(String lexeme, String string) {

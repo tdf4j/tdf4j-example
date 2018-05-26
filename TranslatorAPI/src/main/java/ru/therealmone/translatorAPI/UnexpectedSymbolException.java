@@ -1,10 +1,8 @@
-package ru.therealmone.translatorAPI.Exceptions;
-
-import ru.therealmone.translatorAPI.Token;
+package ru.therealmone.translatorAPI;
 
 import java.util.ArrayList;
 
-public class UnexpectedSymbolException extends Exception implements ExceptionInterface{
+public class UnexpectedSymbolException extends Exception {
     private String input;
     private ArrayList<Token> tokens;
 
@@ -13,7 +11,6 @@ public class UnexpectedSymbolException extends Exception implements ExceptionInt
         this.tokens = tokens;
     }
 
-    @Override
     public void message() {
         int count = 0;
         StringBuilder message = new StringBuilder();

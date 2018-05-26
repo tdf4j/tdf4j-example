@@ -1,29 +1,18 @@
 package ru.therealmone.spoStackMachine;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-import ru.therealmone.translatorAPI.Exceptions.UnknownCommandException;
+import com.opencsv.CSVReader;
 import ru.therealmone.translatorAPI.Token;
-import ru.therealmone.translatorAPI.Interfaces.Visitor;
+import ru.therealmone.translatorAPI.Visitor;
 
-import java.io.FileNotFoundException;
+import java.io.FileReader;
+import ru.therealmone.translatorAPI.NoSuchElementException;
+import ru.therealmone.translatorAPI.KeyAlreadyExistsException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Stack;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class StackMachine implements Visitor {
-    private Map<String, Pattern> commands = new HashMap<>();
-    private Map<String, Command> executions = new HashMap<>();
+    private HashMap variables;
     private Stack<String> stack = new Stack<>();
 
     @Override
@@ -40,102 +29,163 @@ public class StackMachine implements Visitor {
         }
     }
 
-    public StackMachine(String commandsDir) {
+    public StackMachine(String contextDir) {
+        variables = new HashMap();
+
         try {
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder docBuilder = dbf.newDocumentBuilder();
-            Document doc = docBuilder.parse(commandsDir);
+            CSVReader csvReader = new CSVReader(new FileReader(contextDir));
+            String[] nextLine;
+            csvReader.readNext();
 
-            Node root = doc.getDocumentElement();
-            NodeList childes = root.getChildNodes();
-
-
-            for (int i = 0; i < childes.getLength(); i++) {
-                Node node = childes.item(i);
-
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    Element element = (Element) node;
-                    String type = element.getElementsByTagName("type").item(0).getTextContent();
-                    String template = element.getElementsByTagName("template").item(0).getTextContent();
-                    commands.put(type, Pattern.compile(template));
-                }
+            while((nextLine = csvReader.readNext()) != null) {
+                variables.add(nextLine[0], Integer.parseInt(nextLine[1]));
             }
-        } catch (FileNotFoundException e) {
-            System.out.println("Can't find commands.xml file in: \n" + commandsDir);
-            e.printStackTrace();
-            System.exit(1);
-        } catch (ParserConfigurationException e) {
-            System.out.println("DocumentBuilder cannot be created which satisfies the configuration requested.");
-            e.printStackTrace();
-            System.exit(1);
-        } catch(SAXException e) {
-            System.out.println("XML parse error.");
-            e.printStackTrace();
+            csvReader.close();
+
+        } catch (KeyAlreadyExistsException e) {
+            e.message();
             System.exit(1);
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(-1);
         }
-
-        initExecutions();
     }
 
+    //TODO: Реализовать typeof, get, put, remove, rewrite
     private void calculate(String opn) throws NumberFormatException {
-        String[] splittedOPN = opn.split(",");
-        for(String com: splittedOPN) {
-            executions.get(match(com)).execute(com);
-        }
-    }
+        String[] str = opn.split(",");
 
-    private String match(String com) {
-        try {
-            for (Map.Entry<String, Pattern> entry : commands.entrySet()) {
-                Matcher m = entry.getValue().matcher(com);
-                if (m.matches())
-                    return entry.getKey();
-            }
-            throw new UnknownCommandException(com);
-        } catch (UnknownCommandException e) {
-            e.message();
-            System.exit(1);
-        }
-        return com; //Unreachable ????
-    }
+        for (int i = 0; i < str.length; i++) {
+            try {
+                double tmp = Double.parseDouble(str[i]);
+                stack.push("" + tmp);
 
-    private void initExecutions() {
-        commands.forEach( (command, pattern) -> {
-            //TODO: Описать все команды
-            switch (command) {
-                case "TAKE_VALUE" : {executions.put(command, com -> {}); break;}
-                case "TAKE_VAR_NAME" : {executions.put(command, com -> {}); break;}
-                case "GOTO_ON_FALSE" : {executions.put(command, com -> {}); break;}
-                case "GOTO_ON_TRUE" : {executions.put(command, com -> {}); break;}
-                case "DEL" : {executions.put(command, com -> {}); break;}
-                case "MUL" : {executions.put(command, com -> {}); break;}
-                case "PLUS" : {executions.put(command, com -> {}); break;}
-                case "MINUS" : {executions.put(command, com -> {}); break;}
-                case "LESS" : {executions.put(command, com -> {}); break;}
-                case "MORE" : {executions.put(command, com -> {}); break;}
-                case "LESS_OR_EQUALS" : {executions.put(command, com -> {}); break;}
-                case "MORE_OR_EQUALS" : {executions.put(command, com -> {}); break;}
-                case "EQUALS" : {executions.put(command, com -> {}); break;}
-                case "AND" : {executions.put(command, com -> {}); break;}
-                case "OR" : {executions.put(command, com -> {}); break;}
-                case "XOR" : {executions.put(command, com -> {}); break;}
-                case "ASSIGN" : {executions.put(command, com -> {}); break;}
-                case "TYPEOF" : {executions.put(command, com -> {}); break;}
-                case "PUT" : {executions.put(command, com -> {}); break;}
-                case "GET" : {executions.put(command, com -> {}); break;}
-                case "REMOVE" : {executions.put(command, com -> {}); break;}
-                case "REWRITE" : {executions.put(command, com -> {}); break;}
-                case "$" : {executions.put(command, com -> System.exit(0)); break;}
+            } catch (NumberFormatException e) {
+
+                switch (str[i]) {
+                    case "/": {
+                        double p2 = Double.parseDouble(stack.pop());
+                        double p1 = Double.parseDouble(stack.pop());
+                        stack.push("" + (p1 / p2));
+                        break;
+                    }
+
+                    case "*": {
+                        double p2 = Double.parseDouble(stack.pop());
+                        double p1 = Double.parseDouble(stack.pop());
+                        stack.push("" + (p1 * p2));
+                        break;
+                    }
+
+                    case "+": {
+                        double p2 = Double.parseDouble(stack.pop());
+                        double p1 = Double.parseDouble(stack.pop());
+                        stack.push("" + (p1 + p2));
+                        break;
+                    }
+
+                    case "-": {
+                        double p2 = Double.parseDouble(stack.pop());
+                        double p1 = Double.parseDouble(stack.pop());
+                        stack.push("" + (p1 - p2));
+                        break;
+                    }
+
+                    case "<": {
+                        double p2 = Double.parseDouble(stack.pop());
+                        double p1 = Double.parseDouble(stack.pop());
+                        stack.push("" + (p1 < p2));
+                        break;
+                    }
+
+                    case ">": {
+                        double p2 = Double.parseDouble(stack.pop());
+                        double p1 = Double.parseDouble(stack.pop());
+                        stack.push("" + (p1 > p2));
+                        break;
+                    }
+
+                    case "<=": {
+                        double p2 = Double.parseDouble(stack.pop());
+                        double p1 = Double.parseDouble(stack.pop());
+                        stack.push("" + (p1 <= p2));
+                        break;
+                    }
+
+                    case ">=": {
+                        double p2 = Double.parseDouble(stack.pop());
+                        double p1 = Double.parseDouble(stack.pop());
+                        stack.push("" + (p1 >= p2));
+                        break;
+                    }
+
+                    case "==": {
+                        double p2 = Double.parseDouble(stack.pop());
+                        double p1 = Double.parseDouble(stack.pop());
+                        stack.push("" + (p1 == p2));
+                        break;
+                    }
+
+                    case "&": {
+                        boolean p2 = Boolean.parseBoolean(stack.pop());
+                        boolean p1 = Boolean.parseBoolean(stack.pop());
+                        stack.push("" + (p1 && p2));
+                        break;
+                    }
+
+                    case "|": {
+                        boolean p2 = Boolean.parseBoolean(stack.pop());
+                        boolean p1 = Boolean.parseBoolean(stack.pop());
+                        stack.push("" + (p1 || p2));
+                        break;
+                    }
+
+                    case "^": {
+                        boolean p2 = Boolean.parseBoolean(stack.pop());
+                        boolean p1 = Boolean.parseBoolean(stack.pop());
+                        stack.push("" + (p1 ^ p2));
+                        break;
+                    }
+
+                    case "=": {
+                        double p2 = Double.parseDouble(stack.pop());
+                        String variable = stack.pop();
+                        try {
+                            variables.rewrite(variable, p2);
+                        } catch (NoSuchElementException e1) {
+                            e1.message();
+                            System.exit(1);
+                        }
+                        break;
+                    }
+
+                    default: {
+                        if (str[i].contains("!F@")) {
+                            i = Boolean.valueOf(stack.pop()) ? i : Integer.parseInt(str[i].substring(3, str[i].length())) - 1;
+                        } else if (str[i].contains("!@")) {
+                            i = Integer.parseInt(str[i].substring(2, str[i].length())) - 1;
+                        } else if (str[i].contains("!T@")) {
+                            i = !Boolean.valueOf(stack.pop()) ? i : Integer.parseInt(str[i].substring(3, str[i].length())) - 1;
+                        } else if (str[i].contains("#")) {
+                            String tmp = str[i].substring(1, str[i].length());
+                            stack.push(tmp);
+                        } else if (!str[i].equals("$")) {
+                            try {
+                                stack.push("" + variables.get(str[i]));
+                            } catch (NoSuchElementException e1) {
+                                e1.message();
+                                System.exit(1);
+                            }
+                        }
+                        break;
+                    }
+                }
             }
-        });
+        }
     }
 
     public void showVariables() {
         System.out.println("Current variables: ");
-        //TODO: Реализовать добавление переменных
-        //variables.show();
+        variables.show();
     }
 }
