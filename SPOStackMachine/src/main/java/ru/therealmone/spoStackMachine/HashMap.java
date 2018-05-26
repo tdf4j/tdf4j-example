@@ -1,7 +1,7 @@
 package ru.therealmone.spoStackMachine;
 
-import ru.therealmone.translatorAPI.KeyAlreadyExistsException;
-import ru.therealmone.translatorAPI.NoSuchElementException;
+import ru.therealmone.translatorAPI.Exceptions.KeyAlreadyExistsException;
+import ru.therealmone.translatorAPI.Exceptions.NoSuchElementException;
 
 class HashMap {
     int BUCKET_COUNT = 17;

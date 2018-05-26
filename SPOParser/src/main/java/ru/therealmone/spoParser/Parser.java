@@ -2,6 +2,9 @@ package ru.therealmone.spoParser;
 
 import com.opencsv.CSVReader;
 import ru.therealmone.translatorAPI.*;
+import ru.therealmone.translatorAPI.Exceptions.UnexpectedTokenException;
+import ru.therealmone.translatorAPI.Interfaces.Visitable;
+import ru.therealmone.translatorAPI.Interfaces.Visitor;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -80,9 +83,7 @@ public class Parser implements Visitor, Visitable {
 
     public void showLangRules() {
         System.out.println("LANG RULES; ");
-        for(Map.Entry<Integer, String[]> entry: langRules.entrySet()) {
-            System.out.println("Lang rule #" + entry.getKey() + ": " + Arrays.toString(entry.getValue()));
-        }
+        langRules.forEach( (num, rules) -> System.out.println(num + " --> " + Arrays.toString(rules)));
     }
 
     private void parse(Token token) {
@@ -97,6 +98,7 @@ public class Parser implements Visitor, Visitable {
                         }
                     }
                 }
+
                 openNonTerminal(token);
             }
 
