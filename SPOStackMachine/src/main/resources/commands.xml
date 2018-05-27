@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <commands>
     <command>
+        <type>DIGIT</type>
+        <template>^0|([1-9][0-9]*)$</template>
+    </command>
+
+    <command>
         <type>TAKE_VALUE</type>
-        <template>^[a-z]+$</template>
+        <template>^%[a-z]+$</template>
     </command>
 
     <command>
@@ -18,6 +23,11 @@
     <command>
         <type>GOTO_ON_TRUE</type>
         <template>^!T@[0-9]+$</template>
+    </command>
+
+    <command>
+        <type>GOTO</type>
+        <template>^!@[0-9]+$</template>
     </command>
 
     <command>
@@ -83,6 +93,11 @@
     <command>
         <type>ASSIGN</type>
         <template>^=$</template>
+    </command>
+
+    <command>
+        <type>NEW</type>
+        <template>^new$</template>
     </command>
 
     <command>

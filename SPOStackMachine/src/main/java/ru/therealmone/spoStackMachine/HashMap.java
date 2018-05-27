@@ -15,6 +15,30 @@ class HashMap {
         }
     }
 
+    @Override
+    public String toString() {
+        StringBuilder out = new StringBuilder();
+
+        out.append("\n\tHashMap@")
+                .append(this.hashCode())
+                .append(": \n");
+
+        for (int i = 0; i < BUCKET_COUNT; i++) {
+            Element current = (Element) buckets[i].getNext();
+            while(current != null) {
+                out.append("\t")
+                        .append(current.getName()).
+                        append(" -> ").
+                        append(current.getValue()).
+                        append("\n");
+                current = (Element) current.getNext();
+            }
+        }
+
+        out.replace(out.length() - 1, out.length(), "");
+        return out.toString();
+    }
+
     void add(String key, double value) throws KeyAlreadyExistsException {
         if(!contains(key)) {
             int index = getIndex(key);
@@ -141,15 +165,5 @@ class HashMap {
 
     private int getIndex(String key) {
         return Math.abs(key.hashCode() % BUCKET_COUNT);
-    }
-
-    void show() {
-        for (int i = 0; i < BUCKET_COUNT; i++) {
-            Element current = (Element) buckets[i].getNext();
-            while(current != null) {
-                System.out.println(current.getName() + " -> " + current.getValue());
-                current = (Element) current.getNext();
-            }
-        }
     }
 }
