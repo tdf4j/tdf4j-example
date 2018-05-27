@@ -10,6 +10,7 @@ import java.util.Stack;
 /**
  * priorities of operators:
  *
+ * 8 - new
  * 7 - get
  * 6 - / , *
  * 5 - + , -
@@ -17,11 +18,12 @@ import java.util.Stack;
  * 3 - & , | , ^
  * 2 - ( , )
  * 1 - =. typeof, put, get, remove, rewrite
- * 0 - new
 **/
 
 final class OPNConverter {
     private static Map<String, Integer> priority = new HashMap<String, Integer>(){{
+        put("new", 8);
+        put("get", 7);
         put("/", 6);
         put("*", 6);
         put("+", 5);
@@ -39,10 +41,8 @@ final class OPNConverter {
         put("=", 1);
         put("typeof", 1);
         put("put", 1);
-        put("get", 7);
         put("remove", 1);
         put("rewrite", 1);
-        put("new", 0); //TODO: Убрать из выражения --new a typeof hashmap-- команду new (Бесполезная?)
     }};
 
     private static Stack<String> stack = new Stack<>();
@@ -309,7 +309,7 @@ final class OPNConverter {
     private static void type(TreeNode root) {
         for(TreeNode child: root.getChildes()) {
             switch (child.getName()) {
-                case "HASHMAP" : {out.append(child.getToken().getValue()).append(","); break;}
+                case "HASHMAP" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
             }
         }
     }
@@ -435,7 +435,7 @@ final class OPNConverter {
     private static void value(TreeNode root) {
         for(TreeNode child: root.getChildes()) {
             switch (child.getName()) {
-                case "VAR" : {out.append(child.getToken().getValue()).append(","); break;}
+                case "VAR" : {out.append("%").append(child.getToken().getValue()).append(","); break;}
                 case "DIGIT" : {out.append(child.getToken().getValue()).append(","); break;}
             }
         }
