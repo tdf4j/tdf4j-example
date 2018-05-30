@@ -2,6 +2,8 @@ package ru.therealmone.spoLexer;
 
 import ru.therealmone.spoParser.Parser;
 import ru.therealmone.spoStackMachine.StackMachine;
+import ru.therealmone.translatorAPI.Exceptions.TranslatorException;
+import ru.therealmone.translatorAPI.Token;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -18,28 +20,41 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Lexer lexer = new Lexer(LEXEMES_DIR);
-        lexer.showLexemes();
+        Lexer lexer;
+        Parser parser;
+        StackMachine stackMachine;
 
-        lexer.generateTokens(loadProgram());
-        lexer.showTokens();
+        try {
+            lexer = new Lexer(LEXEMES_DIR);
+            lexer.showLexemes();
 
-        Parser parser = new Parser(LANG_RULES_DIR, ANALYZE_TABLE_DIR, new HashSet<>(lexer.lexemes.keySet()));
-        parser.showLangRules();
+            lexer.generateTokens(loadProgram());
+            lexer.showTokens();
 
-        lexer.tokens.forEach( (token) -> token.accept(parser));
 
-        System.out.println("PARSE SUCCESS");
-        System.out.println("OPN: " + parser.getOPN());
+            parser = new Parser(LANG_RULES_DIR, ANALYZE_TABLE_DIR, new HashSet<>(lexer.lexemes.keySet()));
+            parser.showLangRules();
 
-        StackMachine stackMachine = new StackMachine(COMMANDS_DIR);
-        parser.accept(stackMachine);
+            for(Token token: lexer.tokens) {
+                token.accept(parser);
+            }
 
-        System.out.println("CALCULATE SUCCESS");
-        stackMachine.showVariables();
+            System.out.println("PARSE SUCCESS");
+            System.out.println("OPN: " + parser.getOPN());
+
+            stackMachine = new StackMachine(COMMANDS_DIR);
+            parser.accept(stackMachine);
+
+            System.out.println("CALCULATE SUCCESS");
+            stackMachine.showVariables();
+
+        } catch (TranslatorException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
-    private static String loadProgram() {
+    private static String loadProgram() throws TranslatorException {
         StringBuilder out = new StringBuilder();
 
         try {
@@ -49,7 +64,7 @@ public class Main {
                 out.append(line);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new TranslatorException("Can't find program.txt", e);
         }
 
         return out.toString();

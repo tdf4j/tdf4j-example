@@ -1,8 +1,9 @@
 package ru.therealmone.spoStackMachine;
 
 import org.junit.Test;
-import ru.therealmone.translatorAPI.Exceptions.KeyAlreadyExistsException;
-import ru.therealmone.translatorAPI.Exceptions.NoSuchElementException;
+import ru.therealmone.spoStackMachine.hashmap.HashMap;
+import ru.therealmone.spoStackMachine.hashmap.exceptions.KeyAlreadyExistsException;
+import ru.therealmone.spoStackMachine.hashmap.exceptions.NoSuchElementException;
 
 import static org.junit.Assert.*;
 
@@ -103,13 +104,13 @@ public class HashMapTest {
     public void resizeMethodTest() {
         hashMap = new HashMap();
         try {
-            int buckets_count = hashMap.BUCKET_COUNT;
+            int buckets_count = hashMap.getBucketCount();
 
             for (int i = 0; i < 1000; i++) {
                 hashMap.add("" + i, i);
             }
 
-            if (buckets_count == hashMap.BUCKET_COUNT) {
+            if (buckets_count == hashMap.getBucketCount()) {
                 fail();
             } else {
                 for (int i = 0; i < 1000; i++) {

@@ -5,18 +5,23 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import ru.therealmone.translatorAPI.Exceptions.KeyAlreadyExistsException;
-import ru.therealmone.translatorAPI.Exceptions.NoSuchElementException;
-import ru.therealmone.translatorAPI.Exceptions.UnknownCommandException;
+import ru.therealmone.spoStackMachine.exceptions.NoVariableException;
+import ru.therealmone.spoStackMachine.exceptions.WrongTypeException;
+import ru.therealmone.spoStackMachine.hashmap.exceptions.KeyAlreadyExistsException;
+import ru.therealmone.spoStackMachine.hashmap.exceptions.NoSuchElementException;
+import ru.therealmone.spoStackMachine.hashmap.exceptions.UnknownCommandException;
+import ru.therealmone.translatorAPI.Exceptions.StackMachineException;
 import ru.therealmone.translatorAPI.Token;
 import ru.therealmone.translatorAPI.Interfaces.Visitor;
 
 import java.io.FileNotFoundException;
 
+import javax.sound.midi.Soundbank;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Stack;
@@ -34,17 +39,15 @@ public class StackMachine implements Visitor {
     public void visit(Token token) {}
 
     @Override
-    public void visit(String opn) {
+    public void visit(String opn) throws StackMachineException {
         try {
             calculate(opn);
         } catch (NumberFormatException e) {
-            System.out.println("Unexpected value type: " + stack.peek());
-            e.printStackTrace();
-            System.exit(1);
+            throw new StackMachineException("Unexpected value type " + stack.peek(), e);
         }
     }
 
-    public StackMachine(String commandsDir) {
+    public StackMachine(String commandsDir) throws StackMachineException {
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = dbf.newDocumentBuilder();
@@ -65,26 +68,19 @@ public class StackMachine implements Visitor {
                 }
             }
         } catch (FileNotFoundException e) {
-            System.out.println("Can't find commands.xml file in: \n" + commandsDir);
-            e.printStackTrace();
-            System.exit(1);
+            throw new StackMachineException("Can't find commands.xml file", e);
         } catch (ParserConfigurationException e) {
-            System.out.println("DocumentBuilder cannot be created which satisfies the configuration requested.");
-            e.printStackTrace();
-            System.exit(1);
+            throw new StackMachineException("DocumentBuilder cannot be created which satisfies the configuration requested", e);
         } catch(SAXException e) {
-            System.out.println("XML parse error.");
-            e.printStackTrace();
-            System.exit(1);
+            throw new StackMachineException("XML parse error", e);
         } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(-1);
+            throw new StackMachineException("I/O exception", e);
         }
 
         initExecutions();
     }
 
-    private void calculate(String opn) throws NumberFormatException {
+    private void calculate(String opn) throws StackMachineException {
         String[] splittedOPN = opn.split(",");
 
         while (!splittedOPN[cursor].equals("$")) {
@@ -109,7 +105,6 @@ public class StackMachine implements Visitor {
 
     private void initExecutions() {
         commands.forEach( (command, pattern) -> {
-            //TODO: Описать все команды
             switch (command) {
 
                 case "DIGIT" : {executions.put(command, com -> {
@@ -125,11 +120,10 @@ public class StackMachine implements Visitor {
                             Double tmp = (Double) variables.get(varName);
                             stack.push("" + tmp);
                         } else {
-                            System.out.println("Wrong type of " + varName);
-                            System.exit(1);
+                            throw new WrongTypeException("Wrong type of " + varName);
                         }
                     } else {
-                        System.out.println("Can't find variable " + varName);
+                        throw new NoVariableException("Can't find variable" + varName);
                     }
 
                     cursor++;
@@ -248,9 +242,9 @@ public class StackMachine implements Visitor {
                     if(variables.containsKey(varName))
                         variables.replace(varName, value);
                     else {
-                        System.out.println("Can't find variable " + varName);
-                        System.exit(1);
+                        throw new NoVariableException("Can't find variable " + varName);
                     }
+
                     cursor++;
                 }); break;}
 
@@ -265,12 +259,11 @@ public class StackMachine implements Visitor {
                         case "hashmap" : {
                             variables.replace(
                                     stack.pop(),
-                                    new ru.therealmone.spoStackMachine.HashMap());
+                                    new ru.therealmone.spoStackMachine.hashmap.HashMap());
                             break;
                         }
                         default: {
-                            System.out.println("Unknown type " + type);
-                            System.exit(1);
+                            throw new WrongTypeException("Unknown type " + type);
                         }
                     }
                     cursor++;
@@ -279,16 +272,29 @@ public class StackMachine implements Visitor {
                 case "PUT" : {executions.put(command, com -> {
                     String varName = stack.pop();
                     String collection = stack.pop();
+                    ru.therealmone.spoStackMachine.hashmap.HashMap hashMap;
+                    Double var;
 
-                    Double var = (Double) variables.get(varName);
-                    ru.therealmone.spoStackMachine.HashMap col =
-                            (ru.therealmone.spoStackMachine.HashMap) variables.get(collection);
+                    if(variables.containsKey(varName)) {
+                        if (variables.get(varName) instanceof Double) {
+                            var = (Double) variables.get(varName);
+                        } else {
+                            throw new WrongTypeException("Wrong type of " + varName);
+                        }
+                    } else {
+                        throw new NoVariableException("Can't find variable " + varName);
+                    }
 
                     try {
-                        col.add(varName, var);
-                    } catch (KeyAlreadyExistsException e) {
-                        e.message();
-                        System.exit(1);
+                        hashMap = (ru.therealmone.spoStackMachine.hashmap.HashMap) variables.get(collection);
+                    } catch (ClassCastException e) {
+                        throw new WrongTypeException("Wrong type of " + collection);
+                    }
+
+                    try {
+                        hashMap.add(varName, var);
+                    } catch (NullPointerException e) {
+                        throw new NoVariableException("Can't find variable " + collection, e);
                     }
 
                     cursor++;
@@ -297,15 +303,18 @@ public class StackMachine implements Visitor {
                 case "GET" : {executions.put(command, com -> {
                     String varName = stack.pop();
                     String collection = stack.pop();
-
-                    ru.therealmone.spoStackMachine.HashMap col =
-                            (ru.therealmone.spoStackMachine.HashMap) variables.get(collection);
+                    ru.therealmone.spoStackMachine.hashmap.HashMap hashMap;
 
                     try {
-                        stack.push("" + col.get(varName));
-                    } catch (NoSuchElementException e) {
-                        e.message();
-                        System.exit(1);
+                        hashMap = (ru.therealmone.spoStackMachine.hashmap.HashMap) variables.get(collection);
+                    } catch (ClassCastException e) {
+                        throw new WrongTypeException("Wrong type of " + collection);
+                    }
+
+                    try {
+                        stack.push("" + hashMap.get(varName));
+                    } catch (NullPointerException e) {
+                        throw new NoVariableException("Can't find variable " + collection, e);
                     }
 
                     cursor++;
@@ -315,14 +324,13 @@ public class StackMachine implements Visitor {
                     String varName = stack.pop();
                     String collection = stack.pop();
 
-                    ru.therealmone.spoStackMachine.HashMap col =
-                            (ru.therealmone.spoStackMachine.HashMap) variables.get(collection);
+                    ru.therealmone.spoStackMachine.hashmap.HashMap hashMap =
+                            (ru.therealmone.spoStackMachine.hashmap.HashMap) variables.get(collection);
 
                     try {
-                        col.remove(varName);
-                    } catch (NoSuchElementException e) {
-                        e.message();
-                        System.exit(1);
+                        hashMap.remove(varName);
+                    } catch (NullPointerException e) {
+                        throw new NoVariableException("Can't find variable " + collection, e);
                     }
 
                     cursor++;
@@ -333,20 +341,19 @@ public class StackMachine implements Visitor {
                     String varName = stack.pop();
                     String collection = stack.pop();
 
-                    ru.therealmone.spoStackMachine.HashMap col =
-                            (ru.therealmone.spoStackMachine.HashMap) variables.get(collection);
+                    ru.therealmone.spoStackMachine.hashmap.HashMap col =
+                            (ru.therealmone.spoStackMachine.hashmap.HashMap) variables.get(collection);
 
                     try {
                         col.rewrite(varName, value);
-                    } catch (NoSuchElementException e) {
-                        e.message();
-                        System.exit(1);
+                    } catch (NullPointerException e) {
+                        throw new NoVariableException("Can't find variable " + collection, e);
                     }
 
                     cursor++;
                 }); break;}
 
-                case "$" : {executions.put(command, com -> System.exit(0)); break;}
+                case "$" : {executions.put(command, com -> System.out.println("EXECUTION SUCCESS")); break;}
             }
         });
     }

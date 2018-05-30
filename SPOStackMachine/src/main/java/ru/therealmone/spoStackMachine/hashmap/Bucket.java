@@ -1,4 +1,4 @@
-package ru.therealmone.spoStackMachine;
+package ru.therealmone.spoStackMachine.hashmap;
 
 import ru.therealmone.translatorAPI.Node;
 

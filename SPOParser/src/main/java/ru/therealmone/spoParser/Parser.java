@@ -2,7 +2,9 @@ package ru.therealmone.spoParser;
 
 import com.opencsv.CSVReader;
 import ru.therealmone.translatorAPI.*;
-import ru.therealmone.translatorAPI.Exceptions.UnexpectedTokenException;
+import ru.therealmone.spoParser.exceptions.UnexpectedTokenException;
+import ru.therealmone.translatorAPI.Exceptions.ParserException;
+import ru.therealmone.translatorAPI.Exceptions.TranslatorException;
 import ru.therealmone.translatorAPI.Interfaces.Visitable;
 import ru.therealmone.translatorAPI.Interfaces.Visitor;
 
@@ -23,19 +25,21 @@ public class Parser implements Visitor, Visitable {
     private StringBuilder history = new StringBuilder();
 
     @Override
-    public void visit(Token token) {
+    public void visit(Token token) throws ParserException {
         parse(token);
     }
 
     @Override
-    public void visit(String opn) {}
+    public void visit(String opn) {
+        //NOP
+    }
 
     @Override
-    public void accept(Visitor v) {
+    public void accept(Visitor v) throws TranslatorException {
         v.visit(OPNConverter.convertToOPN(root));
     }
 
-    public Parser(String langRulesDir, String analyzeTableDir, HashSet<String> terminals) {
+    public Parser(String langRulesDir, String analyzeTableDir, HashSet<String> terminals) throws ParserException {
         this.terminals = terminals;
         terminals.add("$");
 
@@ -73,11 +77,9 @@ public class Parser implements Visitor, Visitable {
             csvReader.close();
 
         } catch (FileNotFoundException e) {
-            System.out.println("Can't find file in: \n" + langRulesDir + "\n or: \n" + analyzeTableDir);
-            System.exit(1);
+            throw new ParserException("Can't find langRules.csv or analzeTable.csv", e);
         } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(-1);
+            throw new ParserException("I/O exception", e);
         }
     }
 
@@ -86,7 +88,7 @@ public class Parser implements Visitor, Visitable {
         langRules.forEach( (num, rules) -> System.out.println(num + " --> " + Arrays.toString(rules)));
     }
 
-    private void parse(Token token) {
+    private void parse(Token token) throws ParserException {
         try {
             while (!terminals.contains(stack.peek())) {
 
@@ -119,7 +121,7 @@ public class Parser implements Visitor, Visitable {
 
         } catch (UnexpectedTokenException e) {
             e.message();
-            System.exit(1);
+            throw new ParserException("Can't parse token " + token.getType() + " -> " + token.getValue(), e);
         }
     }
 
@@ -133,7 +135,7 @@ public class Parser implements Visitor, Visitable {
         }
     }
 
-    private void openNonTerminal(Token token) {
+    private void openNonTerminal(Token token) throws ParserException {
         String peek = stack.peek();
 
         try {
@@ -150,11 +152,8 @@ public class Parser implements Visitor, Visitable {
             }
 
         } catch (NullPointerException e) {
-            System.out.println("Seems like tables aren't complete. \nCan't find rule for " + peek + " (token = " + token.getType() + ").");
-            e.printStackTrace();
-            System.exit(1);
+            throw new ParserException("Can't find rule for " + peek + "(token = " + token.getType() + ")", e);
         }
-
     }
 
     public String getOPN() {

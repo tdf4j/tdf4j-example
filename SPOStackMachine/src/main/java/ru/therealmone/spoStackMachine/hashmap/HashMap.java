@@ -1,14 +1,14 @@
-package ru.therealmone.spoStackMachine;
+package ru.therealmone.spoStackMachine.hashmap;
 
-import ru.therealmone.translatorAPI.Exceptions.KeyAlreadyExistsException;
-import ru.therealmone.translatorAPI.Exceptions.NoSuchElementException;
+import ru.therealmone.spoStackMachine.hashmap.exceptions.KeyAlreadyExistsException;
+import ru.therealmone.spoStackMachine.hashmap.exceptions.NoSuchElementException;
 
-class HashMap {
-    int BUCKET_COUNT = 17;
+public class HashMap {
+    private int BUCKET_COUNT = 17;
     private static final int MAX_ELEMENTS_IN_BUCKET = 7;
     private Bucket[] buckets;
 
-    HashMap() {
+    public HashMap() {
         buckets = new Bucket[BUCKET_COUNT];
         for (int i = 0; i < buckets.length; i++) {
             buckets[i] = new Bucket();
@@ -39,7 +39,7 @@ class HashMap {
         return out.toString();
     }
 
-    void add(String key, double value) throws KeyAlreadyExistsException {
+    public void add(String key, double value) throws KeyAlreadyExistsException {
         if(!contains(key)) {
             int index = getIndex(key);
 
@@ -52,7 +52,7 @@ class HashMap {
         } else {throw new KeyAlreadyExistsException(key);}
     }
 
-    double get(String key) throws NoSuchElementException {
+    public double get(String key) throws NoSuchElementException {
         int index = getIndex(key);
         if(buckets[index].getEleCount() == 0) {throw new NoSuchElementException(key);}
 
@@ -68,7 +68,7 @@ class HashMap {
         throw new NoSuchElementException(key);
     }
 
-    boolean contains(String key) {
+    public boolean contains(String key) {
         int index = getIndex(key);
         if(buckets[index].getEleCount() == 0) {return false;}
 
@@ -84,7 +84,7 @@ class HashMap {
         return false;
     }
 
-    void remove(String key) throws NoSuchElementException {
+    public void remove(String key) throws NoSuchElementException {
         if(contains(key)) {
 
             int index = getIndex(key);
@@ -103,7 +103,7 @@ class HashMap {
         } else {throw new NoSuchElementException(key);}
     }
 
-    void rewrite(String key, double value) throws NoSuchElementException {
+    public void rewrite(String key, double value) throws NoSuchElementException {
         if(contains(key)) {
 
             int index = getIndex(key);
@@ -165,5 +165,9 @@ class HashMap {
 
     private int getIndex(String key) {
         return Math.abs(key.hashCode() % BUCKET_COUNT);
+    }
+
+    public int getBucketCount() {
+        return this.BUCKET_COUNT;
     }
 }

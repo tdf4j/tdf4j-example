@@ -5,8 +5,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import ru.therealmone.translatorAPI.Exceptions.LexerException;
 import ru.therealmone.translatorAPI.Token;
-import ru.therealmone.translatorAPI.Exceptions.UnexpectedSymbolException;
+import ru.therealmone.spoLexer.exceptions.UnexpectedSymbolException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -25,7 +26,7 @@ public class Lexer {
 
     private static final char END_SYMBOL = '$';
 
-    public Lexer(String fileDir) {
+    public Lexer(String fileDir) throws LexerException {
             try {
                 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
                 DocumentBuilder docBuilder = dbf.newDocumentBuilder();
@@ -47,20 +48,13 @@ public class Lexer {
                     }
                 }
             } catch (FileNotFoundException e) {
-                System.out.println("Can't find lexemes.xml file in: \n" + fileDir);
-                e.printStackTrace();
-                System.exit(1);
+                throw new LexerException("Can't find lexemes.xml", e);
             } catch (ParserConfigurationException e) {
-                System.out.println("DocumentBuilder cannot be created which satisfies the configuration requested.");
-                e.printStackTrace();
-                System.exit(1);
+                throw new LexerException("DocumentBuilder cannot be created which satisfies the configuration requested", e);
             } catch(SAXException e) {
-                System.out.println("XML parse error.");
-                e.printStackTrace();
-                System.exit(1);
+                throw new LexerException("XML parse error", e);
             } catch (IOException e) {
-                e.printStackTrace();
-                System.exit(-1);
+                throw new LexerException("I/O exception", e);
             }
     }
 
@@ -77,7 +71,7 @@ public class Lexer {
         lexemes.forEach( (lexeme, pattern) -> System.out.println(lexeme + " --> " + pattern));
     }
 
-    public void generateTokens(String input) {
+    public void generateTokens(String input) throws LexerException {
         try {
             input = input.replaceAll("\\$", "");
             input += END_SYMBOL;
@@ -105,7 +99,7 @@ public class Lexer {
 
         } catch (UnexpectedSymbolException e) {
             e.message();
-            System.exit(1);
+            throw new LexerException("Can't generate tokens", e);
         }
     }
     
