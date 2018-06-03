@@ -1,9 +1,9 @@
-package ru.therealmone.spoStackMachine.hashmap.exceptions;
+package ru.therealmone.spoStackMachine.exceptions;
 
-import ru.therealmone.spoStackMachine.exceptions.HashMapException;
+import ru.therealmone.translatorAPI.Exceptions.StackMachineException;
 import ru.therealmone.translatorAPI.Interfaces.ExceptionInterface;
 
-public class UnknownCommandException extends HashMapException implements ExceptionInterface {
+public class UnknownCommandException extends StackMachineException implements ExceptionInterface {
     private String command;
 
     public UnknownCommandException(String command) {

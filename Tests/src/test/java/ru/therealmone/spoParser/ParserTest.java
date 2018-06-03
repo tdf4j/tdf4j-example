@@ -4,7 +4,6 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import ru.therealmone.spoLexer.Lexer;
-import ru.therealmone.translatorAPI.Exceptions.ParserException;
 import ru.therealmone.translatorAPI.Exceptions.TranslatorException;
 import ru.therealmone.translatorAPI.Token;
 
@@ -106,15 +105,66 @@ public class ParserTest {
             lexer.generateTokens("a = b; c = a; a = a;");
             assertTrue(check(lexer.tokens, new Parser(LANG_RULES_DIR, ANALYZE_TABLE_DIR, terminals)));
         } catch (TranslatorException e) {
+            e.printStackTrace();
             fail();
         }
     }
 
+    @Test
+    public void converterTests() {
+        try {
+            Lexer lexer = new Lexer(LEXEMES_DIR);
+            HashSet<String> terminals = new HashSet<>(lexer.lexemes.keySet());
+
+            lexer.generateTokens(""); //main program
+            assertEquals("$", //opn
+                    getOPN(lexer, new Parser(LANG_RULES_DIR, ANALYZE_TABLE_DIR, terminals)));
+
+            //TODO: Написать больше тестов
+            //while tests
+            lexer.generateTokens("while(a < b) {a = a + 1;}");
+            assertEquals("%a,%b,<,!F@10,#a,%a,1,+,=,!@0,$",
+                    getOPN(lexer, new Parser(LANG_RULES_DIR, ANALYZE_TABLE_DIR, terminals)));
+
+            lexer.generateTokens("while(a < b & c > d) {}");
+            assertEquals("%a,%b,<,%c,%d,>,&,!F@9,!@0,$",
+                    getOPN(lexer, new Parser(LANG_RULES_DIR, ANALYZE_TABLE_DIR, terminals)));
+
+            lexer.generateTokens("while(((a < b) & (c > d)) | ((a > c) & (b < d))) {}");
+            assertEquals("%a,%b,<,%c,%d,>,&,%a,%c,>,%b,%d,<,&,|,!F@17,!@0,$",
+                    getOPN(lexer, new Parser(LANG_RULES_DIR, ANALYZE_TABLE_DIR, terminals)));
+
+            lexer.generateTokens("while((a < b) & (c > d) | (a > c) & (b < d)) {}");
+            assertEquals("%a,%b,<,%c,%d,>,&,%a,%c,>,%b,%d,<,&,|,!F@17,!@0,$",
+                    getOPN(lexer, new Parser(LANG_RULES_DIR, ANALYZE_TABLE_DIR, terminals)));
+
+            lexer.generateTokens("while(a < b) {if (a < b) {}}");
+            assertEquals("%a,%b,<,!F@10,%a,%b,<,!F@9,!@9,!@0,$",
+                    getOPN(lexer, new Parser(LANG_RULES_DIR, ANALYZE_TABLE_DIR, terminals)));
+
+//            lexer.generateTokens("");
+//            assertEquals("",
+//                    getOPN(lexer, new Parser(LANG_RULES_DIR, ANALYZE_TABLE_DIR, terminals)));
+
+        } catch (TranslatorException e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
 
     private boolean check(ArrayList<Token> tokens, Parser parser) throws TranslatorException {
         for(Token token: tokens) {
             token.accept(parser);
         }
+
         return true;
+    }
+
+    private String getOPN(Lexer lexer, Parser parser) throws TranslatorException{
+        for(Token token: lexer.tokens) {
+            token.accept(parser);
+        }
+
+        return parser.getOPN();
     }
 }

@@ -7,21 +7,17 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import ru.therealmone.spoStackMachine.exceptions.NoVariableException;
 import ru.therealmone.spoStackMachine.exceptions.WrongTypeException;
-import ru.therealmone.spoStackMachine.hashmap.exceptions.KeyAlreadyExistsException;
-import ru.therealmone.spoStackMachine.hashmap.exceptions.NoSuchElementException;
-import ru.therealmone.spoStackMachine.hashmap.exceptions.UnknownCommandException;
+import ru.therealmone.spoStackMachine.exceptions.UnknownCommandException;
 import ru.therealmone.translatorAPI.Exceptions.StackMachineException;
 import ru.therealmone.translatorAPI.Token;
 import ru.therealmone.translatorAPI.Interfaces.Visitor;
 
 import java.io.FileNotFoundException;
 
-import javax.sound.midi.Soundbank;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Stack;
@@ -88,7 +84,7 @@ public class StackMachine implements Visitor {
         }
     }
 
-    private String match(String com) {
+    private String match(String com) throws StackMachineException {
         try {
             for (Map.Entry<String, Pattern> entry : commands.entrySet()) {
                 Matcher m = entry.getValue().matcher(com);
@@ -97,10 +93,8 @@ public class StackMachine implements Visitor {
             }
             throw new UnknownCommandException(com);
         } catch (UnknownCommandException e) {
-            e.message();
-            System.exit(1);
+            throw new StackMachineException("Unknown command", e);
         }
-        return com; //Unreachable ????
     }
 
     private void initExecutions() {
@@ -108,6 +102,11 @@ public class StackMachine implements Visitor {
             switch (command) {
 
                 case "DIGIT" : {executions.put(command, com -> {
+                    stack.push("" + Double.parseDouble(com));
+                    cursor++;
+                }); break;}
+
+                case "DOUBLE" : {executions.put(command, com -> {
                     stack.push("" + Double.parseDouble(com));
                     cursor++;
                 }); break;}
@@ -212,6 +211,13 @@ public class StackMachine implements Visitor {
                     double p2 = Double.parseDouble(stack.pop());
                     double p1 = Double.parseDouble(stack.pop());
                     stack.push("" + (p1 == p2));
+                    cursor++;
+                }); break;}
+
+                case "NOT_EQUALS" : {executions.put(command, com -> {
+                    double p2 = Double.parseDouble(stack.pop());
+                    double p1 = Double.parseDouble(stack.pop());
+                    stack.push("" + (p1 != p2));
                     cursor++;
                 }); break;}
 

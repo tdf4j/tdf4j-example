@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+//TODO: Реализовать оператор !
 public class Parser implements Visitor, Visitable {
 
     private Stack<String> stack = new Stack<>();

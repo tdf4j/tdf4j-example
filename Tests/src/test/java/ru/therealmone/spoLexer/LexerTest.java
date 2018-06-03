@@ -151,6 +151,16 @@ public class LexerTest {
 
             lexer.generateTokens("$");
             assertEquals(1, lexer.tokens.size());
+
+            lexer.generateTokens("!= !");
+            assertEquals("COP", lexer.tokens.get(0).getType());
+            assertEquals("LOP", lexer.tokens.get(1).getType());
+
+            lexer.generateTokens("0.155");
+            assertEquals("DOUBLE", lexer.tokens.get(0).getType());
+
+            lexer.generateTokens("155.0000000");
+            assertEquals("DOUBLE", lexer.tokens.get(0).getType());
         } catch (LexerException e) {
             fail();
         }

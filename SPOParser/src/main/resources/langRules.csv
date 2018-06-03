@@ -38,7 +38,8 @@ NUMBER,PROD,VALUE
 37,value_expr_without_br,GET + LB + VAR + COMMA + VAR + RB + value_expr_continue
 38,value,VAR
 39,value,DIGIT
-40,value_expr_continue,OP + value_expr
-41,value_expr_continue,EMPTY
-42,else,EMPTY
-43,else,ELSE + FLB + expr_continue + FRB
+40,value,DOUBLE
+41,value_expr_continue,OP + value_expr
+42,value_expr_continue,EMPTY
+43,else,EMPTY
+44,else,ELSE + FLB + expr_continue + FRB
