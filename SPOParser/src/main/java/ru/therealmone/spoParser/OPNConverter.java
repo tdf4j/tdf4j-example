@@ -212,7 +212,7 @@ final class OPNConverter {
                 case "DO" : break;
                 case "FLB" : break;
                 case "expr_continue" : {
-                    index1 = out.toString().split(",").length - 1;
+                    index1 = out.toString().split(",").length;
                     expr_continue(child);
                     break;
                 }

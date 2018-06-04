@@ -1,3 +1,12 @@
-new a = 10;
-new b = 20;
-while(a < b) {a = a + 1.5;}
+new a = 1;
+new b = 4;
+new hs typeof hashmap;
+new i = 1;
+put(hs, i);
+
+while(a <= b) {
+    rewrite(hs, i, get(hs, i) * a * 0.125);
+    a = a + 1;
+}
+
+remove(hs, i);

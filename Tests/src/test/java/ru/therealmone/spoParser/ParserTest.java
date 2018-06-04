@@ -142,9 +142,26 @@ public class ParserTest {
             assertEquals("%a,%b,<,!F@10,%a,%b,<,!F@9,!@9,!@0,$",
                     getOPN(lexer, new Parser(LANG_RULES_DIR, ANALYZE_TABLE_DIR, terminals)));
 
-//            lexer.generateTokens("");
-//            assertEquals("",
-//                    getOPN(lexer, new Parser(LANG_RULES_DIR, ANALYZE_TABLE_DIR, terminals)));
+            lexer.generateTokens("while(a < b) {do{} while(a < b)}");
+            assertEquals("%a,%b,<,!F@9,%a,%b,<,!T@4,!@0,$",
+                    getOPN(lexer, new Parser(LANG_RULES_DIR, ANALYZE_TABLE_DIR, terminals)));
+
+
+            lexer.generateTokens("while(a < b) {for(i = 1; i < 100; i = i + 1) {}}");
+            assertEquals("%a,%b,<,!F@18,#i,1,=,%i,100,<,!F@17,#i,%i,1,+,=,!@7,!@0,$",
+                    getOPN(lexer, new Parser(LANG_RULES_DIR, ANALYZE_TABLE_DIR, terminals)));
+
+            lexer.generateTokens("while(a < b) {new a typeof hashmap; new i = 1; put(a, i);}");
+            assertEquals("%a,%b,<,!F@16,#a,new,#hashmap,typeof,#i,new,1,=,#a,#i,put,!@0,$",
+                    getOPN(lexer, new Parser(LANG_RULES_DIR, ANALYZE_TABLE_DIR, terminals)));
+
+
+
+            //for tests
+            lexer.generateTokens("for(i = 1; (i < n) & (n > i); i = i + 1) {}");
+            assertEquals("#i,1,=,%i,%n,<,%n,%i,>,&,!F@17,#i,%i,1,+,=,!@3,$",
+                    getOPN(lexer, new Parser(LANG_RULES_DIR, ANALYZE_TABLE_DIR, terminals)));
+
 
         } catch (TranslatorException e) {
             e.printStackTrace();

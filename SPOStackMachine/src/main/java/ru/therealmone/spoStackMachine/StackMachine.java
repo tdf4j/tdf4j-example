@@ -122,7 +122,7 @@ public class StackMachine implements Visitor {
                             throw new WrongTypeException("Wrong type of " + varName);
                         }
                     } else {
-                        throw new NoVariableException("Can't find variable" + varName);
+                        throw new NoVariableException("Can't find variable " + varName);
                     }
 
                     cursor++;
