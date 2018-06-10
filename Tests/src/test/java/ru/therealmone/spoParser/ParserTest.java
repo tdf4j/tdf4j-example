@@ -151,8 +151,8 @@ public class ParserTest {
             assertEquals("%a,%b,<,!F@18,#i,1,=,%i,100,<,!F@17,#i,%i,1,+,=,!@7,!@0,$",
                     getOPN(lexer, new Parser(LANG_RULES_DIR, ANALYZE_TABLE_DIR, terminals)));
 
-            lexer.generateTokens("while(a < b) {new a typeof hashmap; new i = 1; put(a, i);}");
-            assertEquals("%a,%b,<,!F@16,#a,new,#hashmap,typeof,#i,new,1,=,#a,#i,put,!@0,$",
+            lexer.generateTokens("while(a < b) {new a typeof hashset; new i = 1; put(a, i);}");
+            assertEquals("%a,%b,<,!F@16,#a,new,#hashset,typeof,#i,new,1,=,#a,#i,put,!@0,$",
                     getOPN(lexer, new Parser(LANG_RULES_DIR, ANALYZE_TABLE_DIR, terminals)));
 
 

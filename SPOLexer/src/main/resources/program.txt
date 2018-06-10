@@ -1,6 +1,6 @@
 new a = 1;
 new b = 4;
-new hs typeof hashmap;
+new hs typeof hashset;
 new i = 1;
 put(hs, i);
 

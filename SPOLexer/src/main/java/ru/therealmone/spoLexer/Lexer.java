@@ -67,8 +67,8 @@ public class Lexer {
     }
 
     public void showLexemes() {
-        System.out.println("LEXEMES: ");
-        lexemes.forEach( (lexeme, pattern) -> System.out.println(lexeme + " --> " + pattern));
+        System.out.println("\u001B[33mLEXEMES:\u001B[0m");
+        lexemes.forEach( (lexeme, pattern) -> System.out.printf("%-20s%-10s%-40s%n", lexeme, "-->", pattern));
     }
 
     public void generateTokens(String input) throws LexerException {
@@ -128,7 +128,7 @@ public class Lexer {
 
     public void showTokens() {
         System.out.println("GENERATED TOKENS: ");
-        tokens.forEach(System.out::println);
+        tokens.forEach(token -> System.out.printf("%-20s%-10s%-40s%n", token.getType(), "-->", token.getValue()));
     }
 
     boolean match(String lexeme, String string) {

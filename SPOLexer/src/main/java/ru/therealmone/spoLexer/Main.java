@@ -39,13 +39,13 @@ public class Main {
                 token.accept(parser);
             }
 
-            System.out.println("PARSE SUCCESS");
+            System.out.println("\u001B[32mPARSE SUCCESS\u001B[0m");
             System.out.println("OPN: " + parser.getOPN());
 
             stackMachine = new StackMachine(COMMANDS_DIR);
             parser.accept(stackMachine);
 
-            System.out.println("CALCULATE SUCCESS");
+            System.out.println("\u001B[32mCALCULATE SUCCESS\u001B[0m");
             stackMachine.showVariables();
 
         } catch (TranslatorException e) {

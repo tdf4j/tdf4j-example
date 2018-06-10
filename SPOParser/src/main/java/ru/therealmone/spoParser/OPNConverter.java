@@ -314,7 +314,7 @@ final class OPNConverter {
     private static void type(TreeNode root) {
         for(TreeNode child: root.getChildes()) {
             switch (child.getName()) {
-                case "HASHMAP" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
+                case "HASHSET" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
             }
         }
     }

@@ -1,9 +1,9 @@
-package ru.therealmone.spoStackMachine.hashmap.exceptions;
+package ru.therealmone.spoStackMachine.collections.arraylist.exceptions;
 
-import ru.therealmone.spoStackMachine.exceptions.HashMapException;
+import ru.therealmone.spoStackMachine.exceptions.ArrayListException;
 import ru.therealmone.translatorAPI.Interfaces.ExceptionInterface;
 
-public class NoSuchElementException extends HashMapException implements ExceptionInterface {
+public class NoSuchElementException extends ArrayListException implements ExceptionInterface {
     private String key;
 
     public NoSuchElementException(String key) {

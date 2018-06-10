@@ -23,7 +23,7 @@ NUMBER,PROD,VALUE
 22,init_expr,NEW + VAR + init_expr_continue
 23,init_expr_continue,TYPEOF + type
 24,init_expr_continue,ASSIGN_OP + value_expr
-25,type,HASHMAP
+25,type,HASHSET
 26,condition,condition_with_br + condition_continue
 27,condition,condition_without_br + condition_continue
 28,condition_with_br,LB + condition + RB

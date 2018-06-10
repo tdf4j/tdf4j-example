@@ -1,14 +1,15 @@
-package ru.therealmone.spoStackMachine.hashmap;
+package ru.therealmone.spoStackMachine.collections.hashset;
 
-import ru.therealmone.spoStackMachine.hashmap.exceptions.KeyAlreadyExistsException;
-import ru.therealmone.spoStackMachine.hashmap.exceptions.NoSuchElementException;
+import ru.therealmone.spoStackMachine.collections.Collection;
+import ru.therealmone.spoStackMachine.collections.hashset.exceptions.KeyAlreadyExistsException;
+import ru.therealmone.spoStackMachine.collections.hashset.exceptions.NoSuchElementException;
 
-public class HashMap {
+public class HashSet implements Collection {
     private int BUCKET_COUNT = 17;
     private static final int MAX_ELEMENTS_IN_BUCKET = 7;
     private Bucket[] buckets;
 
-    public HashMap() {
+    public HashSet() {
         buckets = new Bucket[BUCKET_COUNT];
         for (int i = 0; i < buckets.length; i++) {
             buckets[i] = new Bucket();
@@ -16,10 +17,19 @@ public class HashMap {
     }
 
     @Override
+    public int size() {
+        int size = 0;
+        for(Bucket bucket: buckets) {
+            size += bucket.getEleCount();
+        }
+        return size;
+    }
+
+    @Override
     public String toString() {
         StringBuilder out = new StringBuilder();
 
-        out.append("\n\tHashMap@")
+        out.append("\n\tHashSet@")
                 .append(this.hashCode())
                 .append(": \n");
 
@@ -39,6 +49,7 @@ public class HashMap {
         return out.toString();
     }
 
+    @Override
     public void add(String key, double value) throws KeyAlreadyExistsException {
         if(!contains(key)) {
             int index = getIndex(key);
@@ -52,6 +63,7 @@ public class HashMap {
         } else {throw new KeyAlreadyExistsException(key);}
     }
 
+    @Override
     public double get(String key) throws NoSuchElementException {
         int index = getIndex(key);
         if(buckets[index].getEleCount() == 0) {throw new NoSuchElementException(key);}
@@ -68,6 +80,7 @@ public class HashMap {
         throw new NoSuchElementException(key);
     }
 
+    @Override
     public boolean contains(String key) {
         int index = getIndex(key);
         if(buckets[index].getEleCount() == 0) {return false;}
@@ -84,6 +97,7 @@ public class HashMap {
         return false;
     }
 
+    @Override
     public void remove(String key) throws NoSuchElementException {
         if(contains(key)) {
 
@@ -103,6 +117,7 @@ public class HashMap {
         } else {throw new NoSuchElementException(key);}
     }
 
+    @Override
     public void rewrite(String key, double value) throws NoSuchElementException {
         if(contains(key)) {
 

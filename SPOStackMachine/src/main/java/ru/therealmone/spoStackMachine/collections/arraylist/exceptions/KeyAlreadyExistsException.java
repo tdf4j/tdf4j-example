@@ -1,9 +1,9 @@
-package ru.therealmone.spoStackMachine.hashmap.exceptions;
+package ru.therealmone.spoStackMachine.collections.arraylist.exceptions;
 
-import ru.therealmone.spoStackMachine.exceptions.HashMapException;
+import ru.therealmone.spoStackMachine.exceptions.ArrayListException;
 import ru.therealmone.translatorAPI.Interfaces.ExceptionInterface;
 
-public class KeyAlreadyExistsException extends HashMapException implements ExceptionInterface {
+public class KeyAlreadyExistsException extends ArrayListException implements ExceptionInterface {
     private String key;
 
     public KeyAlreadyExistsException(String key) {

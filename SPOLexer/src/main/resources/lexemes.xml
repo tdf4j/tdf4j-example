@@ -16,8 +16,8 @@
     </lexeme>
 
     <lexeme priority="2">
-        <type>HASHMAP</type>
-        <template>^hashmap$</template>
+        <type>HASHSET</type>
+        <template>^hashset$</template>
     </lexeme>
 
     <lexeme priority="2">

@@ -32,7 +32,7 @@ public class Parser implements Visitor, Visitable {
 
     @Override
     public void visit(String opn) {
-        //NOP
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -85,8 +85,8 @@ public class Parser implements Visitor, Visitable {
     }
 
     public void showLangRules() {
-        System.out.println("LANG RULES; ");
-        langRules.forEach( (num, rules) -> System.out.println(num + " --> " + Arrays.toString(rules)));
+        System.out.println("\u001B[33mLANG RULES:\u001B[0m");
+        langRules.forEach( (num, rules) -> System.out.printf("%-20d%-10s%-40s%n", num, "-->", Arrays.toString(rules)));
     }
 
     private void parse(Token token) throws ParserException {

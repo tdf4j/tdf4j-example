@@ -8,6 +8,7 @@ import org.xml.sax.SAXException;
 import ru.therealmone.spoStackMachine.exceptions.NoVariableException;
 import ru.therealmone.spoStackMachine.exceptions.WrongTypeException;
 import ru.therealmone.spoStackMachine.exceptions.UnknownCommandException;
+import ru.therealmone.spoStackMachine.collections.hashset.HashSet;
 import ru.therealmone.translatorAPI.Exceptions.StackMachineException;
 import ru.therealmone.translatorAPI.Token;
 import ru.therealmone.translatorAPI.Interfaces.Visitor;
@@ -262,10 +263,10 @@ public class StackMachine implements Visitor {
                 case "TYPEOF" : {executions.put(command, com -> {
                     String type = stack.pop();
                     switch (type) {
-                        case "hashmap" : {
+                        case "hashset" : {
                             variables.replace(
                                     stack.pop(),
-                                    new ru.therealmone.spoStackMachine.hashmap.HashMap());
+                                    new HashSet());
                             break;
                         }
                         default: {
@@ -278,7 +279,7 @@ public class StackMachine implements Visitor {
                 case "PUT" : {executions.put(command, com -> {
                     String varName = stack.pop();
                     String collection = stack.pop();
-                    ru.therealmone.spoStackMachine.hashmap.HashMap hashMap;
+                    HashSet hashMap;
                     Double var;
 
                     if(variables.containsKey(varName)) {
@@ -292,7 +293,7 @@ public class StackMachine implements Visitor {
                     }
 
                     try {
-                        hashMap = (ru.therealmone.spoStackMachine.hashmap.HashMap) variables.get(collection);
+                        hashMap = (HashSet) variables.get(collection);
                     } catch (ClassCastException e) {
                         throw new WrongTypeException("Wrong type of " + collection);
                     }
@@ -309,10 +310,10 @@ public class StackMachine implements Visitor {
                 case "GET" : {executions.put(command, com -> {
                     String varName = stack.pop();
                     String collection = stack.pop();
-                    ru.therealmone.spoStackMachine.hashmap.HashMap hashMap;
+                    HashSet hashMap;
 
                     try {
-                        hashMap = (ru.therealmone.spoStackMachine.hashmap.HashMap) variables.get(collection);
+                        hashMap = (HashSet) variables.get(collection);
                     } catch (ClassCastException e) {
                         throw new WrongTypeException("Wrong type of " + collection);
                     }
@@ -330,8 +331,8 @@ public class StackMachine implements Visitor {
                     String varName = stack.pop();
                     String collection = stack.pop();
 
-                    ru.therealmone.spoStackMachine.hashmap.HashMap hashMap =
-                            (ru.therealmone.spoStackMachine.hashmap.HashMap) variables.get(collection);
+                    HashSet hashMap =
+                            (HashSet) variables.get(collection);
 
                     try {
                         hashMap.remove(varName);
@@ -347,8 +348,8 @@ public class StackMachine implements Visitor {
                     String varName = stack.pop();
                     String collection = stack.pop();
 
-                    ru.therealmone.spoStackMachine.hashmap.HashMap col =
-                            (ru.therealmone.spoStackMachine.hashmap.HashMap) variables.get(collection);
+                    HashSet col =
+                            (HashSet) variables.get(collection);
 
                     try {
                         col.rewrite(varName, value);
