@@ -2,38 +2,38 @@ package ru.therealmone.spoParser;
 
 import ru.therealmone.translatorAPI.Token;
 
-import java.util.EmptyStackException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * priorities of operators:
  *
- * 8 - new
- * 7 - get
- * 6 - / , *
- * 5 - + , -
- * 4 - < , > , <= , >= , ==
- * 3 - & , | , ^
+ * 10 - new
+ * 9 - get
+ * 8 - / , *
+ * 7 - + , -
+ * 6 - < , > , <= , >= , ==, !=
+ * 5 - !
+ * 4 - &
+ * 3 - |, ^
  * 2 - ( , )
  * 1 - =. typeof, put, get, remove, rewrite
 **/
 
 final class OPNConverter {
     private static Map<String, Integer> priority = new HashMap<String, Integer>(){{
-        put("new", 8);
-        put("get", 7);
-        put("/", 6);
-        put("*", 6);
-        put("+", 5);
-        put("-", 5);
-        put("<", 4);
-        put(">", 4);
-        put("<=", 4);
-        put(">=", 4);
-        put("==", 4);
-        put("&", 3);
+        put("new", 10);
+        put("get", 9);
+        put("/", 8);
+        put("*", 8);
+        put("+", 7);
+        put("-", 7);
+        put("<", 6);
+        put(">", 6);
+        put("<=", 6);
+        put(">=", 6);
+        put("==", 6);
+        put("!", 5);
+        put("&", 4);
         put("|", 3);
         put("^", 3);
         put("(", 2);
@@ -46,11 +46,11 @@ final class OPNConverter {
     }};
 
     private static Stack<String> stack = new Stack<>();
-    private static StringBuilder out = new StringBuilder();
+    private static StringBuilder out;
 
     static String convertToOPN(TreeNode root) {
         stack.clear();
-        out.delete(0, out.length());
+        out = new StringBuilder();
 
         lang(root);
         return out.toString();
@@ -107,7 +107,12 @@ final class OPNConverter {
                 case "WHILE" : break;
                 case "LB" : break;
                 case "condition" : {
-                    index1 = out.toString().split(",").length - 1;
+                    String [] temp = out.toString().split(",");
+                    if(temp.length == 1 && temp[0].equals("")) {
+                        index1 = 0;
+                    } else {
+                        index1 = out.toString().split(",").length;
+                    }
                     condition(child);
                     break;
                 }
@@ -207,7 +212,7 @@ final class OPNConverter {
                 case "DO" : break;
                 case "FLB" : break;
                 case "expr_continue" : {
-                    index1 = out.toString().split(",").length - 1;
+                    index1 = out.toString().split(",").length;
                     expr_continue(child);
                     break;
                 }
@@ -309,7 +314,7 @@ final class OPNConverter {
     private static void type(TreeNode root) {
         for(TreeNode child: root.getChildes()) {
             switch (child.getName()) {
-                case "HASHMAP" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
+                case "HASHSET" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
             }
         }
     }
@@ -437,6 +442,7 @@ final class OPNConverter {
             switch (child.getName()) {
                 case "VAR" : {out.append("%").append(child.getToken().getValue()).append(","); break;}
                 case "DIGIT" : {out.append(child.getToken().getValue()).append(","); break;}
+                case "DOUBLE" : {out.append(child.getToken().getValue()).append(","); break;}
             }
         }
     }

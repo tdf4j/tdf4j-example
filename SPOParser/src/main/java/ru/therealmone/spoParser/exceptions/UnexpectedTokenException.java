@@ -1,13 +1,16 @@
-package ru.therealmone.translatorAPI.Exceptions;
+package ru.therealmone.spoParser.exceptions;
 
+import ru.therealmone.translatorAPI.Exceptions.ParserException;
+import ru.therealmone.translatorAPI.Interfaces.ExceptionInterface;
 import ru.therealmone.translatorAPI.Token;
 
-public class UnexpectedTokenException extends Exception implements ExceptionInterface {
+public class UnexpectedTokenException extends ParserException implements ExceptionInterface {
     private String expected;
     private Token token;
     private String history;
 
     public UnexpectedTokenException(Token token, String expected, String history) {
+        super("Got unexpected token " + token.getValue() + " -> " + token.getValue());
         this.expected = expected;
         this.token = token;
         this.history = history;

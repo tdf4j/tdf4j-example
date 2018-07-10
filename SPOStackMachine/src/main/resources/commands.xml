@@ -6,6 +6,11 @@
     </command>
 
     <command>
+        <type>DOUBLE</type>
+        <template>^(0[.][0-9]*)|([1-9][0-9]*[.][0-9]*)$</template>
+    </command>
+
+    <command>
         <type>TAKE_VALUE</type>
         <template>^%[a-z]+$</template>
     </command>
@@ -73,6 +78,11 @@
     <command>
         <type>EQUALS</type>
         <template>^==$</template>
+    </command>
+
+    <command>
+        <type>NOT_EQUALS</type>
+        <template>^!=$</template>
     </command>
 
     <command>

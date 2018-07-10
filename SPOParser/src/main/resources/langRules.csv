@@ -23,7 +23,7 @@ NUMBER,PROD,VALUE
 22,init_expr,NEW + VAR + init_expr_continue
 23,init_expr_continue,TYPEOF + type
 24,init_expr_continue,ASSIGN_OP + value_expr
-25,type,HASHMAP
+25,type,HASHSET
 26,condition,condition_with_br + condition_continue
 27,condition,condition_without_br + condition_continue
 28,condition_with_br,LB + condition + RB
@@ -38,7 +38,8 @@ NUMBER,PROD,VALUE
 37,value_expr_without_br,GET + LB + VAR + COMMA + VAR + RB + value_expr_continue
 38,value,VAR
 39,value,DIGIT
-40,value_expr_continue,OP + value_expr
-41,value_expr_continue,EMPTY
-42,else,EMPTY
-43,else,ELSE + FLB + expr_continue + FRB
+40,value,DOUBLE
+41,value_expr_continue,OP + value_expr
+42,value_expr_continue,EMPTY
+43,else,EMPTY
+44,else,ELSE + FLB + expr_continue + FRB

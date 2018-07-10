@@ -1,24 +1,25 @@
 package ru.therealmone.spoStackMachine;
 
 import org.junit.Test;
-import ru.therealmone.translatorAPI.Exceptions.KeyAlreadyExistsException;
-import ru.therealmone.translatorAPI.Exceptions.NoSuchElementException;
+import ru.therealmone.spoStackMachine.collections.hashset.HashSet;
+import ru.therealmone.spoStackMachine.collections.hashset.exceptions.KeyAlreadyExistsException;
+import ru.therealmone.spoStackMachine.collections.hashset.exceptions.NoSuchElementException;
 
 import static org.junit.Assert.*;
 
 public class HashMapTest {
-    private HashMap hashMap;
+    private HashSet hashMap;
 
     @Test
     public void addAndGetMethodsTest() {
-        hashMap = new HashMap();
+        hashMap = new HashSet();
         try {
             hashMap.add("1", 1);
             hashMap.add("1", 1);
             fail();
         } catch (KeyAlreadyExistsException e) {}
 
-        hashMap = new HashMap();
+        hashMap = new HashSet();
         try {
             hashMap.add("1", 1);
             assertEquals(1, hashMap.get("1"), 0);
@@ -33,7 +34,7 @@ public class HashMapTest {
 
     @Test
     public void deleteMethodTest() {
-        hashMap = new HashMap();
+        hashMap = new HashSet();
         try {
             hashMap.add("1", 1);
             hashMap.get("1");
@@ -41,7 +42,7 @@ public class HashMapTest {
             fail();
         } catch (NoSuchElementException e) {}
 
-        hashMap = new HashMap();
+        hashMap = new HashSet();
         try {
             hashMap.add("1", 1);
             hashMap.add("2", 2);
@@ -55,7 +56,7 @@ public class HashMapTest {
 
     @Test
     public void containsMethodTest() {
-        hashMap = new HashMap();
+        hashMap = new HashSet();
         try {
             hashMap.add("1", 1);
             assertTrue(hashMap.contains("1"));
@@ -63,7 +64,7 @@ public class HashMapTest {
             fail();
         }
 
-        hashMap = new HashMap();
+        hashMap = new HashSet();
         try {
             hashMap.add("1", 1);
             hashMap.add("2", 2);
@@ -78,7 +79,7 @@ public class HashMapTest {
 
     @Test
     public void rewriteMethodTest() {
-        hashMap = new HashMap();
+        hashMap = new HashSet();
         try {
             hashMap.add("1", 1);
             hashMap.rewrite("1", 1000);
@@ -87,7 +88,7 @@ public class HashMapTest {
             fail();
         }
 
-        hashMap = new HashMap();
+        hashMap = new HashSet();
         try {
             hashMap.add("1", 1);
             hashMap.add("2", 2);
@@ -101,15 +102,15 @@ public class HashMapTest {
 
     @Test
     public void resizeMethodTest() {
-        hashMap = new HashMap();
+        hashMap = new HashSet();
         try {
-            int buckets_count = hashMap.BUCKET_COUNT;
+            int buckets_count = hashMap.getBucketCount();
 
             for (int i = 0; i < 1000; i++) {
                 hashMap.add("" + i, i);
             }
 
-            if (buckets_count == hashMap.BUCKET_COUNT) {
+            if (buckets_count == hashMap.getBucketCount()) {
                 fail();
             } else {
                 for (int i = 0; i < 1000; i++) {

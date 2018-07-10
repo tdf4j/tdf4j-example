@@ -1,4 +1,4 @@
-package ru.therealmone.translatorAPI.Exceptions;
+package ru.therealmone.translatorAPI.Interfaces;
 
 public interface ExceptionInterface {
     void message();

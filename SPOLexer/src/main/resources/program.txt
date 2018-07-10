@@ -1,25 +1,12 @@
-new a typeof hashmap;
+new a = 1;
+new b = 4;
+new hs typeof hashset;
+new i = 1;
+put(hs, i);
 
-new i = 100;
-new ii = 1000;
-new iii = 10000;
-
-put(a, i);
-put(a, ii);
-put(a, iii);
-i = 1;
-ii = 2;
-iii = 3;
-rewrite(a, i, 25);
-rewrite(a, ii, get(a, i) * 10);
-remove(a, iii);
-put(a, iii);
-
-for(i = 0; i < 100; i = i + 1) {
-    iii = iii + 1;
-    rewrite(a, iii, iii);
+while(a <= b) {
+    rewrite(hs, i, get(hs, i) * a * 0.125);
+    a = a + 1;
 }
 
-new b typeof hashmap;
-new bvar = get(a, iii) + get(a, ii) + get(a, i);
-put(b, bvar);
+remove(hs, i);

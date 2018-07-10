@@ -16,8 +16,8 @@
     </lexeme>
 
     <lexeme priority="2">
-        <type>HASHMAP</type>
-        <template>^hashmap$</template>
+        <type>HASHSET</type>
+        <template>^hashset$</template>
     </lexeme>
 
     <lexeme priority="2">
@@ -45,9 +45,14 @@
         <template>^,$</template>
     </lexeme>
 
-    <lexeme priority="1">
+    <lexeme priority="2">
         <type>DIGIT</type>
         <template>^0|([1-9][0-9]*)$</template>
+    </lexeme>
+
+    <lexeme priority="1">
+        <type>DOUBLE</type>
+        <template>^(0[.][0-9]*)|([1-9][0-9]*[.][0-9]*)$</template>
     </lexeme>
 
     <lexeme priority="1">
@@ -92,12 +97,12 @@
 
     <lexeme priority="2">
         <type>LOP</type>
-        <template>^[&amp;\\|\\^]$</template>
+        <template>^[&amp;\\|\\^\\!]$</template>
     </lexeme>
 
     <lexeme priority="2">
         <type>COP</type>
-        <template>^[&lt;>]|(&lt;=)|(>=)|(==)$</template>
+        <template>^[&lt;>]|(&lt;=)|(>=)|(==)|(!=)$</template>
     </lexeme>
 
     <lexeme priority="1">
