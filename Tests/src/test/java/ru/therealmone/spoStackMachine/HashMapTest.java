@@ -1,32 +1,32 @@
 package ru.therealmone.spoStackMachine;
 
 import org.junit.Test;
-import ru.therealmone.spoStackMachine.collections.hashset.HashSet;
+import ru.therealmone.spoStackMachine.collections.hashset.HashSetImpl;
 import ru.therealmone.spoStackMachine.collections.hashset.exceptions.KeyAlreadyExistsException;
 import ru.therealmone.spoStackMachine.collections.hashset.exceptions.NoSuchElementException;
 
 import static org.junit.Assert.*;
 
 public class HashMapTest {
-    private HashSet hashMap;
+    private HashSetImpl hashSet;
 
     @Test
     public void addAndGetMethodsTest() {
-        hashMap = new HashSet();
+        hashSet = new HashSetImpl();
         try {
-            hashMap.add("1", 1);
-            hashMap.add("1", 1);
+            hashSet.add("1", 1);
+            hashSet.add("1", 1);
             fail();
         } catch (KeyAlreadyExistsException e) {}
 
-        hashMap = new HashSet();
+        hashSet = new HashSetImpl();
         try {
-            hashMap.add("1", 1);
-            assertEquals(1, hashMap.get("1"), 0);
-            hashMap.add("2", 2);
-            assertEquals(2, hashMap.get("2"), 0);
-            hashMap.add("qwerty", 100);
-            assertEquals(100, hashMap.get("qwerty"), 0);
+            hashSet.add("1", 1);
+            assertEquals(1, hashSet.get("1"), 0);
+            hashSet.add("2", 2);
+            assertEquals(2, hashSet.get("2"), 0);
+            hashSet.add("qwerty", 100);
+            assertEquals(100, hashSet.get("qwerty"), 0);
         } catch (NoSuchElementException | KeyAlreadyExistsException e) {
             fail();
         }
@@ -34,21 +34,21 @@ public class HashMapTest {
 
     @Test
     public void deleteMethodTest() {
-        hashMap = new HashSet();
+        hashSet = new HashSetImpl();
         try {
-            hashMap.add("1", 1);
-            hashMap.get("1");
+            hashSet.add("1", 1);
+            hashSet.get("1");
         } catch (KeyAlreadyExistsException e) {
             fail();
         } catch (NoSuchElementException e) {}
 
-        hashMap = new HashSet();
+        hashSet = new HashSetImpl();
         try {
-            hashMap.add("1", 1);
-            hashMap.add("2", 2);
-            hashMap.add("qwerty", 100);
-            hashMap.remove("qwerty");
-            hashMap.get("qwerty");
+            hashSet.add("1", 1);
+            hashSet.add("2", 2);
+            hashSet.add("qwerty", 100);
+            hashSet.remove("qwerty");
+            hashSet.get("qwerty");
         } catch (KeyAlreadyExistsException e) {
             fail();
         } catch (NoSuchElementException e) {}
@@ -56,22 +56,22 @@ public class HashMapTest {
 
     @Test
     public void containsMethodTest() {
-        hashMap = new HashSet();
+        hashSet = new HashSetImpl();
         try {
-            hashMap.add("1", 1);
-            assertTrue(hashMap.contains("1"));
+            hashSet.add("1", 1);
+            assertTrue(hashSet.contains("1"));
         } catch (KeyAlreadyExistsException e) {
             fail();
         }
 
-        hashMap = new HashSet();
+        hashSet = new HashSetImpl();
         try {
-            hashMap.add("1", 1);
-            hashMap.add("2", 2);
-            hashMap.add("qwerty", 100);
-            assertTrue(hashMap.contains("1"));
-            assertTrue(hashMap.contains("2"));
-            assertTrue(hashMap.contains("qwerty"));
+            hashSet.add("1", 1);
+            hashSet.add("2", 2);
+            hashSet.add("qwerty", 100);
+            assertTrue(hashSet.contains("1"));
+            assertTrue(hashSet.contains("2"));
+            assertTrue(hashSet.contains("qwerty"));
         } catch (KeyAlreadyExistsException e) {
             fail();
         }
@@ -79,22 +79,22 @@ public class HashMapTest {
 
     @Test
     public void rewriteMethodTest() {
-        hashMap = new HashSet();
+        hashSet = new HashSetImpl();
         try {
-            hashMap.add("1", 1);
-            hashMap.rewrite("1", 1000);
-            assertEquals(1000, hashMap.get("1"), 0);
+            hashSet.add("1", 1);
+            hashSet.rewrite("1", 1000);
+            assertEquals(1000, hashSet.get("1"), 0);
         } catch (KeyAlreadyExistsException | NoSuchElementException e) {
             fail();
         }
 
-        hashMap = new HashSet();
+        hashSet = new HashSetImpl();
         try {
-            hashMap.add("1", 1);
-            hashMap.add("2", 2);
-            hashMap.add("qwerty", 100);
-            hashMap.rewrite("qwerty", 1_000_000);
-            assertEquals(1_000_000, hashMap.get("qwerty"), 0);
+            hashSet.add("1", 1);
+            hashSet.add("2", 2);
+            hashSet.add("qwerty", 100);
+            hashSet.rewrite("qwerty", 1_000_000);
+            assertEquals(1_000_000, hashSet.get("qwerty"), 0);
         } catch (KeyAlreadyExistsException | NoSuchElementException e) {
             fail();
         }
@@ -102,19 +102,19 @@ public class HashMapTest {
 
     @Test
     public void resizeMethodTest() {
-        hashMap = new HashSet();
+        hashSet = new HashSetImpl();
         try {
-            int buckets_count = hashMap.getBucketCount();
+            int buckets_count = hashSet.getBucketCount();
 
             for (int i = 0; i < 1000; i++) {
-                hashMap.add("" + i, i);
+                hashSet.add("" + i, i);
             }
 
-            if (buckets_count == hashMap.getBucketCount()) {
+            if (buckets_count == hashSet.getBucketCount()) {
                 fail();
             } else {
                 for (int i = 0; i < 1000; i++) {
-                    double tmp = hashMap.get("" + i);
+                    double tmp = hashSet.get("" + i);
                 }
             }
 

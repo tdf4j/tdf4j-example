@@ -4,7 +4,6 @@ import com.opencsv.CSVReader;
 import ru.therealmone.translatorAPI.*;
 import ru.therealmone.spoParser.exceptions.UnexpectedTokenException;
 import ru.therealmone.translatorAPI.Exceptions.ParserException;
-import ru.therealmone.translatorAPI.Exceptions.TranslatorException;
 import ru.therealmone.translatorAPI.Interfaces.Visitable;
 import ru.therealmone.translatorAPI.Interfaces.Visitor;
 
@@ -26,7 +25,7 @@ public class Parser implements Visitor, Visitable {
     private StringBuilder history = new StringBuilder();
 
     @Override
-    public void visit(Token token) throws ParserException {
+    public void visit(Token token) {
         parse(token);
     }
 
@@ -36,11 +35,11 @@ public class Parser implements Visitor, Visitable {
     }
 
     @Override
-    public void accept(Visitor v) throws TranslatorException {
+    public void accept(Visitor v) {
         v.visit(OPNConverter.convertToOPN(root));
     }
 
-    public Parser(String langRulesDir, String analyzeTableDir, HashSet<String> terminals) throws ParserException {
+    public Parser(String langRulesDir, String analyzeTableDir, HashSet<String> terminals) {
         this.terminals = terminals;
         terminals.add("$");
 
@@ -89,7 +88,7 @@ public class Parser implements Visitor, Visitable {
         langRules.forEach( (num, rules) -> System.out.printf("%-20d%-10s%-40s%n", num, "-->", Arrays.toString(rules)));
     }
 
-    private void parse(Token token) throws ParserException {
+    private void parse(Token token) {
         try {
             while (!terminals.contains(stack.peek())) {
 
@@ -136,20 +135,26 @@ public class Parser implements Visitor, Visitable {
         }
     }
 
-    private void openNonTerminal(Token token) throws ParserException {
+    private void openNonTerminal(Token token) {
         String peek = stack.peek();
 
         try {
-            String[] tmp = langRules.get(analyzeTable.get(stack.pop()).get(token.getType()));
-            stackForCNReturns.push(tmp.length);
+            int ruleNumber = analyzeTable.get(stack.pop()).get(token.getType());
 
-            for (int i = 0; i < tmp.length; i++) {
-                if(!tmp[i].equals("EMPTY")) {
-                    stack.push(tmp[tmp.length - i - 1]);
-                    currentTreeNode.addChild(new TreeNode(tmp[i], currentTreeNode));
-                } else {
-                    moveCN();
+            if (ruleNumber != 0) {
+                String[] tmp = langRules.get(ruleNumber);
+                stackForCNReturns.push(tmp.length);
+
+                for (int i = 0; i < tmp.length; i++) {
+                    if (!tmp[i].equals("EMPTY")) {
+                        stack.push(tmp[tmp.length - i - 1]);
+                        currentTreeNode.addChild(new TreeNode(tmp[i], currentTreeNode));
+                    } else {
+                        moveCN();
+                    }
                 }
+            } else {
+                throw new UnexpectedTokenException(token, history.toString());
             }
 
         } catch (NullPointerException e) {

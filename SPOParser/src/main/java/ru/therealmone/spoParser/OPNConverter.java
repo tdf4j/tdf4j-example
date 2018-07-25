@@ -43,6 +43,7 @@ final class OPNConverter {
         put("put", 1);
         put("remove", 1);
         put("rewrite", 1);
+        put("print", 1);
     }};
 
     private static Stack<String> stack = new Stack<>();
@@ -78,6 +79,7 @@ final class OPNConverter {
                 case "put_expr" : {put_expr(child); break;}
                 case "remove_expr" : {remove_expr(child); break;}
                 case "rewrite_expr" : {rewrite_expr(child); break;}
+                case "print_expr" : {print_expr(child); break;}
                 case "DEL" : {
                     while (stack.size() != 0) {
                         out.append(stack.pop()).append(",");
@@ -311,10 +313,22 @@ final class OPNConverter {
         }
     }
 
+    private static void print_expr(TreeNode root) {
+        for(TreeNode child : root.getChildes()) {
+            switch (child.getName()) {
+                case "PRINT" : {pushOP(child.getToken()); break;}
+                case "LB" : break;
+                case "value_expr" : {value_expr(child); break;}
+                case "RB" : break;
+            }
+        }
+    }
+
     private static void type(TreeNode root) {
         for(TreeNode child: root.getChildes()) {
             switch (child.getName()) {
                 case "HASHSET" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
+                case "ARRAYLIST" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
             }
         }
     }
@@ -322,10 +336,11 @@ final class OPNConverter {
     private static void put_expr(TreeNode root) {
         for(TreeNode child: root.getChildes()) {
             switch (child.getName()) {
-                case "PUT" : {pushOP(child.getToken());}
+                case "PUT" : {pushOP(child.getToken()); break;}
                 case "LB" : break;
                 case "VAR" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
                 case "COMMA" : break;
+                case "value" : {value(child); break;}
                 case "RB" : break;
             }
         }
@@ -338,6 +353,7 @@ final class OPNConverter {
                 case "LB" : break;
                 case "VAR" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
                 case "COMMA" : break;
+                case "value" : {value(child); break;}
                 case "RB" : break;
             }
         }
@@ -346,11 +362,12 @@ final class OPNConverter {
     private static void rewrite_expr(TreeNode root) {
         for(TreeNode child: root.getChildes()) {
             switch (child.getName()) {
-                case "REWRITE" : pushOP(child.getToken());
+                case "REWRITE" : {pushOP(child.getToken()); break;}
                 case "LB" : break;
                 case "VAR" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
                 case "COMMA" : break;
                 case "value_expr" : {value_expr(child); break;}
+                case "value" : {value(child); break;}
                 case "RB" : break;
             }
         }
@@ -428,11 +445,7 @@ final class OPNConverter {
             switch (child.getName()) {
                 case "value" : {value(child); break;}
                 case "value_expr_continue" : {value_expr_continue(child); break;}
-
-                case "GET" : {pushOP(child.getToken()); break;}
-                case "LB" : break;
-                case "VAR" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
-                case "COMMA" : break;
+                case "get_expr" : {get_expr(child); break;}
             }
         }
     }
@@ -440,11 +453,22 @@ final class OPNConverter {
     private static void value(TreeNode root) {
         for(TreeNode child: root.getChildes()) {
             switch (child.getName()) {
-                case "VAR" : {out.append("%").append(child.getToken().getValue()).append(","); break;}
+                case "VAR" : {out.append(checkTrace()).append(child.getToken().getValue()).append(","); break;}
                 case "DIGIT" : {out.append(child.getToken().getValue()).append(","); break;}
                 case "DOUBLE" : {out.append(child.getToken().getValue()).append(","); break;}
             }
         }
+    }
+
+    private static String checkTrace() {
+        StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+        String methodToCheck = trace[3].getMethodName();
+        return methodToCheck.equals("put_expr")
+                || methodToCheck.equals("remove_expr")
+                || methodToCheck.equals("rewrite_expr")
+                || methodToCheck.equals("get_expr")
+                ? "#"
+                : "%";
     }
 
     private static void value_expr_continue(TreeNode root) {
@@ -452,6 +476,18 @@ final class OPNConverter {
             switch (child.getName()) {
                 case "OP" : {pushOP(child.getToken()); break;}
                 case "value_expr" : {value_expr(child); break;}
+            }
+        }
+    }
+
+    private static void get_expr(TreeNode root) {
+        for(TreeNode child: root.getChildes()) {
+            switch (child.getName()) {
+                case "GET" : {pushOP(child.getToken()); break;}
+                case "LB" : break;
+                case "VAR" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
+                case "COMMA" : break;
+                case "value" : {value(child); break;}
             }
         }
     }

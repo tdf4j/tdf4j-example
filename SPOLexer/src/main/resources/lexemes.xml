@@ -21,6 +21,11 @@
     </lexeme>
 
     <lexeme priority="2">
+        <type>ARRAYLIST</type>
+        <template>^arraylist$</template>
+    </lexeme>
+
+    <lexeme priority="2">
         <type>GET</type>
         <template>^get$</template>
     </lexeme>
@@ -38,6 +43,11 @@
     <lexeme priority="2">
         <type>REWRITE</type>
         <template>^rewrite$</template>
+    </lexeme>
+
+    <lexeme priority="2">
+        <type>PRINT</type>
+        <template>^print$</template>
     </lexeme>
 
     <lexeme priority="1">

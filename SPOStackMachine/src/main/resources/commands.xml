@@ -136,6 +136,11 @@
     </command>
 
     <command>
+        <type>PRINT</type>
+        <template>^print$</template>
+    </command>
+
+    <command>
         <type>$</type>
         <template>^\$$</template>
     </command>

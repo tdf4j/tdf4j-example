@@ -16,6 +16,12 @@ public class UnexpectedTokenException extends ParserException implements Excepti
         this.history = history;
     }
 
+    public UnexpectedTokenException(Token token, String history) {
+        super("Got unexpected token " + token.getValue() + " -> " + token.getValue());
+        this.token = token;
+        this.history = history;
+    }
+
     @Override
     public void message() {
         System.out.println("Unexpected token " + token.getType() + " at '^' mark. \n" + history + token.getValue());
@@ -23,6 +29,9 @@ public class UnexpectedTokenException extends ParserException implements Excepti
             System.out.print(" ");
         }
         System.out.println("^");
-        System.out.println("Expected: " + expected);
+
+        if(expected != null) {
+            System.out.println("Expected: " + expected);
+        }
     }
 }

@@ -4,9 +4,9 @@ new hs typeof hashset;
 new i = 1;
 put(hs, i);
 
+print(hs);
+
 while(a <= b) {
     rewrite(hs, i, get(hs, i) * a * 0.125);
     a = a + 1;
 }
-
-remove(hs, i);

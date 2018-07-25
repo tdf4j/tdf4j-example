@@ -1,15 +1,15 @@
 package ru.therealmone.spoStackMachine.collections.hashset;
 
-import ru.therealmone.spoStackMachine.collections.Collection;
+import ru.therealmone.spoStackMachine.collections.HashSet;
 import ru.therealmone.spoStackMachine.collections.hashset.exceptions.KeyAlreadyExistsException;
 import ru.therealmone.spoStackMachine.collections.hashset.exceptions.NoSuchElementException;
 
-public class HashSet implements Collection {
+public class HashSetImpl implements HashSet {
     private int BUCKET_COUNT = 17;
     private static final int MAX_ELEMENTS_IN_BUCKET = 7;
     private Bucket[] buckets;
 
-    public HashSet() {
+    public HashSetImpl() {
         buckets = new Bucket[BUCKET_COUNT];
         for (int i = 0; i < buckets.length; i++) {
             buckets[i] = new Bucket();

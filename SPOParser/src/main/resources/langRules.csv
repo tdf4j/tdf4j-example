@@ -10,36 +10,40 @@ NUMBER,PROD,VALUE
 9,expr,put_expr + DEL
 10,expr,remove_expr + DEL
 11,expr,rewrite_expr + DEL
-12,expr_continue,expr + expr_continue
-13,expr_continue,EMPTY
-14,while_loop,WHILE + LB + condition + RB + FLB + expr_continue + FRB
-15,for_loop,FOR + LB + assign_expr + DEL + condition + DEL + assign_expr + RB + FLB + expr_continue + FRB
-16,if_statement,IF + LB + condition + RB + FLB + expr_continue + FRB + else
-17,assign_expr,VAR + ASSIGN_OP + value_expr
-18,do_while_loop,DO + FLB + expr_continue + FRB + WHILE + LB + condition + RB
-19,put_expr,PUT + LB + VAR + COMMA + VAR + RB
-20,remove_expr,REMOVE + LB + VAR + COMMA + VAR + RB
-21,rewrite_expr,REWRITE + LB + VAR + COMMA + VAR + COMMA + value_expr + RB
-22,init_expr,NEW + VAR + init_expr_continue
-23,init_expr_continue,TYPEOF + type
-24,init_expr_continue,ASSIGN_OP + value_expr
-25,type,HASHSET
-26,condition,condition_with_br + condition_continue
-27,condition,condition_without_br + condition_continue
-28,condition_with_br,LB + condition + RB
-29,condition_without_br,compare_expr
-30,condition_continue,EMPTY
-31,condition_continue,LOP + condition
-32,compare_expr,value_expr + COP + value_expr
-33,value_expr,value_expr_with_br + value_expr_continue
-34,value_expr,value_expr_without_br + value_expr_continue
-35,value_expr_with_br,LB + value_expr + RB
-36,value_expr_without_br,value + value_expr_continue
-37,value_expr_without_br,GET + LB + VAR + COMMA + VAR + RB + value_expr_continue
-38,value,VAR
-39,value,DIGIT
-40,value,DOUBLE
-41,value_expr_continue,OP + value_expr
-42,value_expr_continue,EMPTY
-43,else,EMPTY
-44,else,ELSE + FLB + expr_continue + FRB
+12,expr,print_expr + DEL
+13,expr_continue,expr + expr_continue
+14,expr_continue,EMPTY
+15,while_loop,WHILE + LB + condition + RB + FLB + expr_continue + FRB
+16,for_loop,FOR + LB + assign_expr + DEL + condition + DEL + assign_expr + RB + FLB + expr_continue + FRB
+17,if_statement,IF + LB + condition + RB + FLB + expr_continue + FRB + else
+18,assign_expr,VAR + ASSIGN_OP + value_expr
+19,do_while_loop,DO + FLB + expr_continue + FRB + WHILE + LB + condition + RB
+20,print_expr,PRINT + LB + value_expr + RB
+21,put_expr,PUT + LB + VAR + COMMA + value + RB
+22,remove_expr,REMOVE + LB + VAR + COMMA + value + RB
+23,rewrite_expr,REWRITE + LB + VAR + COMMA + value + COMMA + value_expr + RB
+24,init_expr,NEW + VAR + init_expr_continue
+25,init_expr_continue,TYPEOF + type
+26,init_expr_continue,ASSIGN_OP + value_expr
+27,type,HASHSET
+28,type,ARRAYLIST
+29,condition,condition_with_br + condition_continue
+30,condition,condition_without_br + condition_continue
+31,condition_with_br,LB + condition + RB
+32,condition_without_br,compare_expr
+33,condition_continue,EMPTY
+34,condition_continue,LOP + condition
+35,compare_expr,value_expr + COP + value_expr
+36,value_expr,value_expr_with_br + value_expr_continue
+37,value_expr,value_expr_without_br + value_expr_continue
+38,value_expr_with_br,LB + value_expr + RB
+39,value_expr_without_br,value + value_expr_continue
+40,value_expr_without_br,get_expr
+41,value,VAR
+42,value,DIGIT
+43,value,DOUBLE
+44,value_expr_continue,OP + value_expr
+45,value_expr_continue,EMPTY
+46,else,EMPTY
+47,else,ELSE + FLB + expr_continue + FRB
+48,get_expr,GET + LB + VAR + COMMA + value + RB + value_expr_continue
