@@ -163,6 +163,6 @@ public class Parser implements Visitor, Visitable {
     }
 
     public String getOPN() {
-        return OPNConverter.convertToOPN(root);
+        return OPNOptimizer.optimize(OPNConverter.convertToOPN(root));
     }
 }

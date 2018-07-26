@@ -1,12 +1,5 @@
 new a = 1;
-new b = 4;
-new hs typeof hashset;
-new i = 1;
-put(hs, i);
+new b = 2;
+new c = 3;
 
-print(hs);
-
-while(a <= b) {
-    rewrite(hs, i, get(hs, i) * a * 0.125);
-    a = a + 1;
-}
+print(c * (a + b) - 100 * 40 / 25 * (100500 + 0.5 * 1));
