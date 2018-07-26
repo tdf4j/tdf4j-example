@@ -16,41 +16,44 @@ import java.util.*;
  * 4 - &
  * 3 - |, ^
  * 2 - ( , )
- * 1 - =. typeof, put, get, remove, rewrite
+ * 1 - =. typeof, put, get, remove, rewrite, print
 **/
 
 final class OPNConverter {
-    private static Map<String, Integer> priority = new HashMap<String, Integer>(){{
-        put("new", 10);
-        put("get", 9);
-        put("/", 8);
-        put("*", 8);
-        put("+", 7);
-        put("-", 7);
-        put("<", 6);
-        put(">", 6);
-        put("<=", 6);
-        put(">=", 6);
-        put("==", 6);
-        put("!", 5);
-        put("&", 4);
-        put("|", 3);
-        put("^", 3);
-        put("(", 2);
-        put(")", 2);
-        put("=", 1);
-        put("typeof", 1);
-        put("put", 1);
-        put("remove", 1);
-        put("rewrite", 1);
-        put("print", 1);
-    }};
-
-    private static Stack<String> stack = new Stack<>();
+    private static final Map<String, Integer> priority;
+    private static Stack<String> stack;
     private static StringBuilder out;
 
+    static {
+        priority = new HashMap<String, Integer>(){{
+            put("new", 10);
+            put("get", 9);
+            put("/", 8);
+            put("*", 8);
+            put("+", 7);
+            put("-", 7);
+            put("<", 6);
+            put(">", 6);
+            put("<=", 6);
+            put(">=", 6);
+            put("==", 6);
+            put("!", 5);
+            put("&", 4);
+            put("|", 3);
+            put("^", 3);
+            put("(", 2);
+            put(")", 2);
+            put("=", 1);
+            put("typeof", 1);
+            put("put", 1);
+            put("remove", 1);
+            put("rewrite", 1);
+            put("print", 1);
+        }};
+    }
+
     static String convertToOPN(TreeNode root) {
-        stack.clear();
+        stack = new Stack<>();
         out = new StringBuilder();
 
         lang(root);

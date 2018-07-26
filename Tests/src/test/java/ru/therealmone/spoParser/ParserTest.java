@@ -158,6 +158,20 @@ public class ParserTest {
 
     }
 
+    @Test
+    public void testOptimizer() {
+        Lexer lexer = new Lexer(LEXEMES_DIR);
+        HashSet<String> terminals = new HashSet<>(lexer.lexemes.keySet());
+
+        lexer.generateTokens("print(100 / (25 + 25));");
+        assertEquals("2.0,print,$",
+                getOPN(lexer, new Parser(LANG_RULES_DIR, ANALYZE_TABLE_DIR, terminals)));
+
+        lexer.generateTokens("print(1 / (100 * (50 - (1 / 0.16))));");
+        assertEquals("2.2857142857142857E-4,print,$",
+                getOPN(lexer, new Parser(LANG_RULES_DIR, ANALYZE_TABLE_DIR, terminals)));
+    }
+
     private boolean check(ArrayList<Token> tokens, Parser parser) {
         for(Token token: tokens) {
             token.accept(parser);

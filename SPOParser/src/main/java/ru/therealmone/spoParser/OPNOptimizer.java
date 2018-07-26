@@ -7,7 +7,7 @@ import java.util.Stack;
 //Есть смысл оптимизировать только математические операции, так как все остальные всегда требуют ссылку на переменную
 final class OPNOptimizer {
     private static Stack<String> stack;
-    private static List<String> operatorsToOptimize;
+    private static final List<String> operatorsToOptimize;
 
     static {
         operatorsToOptimize = new ArrayList<String>() {{
