@@ -19,42 +19,34 @@ public class Main {
     private static final String PROGRAM_DIR = "spoLexer/src/main/resources/program.txt";
 
     public static void main(String[] args) {
-
         Lexer lexer;
         Parser parser;
         StackMachine stackMachine;
 
-        try {
-            lexer = new Lexer(LEXEMES_DIR);
-            lexer.showLexemes();
+        lexer = new Lexer(LEXEMES_DIR);
+        lexer.showLexemes();
 
-            lexer.generateTokens(loadProgram());
-            lexer.showTokens();
+        lexer.generateTokens(loadProgram());
+        lexer.showTokens();
 
+        parser = new Parser(LANG_RULES_DIR, ANALYZE_TABLE_DIR, new HashSet<>(lexer.lexemes.keySet()));
+        parser.showLangRules();
 
-            parser = new Parser(LANG_RULES_DIR, ANALYZE_TABLE_DIR, new HashSet<>(lexer.lexemes.keySet()));
-            parser.showLangRules();
-
-            for(Token token: lexer.tokens) {
-                token.accept(parser);
-            }
-
-            System.out.println("\u001B[32mPARSE SUCCESS\u001B[0m");
-            System.out.println("OPN: " + parser.getOPN());
-
-            stackMachine = new StackMachine(COMMANDS_DIR);
-            parser.accept(stackMachine);
-
-            System.out.println("\u001B[32mCALCULATE SUCCESS\u001B[0m");
-            stackMachine.showVariables();
-
-        } catch (TranslatorException e) {
-            e.printStackTrace();
-            System.exit(1);
+        for(Token token: lexer.tokens) {
+            token.accept(parser);
         }
+
+        System.out.println("\u001B[32mPARSE SUCCESS\u001B[0m");
+        System.out.println("OPN: " + parser.getOPN());
+
+        stackMachine = new StackMachine(COMMANDS_DIR);
+        parser.accept(stackMachine);
+
+        System.out.println("\u001B[32mCALCULATE SUCCESS\u001B[0m");
+        stackMachine.showVariables();
     }
 
-    private static String loadProgram() throws TranslatorException {
+    private static String loadProgram() {
         StringBuilder out = new StringBuilder();
 
         try {

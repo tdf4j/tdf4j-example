@@ -26,7 +26,7 @@ public class Lexer {
 
     private static final char END_SYMBOL = '$';
 
-    public Lexer(String fileDir) throws LexerException {
+    public Lexer(String fileDir) {
             try {
                 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
                 DocumentBuilder docBuilder = dbf.newDocumentBuilder();
@@ -47,6 +47,7 @@ public class Lexer {
                         addLexeme(type, template, Integer.parseInt(priority));
                     }
                 }
+
             } catch (FileNotFoundException e) {
                 throw new LexerException("Can't find lexemes.xml", e);
             } catch (ParserConfigurationException e) {
@@ -62,8 +63,9 @@ public class Lexer {
         if (!lexemes.containsKey(type)) {
             this.lexemes.put(type, Pattern.compile(pattern));
             this.priority.put(type, priority);
-        } else
+        } else {
             System.out.println("Lexeme " + type + " already exists!");
+        }
     }
 
     public void showLexemes() {
@@ -71,58 +73,55 @@ public class Lexer {
         lexemes.forEach( (lexeme, pattern) -> System.out.printf("%-20s%-10s%-40s%n", lexeme, "-->", pattern));
     }
 
-    public void generateTokens(String input) throws LexerException {
-        try {
-            input = input.replaceAll("\\$", "");
-            input += END_SYMBOL;
+    public void generateTokens(String input) {
+        input = input.replaceAll("\\$", "");
+        input += END_SYMBOL;
 
-            tokens.clear();
-            StringBuilder tempString = new StringBuilder();
+        tokens.clear();
+        StringBuilder tempString = new StringBuilder();
 
-            while (input.charAt(0) != END_SYMBOL) {
-                input = input.trim();
-                tempString.append(input.charAt(tempString.length()));
+        while (input.charAt(0) != END_SYMBOL) {
+            input = input.trim();
+            tempString.append(input.charAt(tempString.length()));
 
-                if (!checkLexemes(tempString.toString())) {
-                    if (tempString.length() > 1) {
-                        tempString.deleteCharAt(tempString.length() - 1);
-                        tokens.add(new Token(chooseLexeme(tempString.toString()), tempString.toString()));
-                        input = input.substring(tempString.length());
-                        tempString.delete(0, tempString.length());
-                    } else {
-                        throw new UnexpectedSymbolException(input, tokens);
-                    }
+            if (!checkLexemes(tempString.toString())) {
+                if (tempString.length() > 1) {
+                    tempString.deleteCharAt(tempString.length() - 1);
+                    tokens.add(new Token(chooseLexeme(tempString.toString()), tempString.toString()));
+                    input = input.substring(tempString.length());
+                    tempString.delete(0, tempString.length());
+                } else {
+                    throw new UnexpectedSymbolException(input, tokens);
                 }
             }
-
-            tokens.add(new Token("$", "$"));
-
-        } catch (UnexpectedSymbolException e) {
-            e.message();
-            throw new LexerException("Can't generate tokens", e);
         }
+
+        tokens.add(new Token("$", "$"));
     }
     
     private boolean checkLexemes(String str) {
         for(Map.Entry<String, Pattern> entry: lexemes.entrySet()) {
-           if(match(entry.getKey(), str))
+           if(match(entry.getKey(), str)) {
                return true;
+           }
         }
+
         return false;
     }
 
     private String chooseLexeme(String str) {
-        int tmpPriv = 0;
+        int tmpPriority = 0;
         String lexType = "";
 
         for(Map.Entry<String, Pattern> entry: lexemes.entrySet()) {
             if(match(entry.getKey(), str)) {
-                if(priority.get(entry.getKey()) > tmpPriv) {
+                if(priority.get(entry.getKey()) > tmpPriority) {
                     lexType = entry.getKey();
-                    tmpPriv = priority.get(entry.getKey());
+                    tmpPriority = priority.get(entry.getKey());
                 }
             }
         }
+
         return lexType;
     }
 

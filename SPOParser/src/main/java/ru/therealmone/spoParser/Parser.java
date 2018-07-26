@@ -15,14 +15,14 @@ import java.util.*;
 //TODO: Реализовать оператор !
 public class Parser implements Visitor, Visitable {
 
-    private Stack<String> stack = new Stack<>();
-    private Stack<Integer> stackForCNReturns = new Stack<>();
-    private Map<Integer, String[]> langRules = new HashMap<>();
-    private Map<String, Map<String, Integer>> analyzeTable = new HashMap<>();
+    private Stack<String> stack;
+    private Stack<Integer> stackForCNReturns;
+    private Map<Integer, String[]> langRules;
+    private Map<String, Map<String, Integer>> analyzeTable;
     private HashSet<String> terminals;
     private TreeNode root;
     private TreeNode currentTreeNode;
-    private StringBuilder history = new StringBuilder();
+    private StringBuilder history;
 
     @Override
     public void visit(Token token) {
@@ -42,6 +42,12 @@ public class Parser implements Visitor, Visitable {
     public Parser(String langRulesDir, String analyzeTableDir, HashSet<String> terminals) {
         this.terminals = terminals;
         terminals.add("$");
+
+        stack = new Stack<>();
+        stackForCNReturns = new Stack<>();
+        langRules = new HashMap<>();
+        analyzeTable = new HashMap<>();
+        history = new StringBuilder();
 
         stack.push("lang");
         root = new TreeNode("lang");
@@ -89,39 +95,32 @@ public class Parser implements Visitor, Visitable {
     }
 
     private void parse(Token token) {
-        try {
-            while (!terminals.contains(stack.peek())) {
-
-                if (!stack.peek().equals("lang")) {
-                    for (TreeNode child : currentTreeNode.getChildes()) {
-                        if (child.getName().equals(stack.peek()) && child.getChildes().size() == 0) {
-                            currentTreeNode = child;
-                            break;
-                        }
-                    }
-                }
-
-                openNonTerminal(token);
-            }
-
-            if (stack.peek().equals(token.getType())) {
+        while (!terminals.contains(stack.peek())) {
+            if (!stack.peek().equals("lang")) {
                 for (TreeNode child : currentTreeNode.getChildes()) {
-                    if (child.getName().equals(token.getType()) && child.getToken() == null) {
-                        moveCN();
-                        child.setToken(token);
-                        //System.out.println("Success " + token.getValue());
-                        history.append(token.getValue()).append(" ");
-                        stack.pop();
+                    if (child.getName().equals(stack.peek()) && child.getChildes().size() == 0) {
+                        currentTreeNode = child;
                         break;
                     }
                 }
-            } else {
-                throw new UnexpectedTokenException(token, stack.peek(), history.toString());
             }
 
-        } catch (UnexpectedTokenException e) {
-            e.message();
-            throw new ParserException("Can't parse token " + token.getType() + " -> " + token.getValue(), e);
+            openNonTerminal(token);
+        }
+
+        if (stack.peek().equals(token.getType())) {
+            for (TreeNode child : currentTreeNode.getChildes()) {
+                if (child.getName().equals(token.getType()) && child.getToken() == null) {
+                    moveCN();
+                    child.setToken(token);
+                    //System.out.println("Success " + token.getValue());
+                    history.append(token.getValue()).append(" ");
+                    stack.pop();
+                    break;
+                }
+            }
+        } else {
+            throw new UnexpectedTokenException(token, stack.peek(), history.toString());
         }
     }
 
@@ -153,6 +152,7 @@ public class Parser implements Visitor, Visitable {
                         moveCN();
                     }
                 }
+
             } else {
                 throw new UnexpectedTokenException(token, history.toString());
             }
