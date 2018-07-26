@@ -1,6 +1,7 @@
 package ru.therealmone.spoStackMachine;
 
 import org.junit.Test;
+import ru.therealmone.spoStackMachine.collections.HashSet;
 import ru.therealmone.spoStackMachine.collections.hashset.HashSetImpl;
 import ru.therealmone.spoStackMachine.collections.hashset.exceptions.KeyAlreadyExistsException;
 import ru.therealmone.spoStackMachine.collections.hashset.exceptions.NoSuchElementException;
@@ -8,7 +9,7 @@ import ru.therealmone.spoStackMachine.collections.hashset.exceptions.NoSuchEleme
 import static org.junit.Assert.*;
 
 public class HashMapTest {
-    private HashSetImpl hashSet;
+    private HashSet hashSet;
 
     @Test
     public void addAndGetMethodsTest() {
@@ -104,13 +105,13 @@ public class HashMapTest {
     public void resizeMethodTest() {
         hashSet = new HashSetImpl();
         try {
-            int buckets_count = hashSet.getBucketCount();
+            int buckets_count =((HashSetImpl) hashSet).getBucketCount();
 
             for (int i = 0; i < 1000; i++) {
                 hashSet.add("" + i, i);
             }
 
-            if (buckets_count == hashSet.getBucketCount()) {
+            if (buckets_count == ((HashSetImpl) hashSet).getBucketCount()) {
                 fail();
             } else {
                 for (int i = 0; i < 1000; i++) {
