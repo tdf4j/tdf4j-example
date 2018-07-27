@@ -1,5 +1,7 @@
-new a = 1;
-new b = 2;
-new c = 3;
+new a typeof arraylist;
 
-print(c * (a + b) - 100 * 40 / 25 * (100500 + 0.5 * 1));
+put(a, 1);
+put(a, 2);
+put(a, 3);
+
+rewrite(a, 1, 3);

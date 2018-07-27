@@ -76,11 +76,12 @@ public class ArrayListImpl implements ArrayList {
     public String toString() {
         StringBuilder out = new StringBuilder();
         out.append("ArrayList@").append(this.hashCode()).append(":\n");
-        for (int i = 0; i < data.length; i++) {
-            out.append("index = ")
+        for (int i = 0; i < size; i++) {
+            out.append("\tindex = ")
                     .append(i)
                     .append(", value = ")
-                    .append(data[i]);
+                    .append(data[i])
+                    .append("\n");
         }
 
         return out.toString();

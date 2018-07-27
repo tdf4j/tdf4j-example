@@ -5,6 +5,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import ru.therealmone.spoStackMachine.collections.ArrayList;
+import ru.therealmone.spoStackMachine.collections.Collection;
+import ru.therealmone.spoStackMachine.collections.HashSet;
 import ru.therealmone.spoStackMachine.collections.arraylist.ArrayListImpl;
 import ru.therealmone.spoStackMachine.exceptions.NoVariableException;
 import ru.therealmone.spoStackMachine.exceptions.WrongTypeException;
@@ -384,32 +387,11 @@ public class StackMachine implements Visitor {
 
                 case "PUT" : {
                     executions.put(command, com -> {
-                        String varName = stack.pop();
-                        String collection = stack.pop();
-                        HashSetImpl hashSet;
-                        Double var;
+                        String parameter = stack.pop();
+                        String collectionName = stack.pop();
 
-                        if(variables.containsKey(varName)) {
-                            if (variables.get(varName) instanceof Double) {
-                                var = (Double) variables.get(varName);
-                            } else {
-                                throw new WrongTypeException("Wrong type of " + varName);
-                            }
-                        } else {
-                            throw new NoVariableException("Can't find variable " + varName);
-                        }
-
-                        try {
-                            hashSet = (HashSetImpl) variables.get(collection);
-                        } catch (ClassCastException e) {
-                            throw new WrongTypeException("Wrong type of " + collection);
-                        }
-
-                        try {
-                            hashSet.add(varName, var);
-                        } catch (NullPointerException e) {
-                            throw new NoVariableException("Can't find variable " + collection, e);
-                        }
+                        Collection collection = (Collection) variables.get(collectionName);
+                        put(collection, parameter);
 
                         cursor++;
                     });
@@ -419,21 +401,11 @@ public class StackMachine implements Visitor {
 
                 case "GET" : {
                     executions.put(command, com -> {
-                        String varName = stack.pop();
-                        String collection = stack.pop();
-                        HashSetImpl hashSet;
+                        String parameter = stack.pop();
+                        String collectionName = stack.pop();
 
-                        try {
-                            hashSet = (HashSetImpl) variables.get(collection);
-                        } catch (ClassCastException e) {
-                            throw new WrongTypeException("Wrong type of " + collection);
-                        }
-
-                        try {
-                            stack.push("" + hashSet.get(varName));
-                        } catch (NullPointerException e) {
-                            throw new NoVariableException("Can't find variable " + collection, e);
-                        }
+                        Collection collection = (Collection) variables.get(collectionName);
+                        get(collection, parameter);
 
                         cursor++;
                     });
@@ -443,17 +415,11 @@ public class StackMachine implements Visitor {
 
                 case "REMOVE" : {
                     executions.put(command, com -> {
-                        String varName = stack.pop();
-                        String collection = stack.pop();
+                        String parameter = stack.pop();
+                        String collectionName = stack.pop();
 
-                        HashSetImpl hashSet =
-                                (HashSetImpl) variables.get(collection);
-
-                        try {
-                            hashSet.remove(varName);
-                        } catch (NullPointerException e) {
-                            throw new NoVariableException("Can't find variable " + collection, e);
-                        }
+                        Collection collection = (Collection) variables.get(collectionName);
+                        remove(collection, parameter);
 
                         cursor++;
                     });
@@ -463,18 +429,12 @@ public class StackMachine implements Visitor {
 
                 case "REWRITE" : {
                     executions.put(command, com -> {
-                        double value = Double.parseDouble(stack.pop());
-                        String varName = stack.pop();
-                        String collection = stack.pop();
+                        String parameter1 = stack.pop();
+                        String parameter0 = stack.pop();
+                        String collectionName = stack.pop();
 
-                        HashSetImpl col =
-                                (HashSetImpl) variables.get(collection);
-
-                        try {
-                            col.rewrite(varName, value);
-                        } catch (NullPointerException e) {
-                            throw new NoVariableException("Can't find variable " + collection, e);
-                        }
+                        Collection collection = (Collection) variables.get(collectionName);
+                        rewrite(collection, parameter0, parameter1);
 
                         cursor++;
                     });
@@ -501,5 +461,86 @@ public class StackMachine implements Visitor {
     public void showVariables() {
         System.out.println("Current variables: ");
         variables.forEach( (name, obj) -> System.out.println(name + ": " + obj));
+    }
+
+    private void put(Collection collection, String parameter) {
+        if (collection instanceof HashSet) {
+            if(!variables.containsKey(parameter)) {
+                throw new NoVariableException("Can't find variable: " + parameter);
+            }
+
+            ((HashSet) collection).add(parameter, (double) variables.get(parameter));
+        }
+        else if (collection instanceof ArrayList) {
+            double value = getValueFromParameter(parameter);
+
+            ((ArrayList) collection).add(value);
+        }
+    }
+
+    private void get(Collection collection, String parameter) {
+        if (collection instanceof HashSet) {
+            double value = ((HashSet) collection).get(parameter);
+            stack.push("" + value);
+        }
+        else if (collection instanceof ArrayList) {
+            int index = getIndexFromParameter(parameter);
+
+            double value = ((ArrayList) collection).get(index);
+            stack.push("" + value);
+        }
+    }
+
+    private void remove(Collection collection, String parameter) {
+        if (collection instanceof HashSet) {
+            ((HashSet) collection).remove(parameter);
+        }
+        else if(collection instanceof ArrayList) {
+            int index = getIndexFromParameter(parameter);
+            ((ArrayList) collection).remove(index);
+        }
+    }
+
+    private void rewrite(Collection collection, String ... parameters) {
+        if(collection instanceof HashSet) {
+            String varName = parameters[0];
+            double value = getValueFromParameter(parameters[1]);
+
+            ((HashSet) collection).rewrite(varName, value);
+        }
+        else if(collection instanceof ArrayList) {
+            int index = getIndexFromParameter(parameters[0]);
+            double value = getValueFromParameter(parameters[1]);
+
+            ((ArrayList) collection).rewrite(index, value);
+        }
+    }
+
+    private int getIndexFromParameter(String parameter) {
+        int index;
+
+        try {
+            if (variables.containsKey(parameter)) {
+                index = ((Double) variables.get(parameter)).intValue();
+            } else {
+                index = ((Double) Double.parseDouble(parameter)).intValue();
+            }
+        } catch (NumberFormatException | ClassCastException e) {
+            throw new WrongTypeException("Wrong type of: " + parameter, e);
+        }
+
+        return index;
+    }
+
+    private double getValueFromParameter(String parameter) {
+        double value;
+
+        try {
+            value = Double.parseDouble(parameter);
+        } catch (NumberFormatException e) {
+            throw new WrongTypeException("Wrong type of: " + parameter, e);
+        }
+
+        return value;
     }
 }
