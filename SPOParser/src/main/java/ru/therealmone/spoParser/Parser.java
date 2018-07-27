@@ -1,15 +1,12 @@
 package ru.therealmone.spoParser;
 
-import com.opencsv.CSVReader;
+import ru.therealmone.translatorAPI.ResourceLoader;
 import ru.therealmone.translatorAPI.*;
 import ru.therealmone.spoParser.exceptions.UnexpectedTokenException;
 import ru.therealmone.translatorAPI.Exceptions.ParserException;
 import ru.therealmone.translatorAPI.Interfaces.Visitable;
 import ru.therealmone.translatorAPI.Interfaces.Visitor;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.*;
 
 //TODO: Реализовать оператор !
@@ -39,7 +36,7 @@ public class Parser implements Visitor, Visitable {
         v.visit(OPNConverter.convertToOPN(root));
     }
 
-    public Parser(String langRulesDir, String analyzeTableDir, HashSet<String> terminals) {
+    public Parser(HashSet<String> terminals) {
         this.terminals = terminals;
         terminals.add("$");
 
@@ -53,40 +50,8 @@ public class Parser implements Visitor, Visitable {
         root = new TreeNode("lang");
         currentTreeNode = root;
 
-        try {
-
-            CSVReader csvReader = new CSVReader(new FileReader(langRulesDir));
-            String[] nextLine;
-            csvReader.readNext();
-
-            while((nextLine = csvReader.readNext()) != null) {
-                try {
-                    langRules.put(Integer.parseInt(nextLine[0].trim()), nextLine[2].split("\\s\\+\\s"));
-                } catch (NumberFormatException e) {
-                        e.printStackTrace();
-                }
-            }
-
-            csvReader.close();
-
-            csvReader = new CSVReader(new FileReader(analyzeTableDir));
-            String[] description = csvReader.readNext();
-
-            while((nextLine = csvReader.readNext()) != null) {
-                Map<String, Integer> tmp = new HashMap<>();
-                for (int i = 1; i < nextLine.length; i++) {
-                    tmp.put(description[i], Integer.parseInt(nextLine[i]));
-                }
-                analyzeTable.put(nextLine[0], tmp);
-            }
-
-            csvReader.close();
-
-        } catch (FileNotFoundException e) {
-            throw new ParserException("Can't find langRules.csv or analzeTable.csv", e);
-        } catch (IOException e) {
-            throw new ParserException("I/O exception", e);
-        }
+        langRules = ResourceLoader.getLangRules();
+        analyzeTable = ResourceLoader.getAnalyzeTable();
     }
 
     public void showLangRules() {

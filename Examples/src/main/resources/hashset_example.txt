@@ -1,0 +1,20 @@
+new a typeof hashset;
+new width = 400;
+new length = 400;
+
+put(a, width);
+put(a, length);
+
+print(get(a, width));
+print(get(a, length));
+
+rewrite(a, width, 1000);
+rewrite(a, length, 1000);
+
+print(get(a, width));
+print(get(a, length));
+
+remove(a, width);
+remove(a, length);
+
+print(get(a, width));

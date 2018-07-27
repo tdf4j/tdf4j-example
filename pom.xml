@@ -13,6 +13,8 @@
 		<module>SPOParser</module>
         <module>TranslatorAPI</module>
         <module>SPOStackMachine</module>
+        <module>ApplicationAPI</module>
+        <module>Examples</module>
         <module>Tests</module>
     </modules>
 
@@ -36,6 +38,7 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
 

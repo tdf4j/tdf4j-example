@@ -9,32 +9,13 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>Tests</artifactId>
+    <artifactId>Examples</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>ru.therealmone</groupId>
-            <artifactId>SPOLexer</artifactId>
-            <version>1.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>ru.therealmone</groupId>
-            <artifactId>SPOParser</artifactId>
-            <version>1.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>ru.therealmone</groupId>
-            <artifactId>SPOStackMachine</artifactId>
-            <version>1.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>ru.therealmone</groupId>
-            <artifactId>TranslatorAPI</artifactId>
+            <artifactId>ApplicationAPI</artifactId>
             <version>1.0</version>
         </dependency>
     </dependencies>
-
 </project>

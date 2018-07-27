@@ -13,4 +13,13 @@
     <version>1.0</version>
     <packaging>jar</packaging>
 
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.opencsv/opencsv -->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>4.1</version>
+        </dependency>
+    </dependencies>
+
 </project>

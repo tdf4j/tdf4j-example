@@ -1,10 +1,6 @@
 package ru.therealmone.spoStackMachine;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import ru.therealmone.translatorAPI.ResourceLoader;
 import ru.therealmone.spoStackMachine.collections.ArrayList;
 import ru.therealmone.spoStackMachine.collections.Collection;
 import ru.therealmone.spoStackMachine.collections.HashSet;
@@ -17,12 +13,6 @@ import ru.therealmone.translatorAPI.Exceptions.StackMachineException;
 import ru.therealmone.translatorAPI.Token;
 import ru.therealmone.translatorAPI.Interfaces.Visitor;
 
-import java.io.FileNotFoundException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Stack;
@@ -44,41 +34,14 @@ public class StackMachine implements Visitor {
         calculate(opn);
     }
 
-    public StackMachine(String commandsDir) {
+    public StackMachine() {
         commands = new HashMap<>();
         executions = new HashMap<>();
         variables = new HashMap<>();
         stack = new Stack<>();
         cursor = 0;
 
-        try {
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder docBuilder = dbf.newDocumentBuilder();
-            Document doc = docBuilder.parse(commandsDir);
-
-            Node root = doc.getDocumentElement();
-            NodeList childes = root.getChildNodes();
-
-
-            for (int i = 0; i < childes.getLength(); i++) {
-                Node node = childes.item(i);
-
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    Element element = (Element) node;
-                    String type = element.getElementsByTagName("type").item(0).getTextContent();
-                    String template = element.getElementsByTagName("template").item(0).getTextContent();
-                    commands.put(type, Pattern.compile(template));
-                }
-            }
-        } catch (FileNotFoundException e) {
-            throw new StackMachineException("Can't find commands.xml file", e);
-        } catch (ParserConfigurationException e) {
-            throw new StackMachineException("DocumentBuilder cannot be created which satisfies the configuration requested", e);
-        } catch(SAXException e) {
-            throw new StackMachineException("XML parse error", e);
-        } catch (IOException e) {
-            throw new StackMachineException("I/O exception", e);
-        }
+        commands = ResourceLoader.getCommands();
 
         initExecutions();
     }
@@ -536,7 +499,11 @@ public class StackMachine implements Visitor {
         double value;
 
         try {
-            value = Double.parseDouble(parameter);
+            if(variables.containsKey(parameter)) {
+                value = (double) variables.get(parameter);
+            } else {
+                value = Double.parseDouble(parameter);
+            }
         } catch (NumberFormatException e) {
             throw new WrongTypeException("Wrong type of: " + parameter, e);
         }

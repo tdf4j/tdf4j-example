@@ -1,0 +1,8 @@
+new a = 100;
+new b = 1;
+
+if(a < b) {
+    print(a);
+} else {
+    print(b);
+}

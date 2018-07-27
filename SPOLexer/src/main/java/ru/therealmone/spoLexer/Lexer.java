@@ -1,71 +1,24 @@
 package ru.therealmone.spoLexer;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-import ru.therealmone.translatorAPI.Exceptions.LexerException;
+import ru.therealmone.translatorAPI.ResourceLoader;
 import ru.therealmone.translatorAPI.Token;
 import ru.therealmone.spoLexer.exceptions.UnexpectedSymbolException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.*;
 
 public class Lexer {
-    public ArrayList<Token> tokens = new ArrayList<>();
-    public Map<String, Pattern> lexemes = new HashMap<>();
-    private Map<String, Integer> priority = new HashMap<>();
+    public ArrayList<Token> tokens;
+    public Map<String, Pattern> lexemes;
+    private Map<String, Integer> priority;
 
     private static final char END_SYMBOL = '$';
 
-    public Lexer(String fileDir) {
-            try {
-                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-                DocumentBuilder docBuilder = dbf.newDocumentBuilder();
-                Document doc = docBuilder.parse(fileDir);
-
-                Node root = doc.getDocumentElement();
-                NodeList childes = root.getChildNodes();
-
-
-                for (int i = 0; i < childes.getLength(); i++) {
-                    Node node = childes.item(i);
-
-                    if (node.getNodeType() == Node.ELEMENT_NODE) {
-                        Element element = (Element) node;
-                        String type = element.getElementsByTagName("type").item(0).getTextContent();
-                        String template = element.getElementsByTagName("template").item(0).getTextContent();
-                        String priority = element.getAttribute("priority");
-                        addLexeme(type, template, Integer.parseInt(priority));
-                    }
-                }
-
-            } catch (FileNotFoundException e) {
-                throw new LexerException("Can't find lexemes.xml", e);
-            } catch (ParserConfigurationException e) {
-                throw new LexerException("DocumentBuilder cannot be created which satisfies the configuration requested", e);
-            } catch(SAXException e) {
-                throw new LexerException("XML parse error", e);
-            } catch (IOException e) {
-                throw new LexerException("I/O exception", e);
-            }
-    }
-
-    void addLexeme(String type, String pattern, Integer priority) {
-        if (!lexemes.containsKey(type)) {
-            this.lexemes.put(type, Pattern.compile(pattern));
-            this.priority.put(type, priority);
-        } else {
-            System.out.println("Lexeme " + type + " already exists!");
-        }
+    public Lexer() {
+        tokens = new ArrayList<>();
+        lexemes = ResourceLoader.getLexemes();
+        priority = ResourceLoader.getLexemePriority();
     }
 
     public void showLexemes() {
