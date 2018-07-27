@@ -20,14 +20,6 @@ public final class ResourceLoader  {
     private static Map<String, Map<String, Integer>> analyzeTable;
     private static Map<String, Pattern> commands;
 
-    static {
-        lexemes = new HashMap<>();
-        lexemePriority = new HashMap<>();
-        langRules = new HashMap<>();
-        analyzeTable = new HashMap<>();
-        commands = new HashMap<>();
-    }
-
     public static void initialize() {
         loadLexemes("TranslatorAPI/src/main/resources/", "lexemes.xml");
         loadLangRules("TranslatorAPI/src/main/resources/", "langRules.csv");
@@ -36,6 +28,9 @@ public final class ResourceLoader  {
     }
 
     public static void loadLexemes(String dir, String filename) {
+        lexemes = new HashMap<>();
+        lexemePriority = new HashMap<>();
+
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = dbf.newDocumentBuilder();
@@ -63,8 +58,9 @@ public final class ResourceLoader  {
     }
 
     public static void loadLangRules(String dir, String filename) {
-        try {
+        langRules = new HashMap<>();
 
+        try {
             CSVReader csvReader = new CSVReader(new FileReader(dir + filename));
             String[] nextLine;
             csvReader.readNext();
@@ -85,6 +81,8 @@ public final class ResourceLoader  {
     }
 
     public static void  loadAnalyzeTable(String dir, String filename) {
+        analyzeTable = new HashMap<>();
+
         try {
             CSVReader csvReader = new CSVReader(new FileReader(dir + filename));
             String[] description = csvReader.readNext();
@@ -105,6 +103,8 @@ public final class ResourceLoader  {
     }
 
     public static void loadCommands(String dir, String filename) {
+        commands = new HashMap<>();
+
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = dbf.newDocumentBuilder();
