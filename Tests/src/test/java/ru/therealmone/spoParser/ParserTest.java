@@ -102,6 +102,33 @@ public class ParserTest {
         lexer.generateTokens("do{}while(a == b & c < d * (5 + 1) | 10 * (s + 150) <= 300)");
         assertTrue(check(lexer.tokens, new Parser(terminals)));
 
+        //print tests
+        lexer.generateTokens("print(0);");
+        assertTrue(check(lexer.tokens, new Parser(terminals)));
+
+        lexer.generateTokens("new a = 100; print(a);");
+        assertTrue(check(lexer.tokens, new Parser(terminals)));
+
+        lexer.generateTokens("new a typeof arraylist; put(a, 100); print(get(a, 0));");
+        assertTrue(check(lexer.tokens, new Parser(terminals)));
+
+        lexer.generateTokens("new a typeof hashset; new i = 0; put(a, i); print(get(a, i));");
+        assertTrue(check(lexer.tokens, new Parser(terminals)));
+
+        //get tests
+        lexer.generateTokens("new a typeof hashset; new i = 100; put(a, i); i = get(a, i);");
+        assertTrue(check(lexer.tokens, new Parser(terminals)));
+
+        lexer.generateTokens("new a typeof arraylist; put(a, 100); i = get(a, 0);");
+        assertTrue(check(lexer.tokens, new Parser(terminals)));
+
+        //remove tests
+        lexer.generateTokens("new a typeof hashset; new i = 100; put(a, i); remove(a, i);");
+        assertTrue(check(lexer.tokens, new Parser(terminals)));
+
+        lexer.generateTokens("new a typeof arraylist; put(a, 100); remove(a, 0);");
+        assertTrue(check(lexer.tokens, new Parser(terminals)));
+
         //Combinations
         //TODO: Написать больше комбинаций
         lexer.generateTokens("while(a > b) {if (a < d) {do{i = i;}while(a < b)} else {for(i = i; i < 100; i = i + 1){i = i;}}}");
@@ -175,6 +202,14 @@ public class ParserTest {
 
         lexer.generateTokens("print(1 / (100 * (50 - (1 / 0.16))));");
         assertEquals("2.2857142857142857E-4,print,$",
+                getOPN(lexer, new Parser(terminals)));
+
+        lexer.generateTokens("print(100 / (25 + 25 - a));");
+        assertEquals("100,50.0,%a,-,/,print,$",
+                getOPN(lexer, new Parser(terminals)));
+
+        lexer.generateTokens("print(1 / (100 * (50 - (1 / 0.16 - a))));");
+        assertEquals("1,100,50,6.25,%a,-,-,*,/,print,$",
                 getOPN(lexer, new Parser(terminals)));
     }
 
