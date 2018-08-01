@@ -1,6 +1,10 @@
 new a typeof arraylist;
 new i = 0;
 
-put(a, 100);
-i = get(a, 0);
-print(i);
+for(i = 0; i < 1000; i = i + 1) {
+	put(a, i);
+}
+
+for(i = 0; i < size(a); i = i + 1) {
+	print(get(a, i));
+}

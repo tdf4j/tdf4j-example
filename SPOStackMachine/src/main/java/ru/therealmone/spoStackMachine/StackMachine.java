@@ -501,7 +501,7 @@ public class StackMachine implements Visitor {
 
         try {
             if (variables.containsKey(parameter)) {
-                index = (int) variables.get(parameter);
+                index = castStringToInt("" + variables.get(parameter));
             } else {
                 index = castStringToInt(parameter);
             }
