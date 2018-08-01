@@ -353,7 +353,7 @@ public class StackMachine implements Visitor {
                         String parameter = stack.pop();
                         String collectionName = stack.pop();
 
-                        Collection collection = (Collection) variables.get(collectionName);
+                        Collection collection = getCollectionByName(collectionName);
                         put(collection, parameter);
 
                         cursor++;
@@ -367,7 +367,7 @@ public class StackMachine implements Visitor {
                         String parameter = stack.pop();
                         String collectionName = stack.pop();
 
-                        Collection collection = (Collection) variables.get(collectionName);
+                        Collection collection = getCollectionByName(collectionName);
                         get(collection, parameter);
 
                         cursor++;
@@ -380,7 +380,7 @@ public class StackMachine implements Visitor {
                     executions.put(command, com -> {
                         String collectionName = stack.pop();
 
-                        Collection collection = (Collection) variables.get(collectionName);
+                        Collection collection = getCollectionByName(collectionName);
                         size(collection);
 
                         cursor++;
@@ -394,7 +394,7 @@ public class StackMachine implements Visitor {
                         String parameter = stack.pop();
                         String collectionName = stack.pop();
 
-                        Collection collection = (Collection) variables.get(collectionName);
+                        Collection collection = getCollectionByName(collectionName);
                         remove(collection, parameter);
 
                         cursor++;
@@ -409,7 +409,7 @@ public class StackMachine implements Visitor {
                         String parameter0 = stack.pop();
                         String collectionName = stack.pop();
 
-                        Collection collection = (Collection) variables.get(collectionName);
+                        Collection collection = getCollectionByName(collectionName);
                         rewrite(collection, parameter0, parameter1);
 
                         cursor++;
@@ -501,9 +501,9 @@ public class StackMachine implements Visitor {
 
         try {
             if (variables.containsKey(parameter)) {
-                index = ((Double) variables.get(parameter)).intValue();
+                index = (int) variables.get(parameter);
             } else {
-                index = ((Double) Double.parseDouble(parameter)).intValue();
+                index = Integer.parseInt(parameter);
             }
         } catch (NumberFormatException | ClassCastException e) {
             throw new WrongTypeException("Wrong type of: " + parameter, e);
@@ -526,5 +526,15 @@ public class StackMachine implements Visitor {
         }
 
         return value;
+    }
+
+    private Collection getCollectionByName(String collectionName) {
+        Collection collection;
+        try {
+            collection = (Collection) variables.get(collectionName);
+        } catch (ClassCastException e) {
+            throw new WrongTypeException("Wrong type of: " + collectionName, e);
+        }
+        return collection;
     }
 }

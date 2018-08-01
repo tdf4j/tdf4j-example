@@ -1,8 +1,5 @@
 new a typeof arraylist;
-new i = 0;
+new i = 10000;
 
-for(i = i; i < 100; i = i + 1) {
-    put(a, i);
-}
-
-print(size(a));
+put(a, i);
+print(get(a, 0.1));
