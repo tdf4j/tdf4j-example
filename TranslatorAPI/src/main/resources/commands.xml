@@ -126,6 +126,11 @@
     </command>
 
     <command>
+        <type>SIZE</type>
+        <template>^size$</template>
+    </command>
+
+    <command>
         <type>REMOVE</type>
         <template>^remove$</template>
     </command>

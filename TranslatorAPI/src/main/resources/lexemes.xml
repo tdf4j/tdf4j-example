@@ -31,6 +31,11 @@
     </lexeme>
 
     <lexeme priority="2">
+        <type>SIZE</type>
+        <template>^size$</template>
+    </lexeme>
+
+    <lexeme priority="2">
         <type>PUT</type>
         <template>^put$</template>
     </lexeme>

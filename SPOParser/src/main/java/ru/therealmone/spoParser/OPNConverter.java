@@ -28,6 +28,7 @@ final class OPNConverter {
         priority = new HashMap<String, Integer>(){{
             put("new", 10);
             put("get", 9);
+            put("size", 9);
             put("/", 8);
             put("*", 8);
             put("+", 7);
@@ -449,6 +450,7 @@ final class OPNConverter {
                 case "value" : {value(child); break;}
                 case "value_expr_continue" : {value_expr_continue(child); break;}
                 case "get_expr" : {get_expr(child); break;}
+                case "size_expr" : {size_expr(child); break;}
             }
         }
     }
@@ -491,6 +493,19 @@ final class OPNConverter {
                 case "VAR" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
                 case "COMMA" : break;
                 case "value" : {value(child); break;}
+                case "RB" : break;
+            }
+        }
+    }
+
+
+    private static void size_expr(TreeNode root) {
+        for(TreeNode child: root.getChildes()) {
+            switch (child.getName()) {
+                case "SIZE" : {pushOP(child.getToken()); break;}
+                case "LB" : break;
+                case "VAR" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
+                case "RB" : break;
             }
         }
     }

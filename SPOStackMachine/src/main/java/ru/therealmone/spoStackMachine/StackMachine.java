@@ -376,6 +376,19 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
+                case "SIZE" : {
+                    executions.put(command, com -> {
+                        String collectionName = stack.pop();
+
+                        Collection collection = (Collection) variables.get(collectionName);
+                        size(collection);
+
+                        cursor++;
+                    });
+
+                    break;
+                }
+
                 case "REMOVE" : {
                     executions.put(command, com -> {
                         String parameter = stack.pop();
@@ -452,6 +465,10 @@ public class StackMachine implements Visitor {
             double value = ((ArrayList) collection).get(index);
             stack.push("" + value);
         }
+    }
+
+    private void size(Collection collection) {
+        stack.push("" + collection.size());
     }
 
     private void remove(Collection collection, String parameter) {

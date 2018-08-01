@@ -39,11 +39,13 @@ NUMBER,PROD,VALUE
 38,value_expr_with_br,LB + value_expr + RB
 39,value_expr_without_br,value + value_expr_continue
 40,value_expr_without_br,get_expr
-41,value,VAR
-42,value,DIGIT
-43,value,DOUBLE
-44,value_expr_continue,OP + value_expr
-45,value_expr_continue,EMPTY
-46,else,EMPTY
-47,else,ELSE + FLB + expr_continue + FRB
-48,get_expr,GET + LB + VAR + COMMA + value + RB + value_expr_continue
+41,value_expr_without_br,size_expr
+42,value,VAR
+43,value,DIGIT
+44,value,DOUBLE
+45,value_expr_continue,OP + value_expr
+46,value_expr_continue,EMPTY
+47,else,EMPTY
+48,else,ELSE + FLB + expr_continue + FRB
+49,get_expr,GET + LB + VAR + COMMA + value + RB + value_expr_continue
+50,size_expr,SIZE + LB + VAR + RB + value_expr_continue
