@@ -4,7 +4,9 @@ import ru.therealmone.spoLexer.*;
 import ru.therealmone.spoParser.Parser;
 import ru.therealmone.spoStackMachine.StackMachine;
 import ru.therealmone.translatorAPI.Exceptions.TranslatorException;
+import ru.therealmone.translatorAPI.Interfaces.ExceptionInterface;
 import ru.therealmone.translatorAPI.ResourceLoader;
+import ru.therealmone.translatorAPI.SavePrinter;
 import ru.therealmone.translatorAPI.Token;
 
 import java.util.HashSet;
@@ -21,8 +23,8 @@ class TranslatorImpl implements Translator {
             Parser parser;
             StackMachine stackMachine;
 
-            savePrint("\u001B[31mMAIN PROGRAM\u001B[0m");
-            savePrint("-----------------------------------------------------------------------------------------");
+            SavePrinter.savePrintln("\u001B[31mMAIN PROGRAM\u001B[0m");
+            SavePrinter.savePrintln("-----------------------------------------------------------------------------------------");
 
             lexer = new Lexer();
             if(devMode) {
@@ -44,25 +46,25 @@ class TranslatorImpl implements Translator {
             }
 
             if(devMode) {
-                savePrint("\u001B[32mPARSE SUCCESS\u001B[0m"); //Uncomment to print generated OPN
-                savePrint("OPN: " + parser.getOPN());
+                SavePrinter.savePrintln("\u001B[32mPARSE SUCCESS\u001B[0m");
+                SavePrinter.savePrintln("OPN: " + parser.getOPN());
             }
 
             stackMachine = new StackMachine();
             parser.accept(stackMachine);
 
-            savePrint("-----------------------------------------------------------------------------------------");
-            savePrint("\u001B[31mMAIN PROGRAM DONE\u001B[0m");
+            SavePrinter.savePrintln("-----------------------------------------------------------------------------------------");
+            SavePrinter.savePrintln("\u001B[31mMAIN PROGRAM DONE\u001B[0m");
 
             if(devMode) {
-                savePrint("\u001B[32mCALCULATE SUCCESS\u001B[0m"); //Uncomment to print variables at the end
+                SavePrinter.savePrintln("\u001B[32mCALCULATE SUCCESS\u001B[0m");
                 stackMachine.showVariables();
             }
 
         } catch (TranslatorException e) {
-            savePrint(e.getMessage());
-            savePrint("-----------------------------------------------------------------------------------------");
-            savePrint("\u001B[31mMAIN PROGRAM FAILED\u001B[0m");
+            printError(e);
+            SavePrinter.savePrintln("-----------------------------------------------------------------------------------------");
+            SavePrinter.savePrintln("\u001B[31mMAIN PROGRAM FAILED\u001B[0m");
         }
     }
 
@@ -71,7 +73,11 @@ class TranslatorImpl implements Translator {
         this.devMode = devMode;
     }
 
-    private synchronized static void savePrint(String message) {
-        System.out.println(message);
+    private void printError(TranslatorException e) {
+        if(e instanceof ExceptionInterface) {
+            ((ExceptionInterface) e).message();
+        } else {
+            SavePrinter.savePrintln(e.getMessage());
+        }
     }
 }

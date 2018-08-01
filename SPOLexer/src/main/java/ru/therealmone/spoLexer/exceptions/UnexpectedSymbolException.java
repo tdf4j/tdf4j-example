@@ -2,6 +2,7 @@ package ru.therealmone.spoLexer.exceptions;
 
 import ru.therealmone.translatorAPI.Exceptions.LexerException;
 import ru.therealmone.translatorAPI.Interfaces.ExceptionInterface;
+import ru.therealmone.translatorAPI.SavePrinter;
 import ru.therealmone.translatorAPI.Token;
 
 import java.util.ArrayList;
@@ -26,10 +27,10 @@ public class UnexpectedSymbolException extends LexerException implements Excepti
             message.append(token.getValue()).append(" ");
         }
 
-        System.out.println("Unexpected symbol at '^' mark. \n" + message + input);
+        SavePrinter.savePrintln("Unexpected symbol at '^' mark. \n" + message + input);
         for (int i = 0; i < count; i++) {
-            System.out.print(" ");
+            SavePrinter.savePrint(" ");
         }
-        System.out.println("^");
+        SavePrinter.savePrintln("^");
     }
 }

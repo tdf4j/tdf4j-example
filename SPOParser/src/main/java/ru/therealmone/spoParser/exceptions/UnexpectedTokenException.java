@@ -2,6 +2,7 @@ package ru.therealmone.spoParser.exceptions;
 
 import ru.therealmone.translatorAPI.Exceptions.ParserException;
 import ru.therealmone.translatorAPI.Interfaces.ExceptionInterface;
+import ru.therealmone.translatorAPI.SavePrinter;
 import ru.therealmone.translatorAPI.Token;
 
 public class UnexpectedTokenException extends ParserException implements ExceptionInterface {
@@ -10,28 +11,28 @@ public class UnexpectedTokenException extends ParserException implements Excepti
     private String history;
 
     public UnexpectedTokenException(Token token, String expected, String history) {
-        super("Got unexpected token " + token.getValue() + " -> " + token.getValue());
+        super("Got unexpected token " + token.getValue());
         this.expected = expected;
         this.token = token;
         this.history = history;
     }
 
     public UnexpectedTokenException(Token token, String history) {
-        super("Got unexpected token " + token.getValue() + " -> " + token.getValue());
+        super("Got unexpected token " + token.getValue());
         this.token = token;
         this.history = history;
     }
 
     @Override
     public void message() {
-        System.out.println("Unexpected token " + token.getType() + " at '^' mark. \n" + history + token.getValue());
+        SavePrinter.savePrintln("Unexpected token " + token.getType() + " at '^' mark. \n" + history + token.getValue());
         for (int i = 0; i < history.length(); i++) {
-            System.out.print(" ");
+            SavePrinter.savePrint(" ");
         }
-        System.out.println("^");
+        SavePrinter.savePrintln("^");
 
         if(expected != null) {
-            System.out.println("Expected: " + expected);
+            SavePrinter.savePrintln("Expected: " + expected);
         }
     }
 }

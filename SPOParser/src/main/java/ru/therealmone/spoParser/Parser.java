@@ -55,8 +55,8 @@ public class Parser implements Visitor, Visitable {
     }
 
     public void showLangRules() {
-        System.out.println("\u001B[33mLANG RULES:\u001B[0m");
-        langRules.forEach( (num, rules) -> System.out.printf("%-20d%-10s%-40s%n", num, "-->", Arrays.toString(rules)));
+        SavePrinter.savePrintln("\u001B[33mLANG RULES:\u001B[0m");
+        langRules.forEach( (num, rules) -> SavePrinter.savePrintf("%-20d%-10s%-40s%n", num, "-->", Arrays.toString(rules)));
     }
 
     private void parse(Token token) {
@@ -78,7 +78,6 @@ public class Parser implements Visitor, Visitable {
                 if (child.getName().equals(token.getType()) && child.getToken() == null) {
                     moveCN();
                     child.setToken(token);
-                    //System.out.println("Success " + token.getValue());
                     history.append(token.getValue()).append(" ");
                     stack.pop();
                     break;

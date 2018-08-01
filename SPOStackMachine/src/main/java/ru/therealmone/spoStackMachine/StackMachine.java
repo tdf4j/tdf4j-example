@@ -10,6 +10,7 @@ import ru.therealmone.spoStackMachine.exceptions.WrongTypeException;
 import ru.therealmone.spoStackMachine.exceptions.UnknownCommandException;
 import ru.therealmone.spoStackMachine.collections.hashset.HashSetImpl;
 import ru.therealmone.translatorAPI.Exceptions.StackMachineException;
+import ru.therealmone.translatorAPI.SavePrinter;
 import ru.therealmone.translatorAPI.Token;
 import ru.therealmone.translatorAPI.Interfaces.Visitor;
 
@@ -421,22 +422,20 @@ public class StackMachine implements Visitor {
                 case "PRINT" : {
                     executions.put(command, com -> {
                         double value = Double.parseDouble(stack.pop());
-                        System.out.println(value);
+                        SavePrinter.savePrintln("" + value);
 
                         cursor++;
                     });
 
                     break;
                 }
-
-                case "$" : {executions.put(command, com -> System.out.println("EXECUTION SUCCESS")); break;}
             }
         });
     }
 
     public void showVariables() {
-        System.out.println("Current variables: ");
-        variables.forEach( (name, obj) -> System.out.println(name + ": " + obj));
+        SavePrinter.savePrintln("Current variables: ");
+        variables.forEach( (name, obj) -> SavePrinter.savePrintln(name + ": " + obj));
     }
 
     private void put(Collection collection, String parameter) {

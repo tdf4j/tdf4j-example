@@ -1,6 +1,7 @@
 package ru.therealmone.spoLexer;
 
 import ru.therealmone.translatorAPI.ResourceLoader;
+import ru.therealmone.translatorAPI.SavePrinter;
 import ru.therealmone.translatorAPI.Token;
 import ru.therealmone.spoLexer.exceptions.UnexpectedSymbolException;
 
@@ -22,8 +23,8 @@ public class Lexer {
     }
 
     public void showLexemes() {
-        System.out.println("\u001B[33mLEXEMES:\u001B[0m");
-        lexemes.forEach( (lexeme, pattern) -> System.out.printf("%-20s%-10s%-40s%n", lexeme, "-->", pattern));
+        SavePrinter.savePrintln("\u001B[33mLEXEMES:\u001B[0m");
+        lexemes.forEach( (lexeme, pattern) -> SavePrinter.savePrintf("%-20s%-10s%-40s%n", lexeme, "-->", pattern));
     }
 
     public void generateTokens(String input) {
@@ -79,8 +80,8 @@ public class Lexer {
     }
 
     public void showTokens() {
-        System.out.println("GENERATED TOKENS: ");
-        tokens.forEach(token -> System.out.printf("%-20s%-10s%-40s%n", token.getType(), "-->", token.getValue()));
+        SavePrinter.savePrintln("GENERATED TOKENS: ");
+        tokens.forEach(token -> SavePrinter.savePrintf("%-20s%-10s%-40s%n", token.getType(), "-->", token.getValue()));
     }
 
     boolean match(String lexeme, String string) {

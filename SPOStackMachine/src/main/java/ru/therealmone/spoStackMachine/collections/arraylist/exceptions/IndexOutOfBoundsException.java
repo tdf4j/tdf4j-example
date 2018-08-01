@@ -2,6 +2,7 @@ package ru.therealmone.spoStackMachine.collections.arraylist.exceptions;
 
 import ru.therealmone.spoStackMachine.exceptions.ArrayListException;
 import ru.therealmone.translatorAPI.Interfaces.ExceptionInterface;
+import ru.therealmone.translatorAPI.SavePrinter;
 
 public class IndexOutOfBoundsException extends ArrayListException implements ExceptionInterface {
     private int index;
@@ -15,6 +16,6 @@ public class IndexOutOfBoundsException extends ArrayListException implements Exc
 
     @Override
     public void message() {
-        System.out.println("Index out of bound: " + index + ". Length = " + length);
+        SavePrinter.savePrintln("Index out of bound: " + index + ". Length = " + length);
     }
 }
