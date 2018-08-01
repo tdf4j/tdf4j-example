@@ -22,13 +22,12 @@ public class Parser implements Visitor, Visitable {
     private StringBuilder history;
 
     @Override
-    public void visit(Token token) {
-        parse(token);
-    }
-
-    @Override
-    public void visit(String opn) {
-        throw new UnsupportedOperationException();
+    public void visit(Object object) {
+        if(object instanceof Token) {
+            parse((Token) object);
+        } else {
+            throw new IllegalArgumentException("Illegal argument: " + object);
+        }
     }
 
     @Override

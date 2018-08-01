@@ -11,7 +11,6 @@ import ru.therealmone.spoStackMachine.exceptions.UnknownCommandException;
 import ru.therealmone.spoStackMachine.collections.hashset.HashSetImpl;
 import ru.therealmone.translatorAPI.Exceptions.StackMachineException;
 import ru.therealmone.translatorAPI.SavePrinter;
-import ru.therealmone.translatorAPI.Token;
 import ru.therealmone.translatorAPI.Interfaces.Visitor;
 
 import java.util.Map;
@@ -27,12 +26,14 @@ public class StackMachine implements Visitor {
     private Stack<String> stack;
     private int cursor;
 
-    @Override
-    public void visit(Token token) {}
 
     @Override
-    public void visit(String opn) {
-        calculate(opn);
+    public void visit(Object object) {
+        if(object instanceof String) {
+            calculate((String) object);
+        } else {
+            throw new IllegalArgumentException("Illegal argument: " + object);
+        }
     }
 
     public StackMachine() {
