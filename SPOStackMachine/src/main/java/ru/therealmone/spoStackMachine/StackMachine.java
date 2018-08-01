@@ -503,7 +503,7 @@ public class StackMachine implements Visitor {
             if (variables.containsKey(parameter)) {
                 index = (int) variables.get(parameter);
             } else {
-                index = Integer.parseInt(parameter);
+                index = castStringToInt(parameter);
             }
         } catch (NumberFormatException | ClassCastException e) {
             throw new WrongTypeException("Wrong type of: " + parameter, e);
@@ -536,5 +536,15 @@ public class StackMachine implements Visitor {
             throw new WrongTypeException("Wrong type of: " + collectionName, e);
         }
         return collection;
+    }
+
+    private int castStringToInt(String parameter) {
+        Double value = Double.parseDouble(parameter);
+
+        if(value % 1 == 0) {
+            return value.intValue();
+        } else {
+            throw new WrongTypeException("Wrong type of: " + parameter);
+        }
     }
 }

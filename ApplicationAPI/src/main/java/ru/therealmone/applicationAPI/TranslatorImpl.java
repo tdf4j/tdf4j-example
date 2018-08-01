@@ -62,6 +62,9 @@ class TranslatorImpl implements Translator {
             }
 
         } catch (TranslatorException e) {
+            if(devMode) {
+                e.printStackTrace();
+            }
             printError(e);
             SavePrinter.savePrintln("-----------------------------------------------------------------------------------------");
             SavePrinter.savePrintln("\u001B[31mMAIN PROGRAM FAILED\u001B[0m");

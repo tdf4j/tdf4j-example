@@ -1,2 +1,6 @@
 new a typeof arraylist;
-print(get(a, i));
+new i = 0;
+
+put(a, 100);
+i = get(a, 0);
+print(i);

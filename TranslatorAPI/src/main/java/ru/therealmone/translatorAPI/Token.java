@@ -1,6 +1,5 @@
 package ru.therealmone.translatorAPI;
 
-import ru.therealmone.translatorAPI.Exceptions.TranslatorException;
 import ru.therealmone.translatorAPI.Interfaces.Visitable;
 import ru.therealmone.translatorAPI.Interfaces.Visitor;
 
@@ -22,7 +21,7 @@ public class Token implements Visitable {
     }
 
     @Override
-    public void accept(Visitor v) throws TranslatorException {
+    public void accept(Visitor v) {
         v.visit(this);
     }
 
