@@ -47,7 +47,7 @@ class TranslatorImpl implements Translator {
 
             if (devMode) {
                 SavePrinter.savePrintln("\u001B[32mPARSE SUCCESS\u001B[0m");
-                SavePrinter.savePrintln("OPN: " + parser.getOPN());
+                SavePrinter.savePrintln("RPN: " + parser.getRPN());
             }
 
             stackMachine = new StackMachine();
