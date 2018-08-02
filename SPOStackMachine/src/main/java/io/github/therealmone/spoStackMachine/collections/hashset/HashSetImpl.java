@@ -1,8 +1,8 @@
-package ru.therealmone.spoStackMachine.collections.hashset;
+package io.github.therealmone.spoStackMachine.collections.hashset;
 
-import ru.therealmone.spoStackMachine.collections.HashSet;
-import ru.therealmone.spoStackMachine.collections.hashset.exceptions.KeyAlreadyExistsException;
-import ru.therealmone.spoStackMachine.collections.hashset.exceptions.NoSuchElementException;
+import io.github.therealmone.spoStackMachine.collections.HashSet;
+import io.github.therealmone.spoStackMachine.collections.hashset.exceptions.KeyAlreadyExistsException;
+import io.github.therealmone.spoStackMachine.collections.hashset.exceptions.NoSuchElementException;
 
 public class HashSetImpl implements HashSet {
     private int BUCKET_COUNT = 17;

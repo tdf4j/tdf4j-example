@@ -1,9 +1,9 @@
-package ru.therealmone.spoLexer;
+package io.github.therealmone.spoLexer;
 
-import ru.therealmone.translatorAPI.ResourceLoader;
-import ru.therealmone.translatorAPI.SavePrinter;
-import ru.therealmone.translatorAPI.Token;
-import ru.therealmone.spoLexer.exceptions.UnexpectedSymbolException;
+import io.github.therealmone.translatorAPI.ResourceLoader;
+import io.github.therealmone.translatorAPI.SavePrinter;
+import io.github.therealmone.translatorAPI.Token;
+import io.github.therealmone.spoLexer.exceptions.UnexpectedSymbolException;
 
 import java.util.ArrayList;
 import java.util.Map;

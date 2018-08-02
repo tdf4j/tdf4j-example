@@ -1,4 +1,4 @@
-package ru.therealmone.examples;
+package io.github.therealmone.examples;
 
 import io.github.therealmone.applicationAPI.Translator;
 

@@ -1,7 +1,7 @@
-package ru.therealmone.spoStackMachine.collections.arraylist;
+package io.github.therealmone.spoStackMachine.collections.arraylist;
 
-import ru.therealmone.spoStackMachine.collections.ArrayList;
-import ru.therealmone.spoStackMachine.collections.arraylist.exceptions.IndexOutOfBoundsException;
+import io.github.therealmone.spoStackMachine.collections.ArrayList;
+import io.github.therealmone.spoStackMachine.collections.arraylist.exceptions.IndexOutOfBoundsException;
 
 public class ArrayListImpl implements ArrayList {
     private int size;

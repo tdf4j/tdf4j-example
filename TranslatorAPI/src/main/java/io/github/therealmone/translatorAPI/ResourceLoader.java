@@ -1,4 +1,4 @@
-package ru.therealmone.translatorAPI;
+package io.github.therealmone.translatorAPI;
 
 import com.opencsv.CSVReader;
 import org.w3c.dom.Document;

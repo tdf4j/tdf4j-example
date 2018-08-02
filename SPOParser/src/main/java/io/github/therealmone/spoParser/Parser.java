@@ -1,11 +1,12 @@
-package ru.therealmone.spoParser;
+package io.github.therealmone.spoParser;
 
-import ru.therealmone.translatorAPI.ResourceLoader;
-import ru.therealmone.translatorAPI.*;
-import ru.therealmone.spoParser.exceptions.UnexpectedTokenException;
-import ru.therealmone.translatorAPI.Exceptions.ParserException;
-import ru.therealmone.translatorAPI.Interfaces.Visitable;
-import ru.therealmone.translatorAPI.Interfaces.Visitor;
+import io.github.therealmone.translatorAPI.ResourceLoader;
+import io.github.therealmone.translatorAPI.SavePrinter;
+import io.github.therealmone.translatorAPI.Token;
+import io.github.therealmone.spoParser.exceptions.UnexpectedTokenException;
+import io.github.therealmone.translatorAPI.Exceptions.ParserException;
+import io.github.therealmone.translatorAPI.Interfaces.Visitable;
+import io.github.therealmone.translatorAPI.Interfaces.Visitor;
 
 import java.util.*;
 

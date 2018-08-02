@@ -1,9 +1,9 @@
-package ru.therealmone.spoLexer.exceptions;
+package io.github.therealmone.spoLexer.exceptions;
 
-import ru.therealmone.translatorAPI.Exceptions.LexerException;
-import ru.therealmone.translatorAPI.Interfaces.ExceptionInterface;
-import ru.therealmone.translatorAPI.SavePrinter;
-import ru.therealmone.translatorAPI.Token;
+import io.github.therealmone.translatorAPI.Exceptions.LexerException;
+import io.github.therealmone.translatorAPI.Interfaces.ExceptionInterface;
+import io.github.therealmone.translatorAPI.SavePrinter;
+import io.github.therealmone.translatorAPI.Token;
 
 import java.util.ArrayList;
 

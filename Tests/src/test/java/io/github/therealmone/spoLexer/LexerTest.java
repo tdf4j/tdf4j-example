@@ -1,9 +1,8 @@
-package ru.therealmone.spoLexer;
+package io.github.therealmone.spoLexer;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import ru.therealmone.translatorAPI.Exceptions.LexerException;
-import ru.therealmone.translatorAPI.ResourceLoader;
+import io.github.therealmone.translatorAPI.ResourceLoader;
 
 import static org.junit.Assert.*;
 

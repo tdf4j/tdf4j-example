@@ -1,7 +1,7 @@
-package ru.therealmone.translatorAPI;
+package io.github.therealmone.translatorAPI;
 
-import ru.therealmone.translatorAPI.Interfaces.Visitable;
-import ru.therealmone.translatorAPI.Interfaces.Visitor;
+import io.github.therealmone.translatorAPI.Interfaces.Visitable;
+import io.github.therealmone.translatorAPI.Interfaces.Visitor;
 
 public class Token implements Visitable {
     private String type;

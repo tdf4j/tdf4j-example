@@ -1,4 +1,4 @@
-package ru.therealmone.translatorAPI.Exceptions;
+package io.github.therealmone.translatorAPI.Exceptions;
 
 public class ParserException extends TranslatorException {
     public ParserException(String message, Throwable cause) {

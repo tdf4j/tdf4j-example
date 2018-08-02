@@ -1,13 +1,13 @@
-package ru.therealmone.spoParser;
+package io.github.therealmone.spoParser;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-import ru.therealmone.spoLexer.Lexer;
-import ru.therealmone.translatorAPI.ResourceLoader;
-import ru.therealmone.translatorAPI.Token;
+import io.github.therealmone.spoLexer.Lexer;
+import io.github.therealmone.translatorAPI.ResourceLoader;
+import io.github.therealmone.translatorAPI.Token;
 
 import java.util.ArrayList;
 import java.util.HashSet;

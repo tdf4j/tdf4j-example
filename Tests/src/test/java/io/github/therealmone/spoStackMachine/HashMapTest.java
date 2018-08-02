@@ -1,10 +1,10 @@
-package ru.therealmone.spoStackMachine;
+package io.github.therealmone.spoStackMachine;
 
+import io.github.therealmone.spoStackMachine.collections.hashset.HashSetImpl;
+import io.github.therealmone.spoStackMachine.collections.hashset.exceptions.KeyAlreadyExistsException;
+import io.github.therealmone.spoStackMachine.collections.hashset.exceptions.NoSuchElementException;
 import org.junit.Test;
-import ru.therealmone.spoStackMachine.collections.HashSet;
-import ru.therealmone.spoStackMachine.collections.hashset.HashSetImpl;
-import ru.therealmone.spoStackMachine.collections.hashset.exceptions.KeyAlreadyExistsException;
-import ru.therealmone.spoStackMachine.collections.hashset.exceptions.NoSuchElementException;
+import io.github.therealmone.spoStackMachine.collections.HashSet;
 
 import static org.junit.Assert.*;
 

@@ -1,4 +1,4 @@
-package ru.therealmone.translatorAPI.Exceptions;
+package io.github.therealmone.translatorAPI.Exceptions;
 
 public class TranslatorException extends RuntimeException {
     public TranslatorException(String message, Throwable cause) {

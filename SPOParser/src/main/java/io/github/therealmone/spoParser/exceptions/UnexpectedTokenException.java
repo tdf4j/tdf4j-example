@@ -1,9 +1,9 @@
-package ru.therealmone.spoParser.exceptions;
+package io.github.therealmone.spoParser.exceptions;
 
-import ru.therealmone.translatorAPI.Exceptions.ParserException;
-import ru.therealmone.translatorAPI.Interfaces.ExceptionInterface;
-import ru.therealmone.translatorAPI.SavePrinter;
-import ru.therealmone.translatorAPI.Token;
+import io.github.therealmone.translatorAPI.Exceptions.ParserException;
+import io.github.therealmone.translatorAPI.Interfaces.ExceptionInterface;
+import io.github.therealmone.translatorAPI.SavePrinter;
+import io.github.therealmone.translatorAPI.Token;
 
 public class UnexpectedTokenException extends ParserException implements ExceptionInterface {
     private String expected;

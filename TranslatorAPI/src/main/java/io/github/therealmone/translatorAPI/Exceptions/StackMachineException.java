@@ -1,4 +1,4 @@
-package ru.therealmone.translatorAPI.Exceptions;
+package io.github.therealmone.translatorAPI.Exceptions;
 
 public class StackMachineException extends TranslatorException {
     public StackMachineException(String message, Throwable cause) {

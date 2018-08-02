@@ -1,4 +1,4 @@
-package ru.therealmone.spoStackMachine;
+package io.github.therealmone.spoStackMachine;
 
 @FunctionalInterface
 public interface Command {

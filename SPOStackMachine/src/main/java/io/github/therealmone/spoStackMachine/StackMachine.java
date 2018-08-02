@@ -1,17 +1,17 @@
-package ru.therealmone.spoStackMachine;
+package io.github.therealmone.spoStackMachine;
 
-import ru.therealmone.translatorAPI.ResourceLoader;
-import ru.therealmone.spoStackMachine.collections.ArrayList;
-import ru.therealmone.spoStackMachine.collections.Collection;
-import ru.therealmone.spoStackMachine.collections.HashSet;
-import ru.therealmone.spoStackMachine.collections.arraylist.ArrayListImpl;
-import ru.therealmone.spoStackMachine.exceptions.NoVariableException;
-import ru.therealmone.spoStackMachine.exceptions.WrongTypeException;
-import ru.therealmone.spoStackMachine.exceptions.UnknownCommandException;
-import ru.therealmone.spoStackMachine.collections.hashset.HashSetImpl;
-import ru.therealmone.translatorAPI.Exceptions.StackMachineException;
-import ru.therealmone.translatorAPI.SavePrinter;
-import ru.therealmone.translatorAPI.Interfaces.Visitor;
+import io.github.therealmone.spoStackMachine.collections.ArrayList;
+import io.github.therealmone.spoStackMachine.collections.Collection;
+import io.github.therealmone.spoStackMachine.collections.HashSet;
+import io.github.therealmone.spoStackMachine.collections.arraylist.ArrayListImpl;
+import io.github.therealmone.spoStackMachine.collections.hashset.HashSetImpl;
+import io.github.therealmone.spoStackMachine.exceptions.NoVariableException;
+import io.github.therealmone.spoStackMachine.exceptions.UnknownCommandException;
+import io.github.therealmone.spoStackMachine.exceptions.WrongTypeException;
+import io.github.therealmone.translatorAPI.ResourceLoader;
+import io.github.therealmone.translatorAPI.Exceptions.StackMachineException;
+import io.github.therealmone.translatorAPI.SavePrinter;
+import io.github.therealmone.translatorAPI.Interfaces.Visitor;
 
 import java.util.Map;
 import java.util.HashMap;

@@ -1,8 +1,8 @@
-package ru.therealmone.spoStackMachine.collections.hashset.exceptions;
+package io.github.therealmone.spoStackMachine.collections.hashset.exceptions;
 
-import ru.therealmone.spoStackMachine.exceptions.HashMapException;
-import ru.therealmone.translatorAPI.Interfaces.ExceptionInterface;
-import ru.therealmone.translatorAPI.SavePrinter;
+import io.github.therealmone.spoStackMachine.exceptions.HashMapException;
+import io.github.therealmone.translatorAPI.Interfaces.ExceptionInterface;
+import io.github.therealmone.translatorAPI.SavePrinter;
 
 public class KeyAlreadyExistsException extends HashMapException implements ExceptionInterface {
     private String key;

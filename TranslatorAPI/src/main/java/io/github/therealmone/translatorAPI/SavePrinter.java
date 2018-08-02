@@ -1,4 +1,4 @@
-package ru.therealmone.translatorAPI;
+package io.github.therealmone.translatorAPI;
 
 public final class SavePrinter {
     public synchronized static void savePrintln(String message) {

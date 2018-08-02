@@ -1,6 +1,6 @@
-package ru.therealmone.spoStackMachine.exceptions;
+package io.github.therealmone.spoStackMachine.exceptions;
 
-import ru.therealmone.translatorAPI.Exceptions.StackMachineException;
+import io.github.therealmone.translatorAPI.Exceptions.StackMachineException;
 
 public class WrongTypeException extends StackMachineException {
     public WrongTypeException(String message, Throwable cause) {

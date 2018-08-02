@@ -1,4 +1,4 @@
-package ru.therealmone.spoStackMachine.collections;
+package io.github.therealmone.spoStackMachine.collections;
 
 public interface Collection {
     int size();

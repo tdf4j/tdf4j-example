@@ -4,7 +4,7 @@
     
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>ru.therealmone</groupId>
+		<groupId>io.github.therealmone</groupId>
 		<artifactId>SPOTranslator</artifactId>
 		<version>1.0</version>
 	</parent>
@@ -14,19 +14,19 @@
 	
 	<dependencies>
 		<dependency>
-			<groupId>ru.therealmone</groupId>
+			<groupId>io.github.therealmone</groupId>
 			<artifactId>SPOParser</artifactId>
 			<version>1.0</version>
 		</dependency>
 
 		<dependency>
-			<groupId>ru.therealmone</groupId>
+			<groupId>io.github.therealmone</groupId>
 			<artifactId>SPOStackMachine</artifactId>
 			<version>1.0</version>
 		</dependency>
 
 		<dependency>
-			<groupId>ru.therealmone</groupId>
+			<groupId>io.github.therealmone</groupId>
 			<artifactId>TranslatorAPI</artifactId>
 			<version>1.0</version>
 		</dependency>

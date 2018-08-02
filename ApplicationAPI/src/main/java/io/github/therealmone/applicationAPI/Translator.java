@@ -1,6 +1,6 @@
-package ru.therealmone.applicationAPI;
+package io.github.therealmone.applicationAPI;
 
-import ru.therealmone.translatorAPI.Exceptions.TranslatorException;
+import io.github.therealmone.translatorAPI.Exceptions.TranslatorException;
 
 import java.io.*;
 

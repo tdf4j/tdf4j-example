@@ -1,4 +1,4 @@
-package ru.therealmone.translatorAPI;
+package io.github.therealmone.translatorAPI;
 
 public class Node {
     private String name;

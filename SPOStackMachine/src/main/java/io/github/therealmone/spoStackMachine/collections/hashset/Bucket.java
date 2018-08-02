@@ -1,6 +1,6 @@
-package ru.therealmone.spoStackMachine.collections.hashset;
+package io.github.therealmone.spoStackMachine.collections.hashset;
 
-import ru.therealmone.translatorAPI.Node;
+import io.github.therealmone.translatorAPI.Node;
 
 class Bucket extends Node {
     private int eleCount;

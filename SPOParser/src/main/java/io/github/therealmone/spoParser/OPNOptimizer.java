@@ -1,4 +1,4 @@
-package ru.therealmone.spoParser;
+package io.github.therealmone.spoParser;
 
 import java.util.ArrayList;
 import java.util.List;

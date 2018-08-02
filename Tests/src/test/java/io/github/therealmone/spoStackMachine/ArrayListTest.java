@@ -1,9 +1,10 @@
-package ru.therealmone.spoStackMachine;
+package io.github.therealmone.spoStackMachine;
 
+import io.github.therealmone.spoStackMachine.collections.arraylist.ArrayListImpl;
+import io.github.therealmone.spoStackMachine.collections.arraylist.exceptions.IndexOutOfBoundsException;
+import org.junit.Assert;
 import org.junit.Test;
-import ru.therealmone.spoStackMachine.collections.ArrayList;
-import ru.therealmone.spoStackMachine.collections.arraylist.ArrayListImpl;
-import ru.therealmone.spoStackMachine.collections.arraylist.exceptions.IndexOutOfBoundsException;
+import io.github.therealmone.spoStackMachine.collections.ArrayList;
 
 import java.lang.reflect.Field;
 
@@ -27,13 +28,13 @@ public class ArrayListTest {
         try {
             arrayList.get(-1);
         } catch (IndexOutOfBoundsException e) {
-            assertEquals("Index out of bound: -1. Length = 3", e.getMessage());
+            Assert.assertEquals("Index out of bound: -1. Length = 3", e.getMessage());
         }
 
         try {
             arrayList.get(4);
         } catch (IndexOutOfBoundsException e) {
-            assertEquals("Index out of bound: 4. Length = 3", e.getMessage());
+            Assert.assertEquals("Index out of bound: 4. Length = 3", e.getMessage());
         }
     }
 

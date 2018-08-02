@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>SPOTranslator</artifactId>
-        <groupId>ru.therealmone</groupId>
+        <groupId>io.github.therealmone</groupId>
         <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -13,25 +13,25 @@
 
     <dependencies>
         <dependency>
-            <groupId>ru.therealmone</groupId>
+            <groupId>io.github.therealmone</groupId>
             <artifactId>SPOLexer</artifactId>
             <version>1.1</version>
         </dependency>
 
         <dependency>
-            <groupId>ru.therealmone</groupId>
+            <groupId>io.github.therealmone</groupId>
             <artifactId>SPOParser</artifactId>
             <version>1.0</version>
         </dependency>
 
         <dependency>
-            <groupId>ru.therealmone</groupId>
+            <groupId>io.github.therealmone</groupId>
             <artifactId>SPOStackMachine</artifactId>
             <version>1.0</version>
         </dependency>
 
         <dependency>
-            <groupId>ru.therealmone</groupId>
+            <groupId>io.github.therealmone</groupId>
             <artifactId>TranslatorAPI</artifactId>
             <version>1.0</version>
         </dependency>

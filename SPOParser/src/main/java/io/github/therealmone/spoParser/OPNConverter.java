@@ -1,6 +1,6 @@
-package ru.therealmone.spoParser;
+package io.github.therealmone.spoParser;
 
-import ru.therealmone.translatorAPI.Token;
+import io.github.therealmone.translatorAPI.Token;
 
 import java.util.*;
 

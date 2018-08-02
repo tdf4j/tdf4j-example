@@ -1,13 +1,13 @@
-package ru.therealmone.applicationAPI;
+package io.github.therealmone.applicationAPI;
 
-import ru.therealmone.spoLexer.*;
-import ru.therealmone.spoParser.Parser;
-import ru.therealmone.spoStackMachine.StackMachine;
-import ru.therealmone.translatorAPI.Exceptions.TranslatorException;
-import ru.therealmone.translatorAPI.Interfaces.ExceptionInterface;
-import ru.therealmone.translatorAPI.ResourceLoader;
-import ru.therealmone.translatorAPI.SavePrinter;
-import ru.therealmone.translatorAPI.Token;
+import io.github.therealmone.spoLexer.Lexer;
+import io.github.therealmone.spoParser.Parser;
+import io.github.therealmone.spoStackMachine.StackMachine;
+import io.github.therealmone.translatorAPI.Exceptions.TranslatorException;
+import io.github.therealmone.translatorAPI.Interfaces.ExceptionInterface;
+import io.github.therealmone.translatorAPI.ResourceLoader;
+import io.github.therealmone.translatorAPI.SavePrinter;
+import io.github.therealmone.translatorAPI.Token;
 
 import java.util.HashSet;
 
