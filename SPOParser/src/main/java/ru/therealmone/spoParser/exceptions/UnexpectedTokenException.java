@@ -31,7 +31,7 @@ public class UnexpectedTokenException extends ParserException implements Excepti
         }
         SavePrinter.savePrintln("^");
 
-        if(expected != null) {
+        if (expected != null) {
             SavePrinter.savePrintln("Expected: " + expected);
         }
     }

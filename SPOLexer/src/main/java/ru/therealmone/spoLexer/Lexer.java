@@ -24,7 +24,7 @@ public class Lexer {
 
     public void showLexemes() {
         SavePrinter.savePrintln("\u001B[33mLEXEMES:\u001B[0m");
-        lexemes.forEach( (lexeme, pattern) -> SavePrinter.savePrintf("%-20s%-10s%-40s%n", lexeme, "-->", pattern));
+        lexemes.forEach((lexeme, pattern) -> SavePrinter.savePrintf("%-20s%-10s%-40s%n", lexeme, "-->", pattern));
     }
 
     public void generateTokens(String input) {
@@ -52,12 +52,12 @@ public class Lexer {
 
         tokens.add(new Token("$", "$"));
     }
-    
+
     private boolean checkLexemes(String str) {
-        for(Map.Entry<String, Pattern> entry: lexemes.entrySet()) {
-           if(match(entry.getKey(), str)) {
-               return true;
-           }
+        for (Map.Entry<String, Pattern> entry : lexemes.entrySet()) {
+            if (match(entry.getKey(), str)) {
+                return true;
+            }
         }
 
         return false;
@@ -67,9 +67,9 @@ public class Lexer {
         int tmpPriority = 0;
         String lexType = "";
 
-        for(Map.Entry<String, Pattern> entry: lexemes.entrySet()) {
-            if(match(entry.getKey(), str)) {
-                if(priority.get(entry.getKey()) > tmpPriority) {
+        for (Map.Entry<String, Pattern> entry : lexemes.entrySet()) {
+            if (match(entry.getKey(), str)) {
+                if (priority.get(entry.getKey()) > tmpPriority) {
                     lexType = entry.getKey();
                     tmpPriority = priority.get(entry.getKey());
                 }

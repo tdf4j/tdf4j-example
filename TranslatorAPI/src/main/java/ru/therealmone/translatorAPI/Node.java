@@ -5,7 +5,8 @@ public class Node {
     private Node next;
     private Node parent;
 
-    public Node() {}
+    public Node() {
+    }
 
     public Node(String name) {
         this.name = name;

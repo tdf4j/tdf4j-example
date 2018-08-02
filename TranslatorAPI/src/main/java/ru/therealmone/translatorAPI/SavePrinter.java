@@ -9,7 +9,7 @@ public final class SavePrinter {
         System.out.print(message);
     }
 
-    public synchronized static void savePrintf(String format, Object ... args) {
+    public synchronized static void savePrintf(String format, Object... args) {
         System.out.printf(format, args);
     }
 }

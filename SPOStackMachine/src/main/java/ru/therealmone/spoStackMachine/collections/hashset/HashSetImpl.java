@@ -19,7 +19,7 @@ public class HashSetImpl implements HashSet {
     @Override
     public int size() {
         int size = 0;
-        for(Bucket bucket: buckets) {
+        for (Bucket bucket : buckets) {
             size += bucket.getEleCount();
         }
 
@@ -36,7 +36,7 @@ public class HashSetImpl implements HashSet {
 
         for (int i = 0; i < BUCKET_COUNT; i++) {
             Element current = (Element) buckets[i].getNext();
-            while(current != null) {
+            while (current != null) {
                 out.append("\t")
                         .append(current.getName())
                         .append(" -> ")
@@ -52,7 +52,7 @@ public class HashSetImpl implements HashSet {
 
     @Override
     public void add(String key, double value) {
-        if(!contains(key)) {
+        if (!contains(key)) {
             int index = getIndex(key);
 
             while (buckets[index].getEleCount() >= MAX_ELEMENTS_IN_BUCKET) {
@@ -70,14 +70,14 @@ public class HashSetImpl implements HashSet {
     public double get(String key) {
         int index = getIndex(key);
 
-        if(buckets[index].getEleCount() == 0) {
+        if (buckets[index].getEleCount() == 0) {
             throw new NoSuchElementException(key);
         }
 
         Element current = (Element) buckets[index].getNext();
 
-        while(current != null) {
-            if(current.getHashCode() == key.hashCode() && current.getName().equals(key)) {
+        while (current != null) {
+            if (current.getHashCode() == key.hashCode() && current.getName().equals(key)) {
                 return current.getValue();
             }
             current = (Element) current.getNext();
@@ -90,14 +90,14 @@ public class HashSetImpl implements HashSet {
     public boolean contains(String key) {
         int index = getIndex(key);
 
-        if(buckets[index].getEleCount() == 0) {
+        if (buckets[index].getEleCount() == 0) {
             return false;
         }
 
         Element current = (Element) buckets[index].getNext();
 
-        while(current != null) {
-            if(current.getHashCode() == key.hashCode() && current.getName().equals(key)) {
+        while (current != null) {
+            if (current.getHashCode() == key.hashCode() && current.getName().equals(key)) {
                 return true;
             }
             current = (Element) current.getNext();
@@ -108,7 +108,7 @@ public class HashSetImpl implements HashSet {
 
     @Override
     public void remove(String key) {
-        if(contains(key)) {
+        if (contains(key)) {
             int index = getIndex(key);
             Element current = (Element) buckets[index].getNext();
 
@@ -116,7 +116,7 @@ public class HashSetImpl implements HashSet {
                 current = (Element) current.getNext();
             }
 
-            if(current.getNext() != null) {
+            if (current.getNext() != null) {
                 current.getNext().setParent(current.getParent());
             }
 
@@ -129,7 +129,7 @@ public class HashSetImpl implements HashSet {
 
     @Override
     public void rewrite(String key, double value) {
-        if(contains(key)) {
+        if (contains(key)) {
             int index = getIndex(key);
             Element current = (Element) buckets[index].getNext();
 
@@ -170,10 +170,10 @@ public class HashSetImpl implements HashSet {
     }
 
     private void putToBucket(int index, Element element) {
-        if(buckets[index].getNext() != null) {
+        if (buckets[index].getNext() != null) {
             Element current = (Element) buckets[index].getNext();
 
-            while(current.getNext() != null) {
+            while (current.getNext() != null) {
                 current = (Element) current.getNext();
             }
 

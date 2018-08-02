@@ -18,7 +18,7 @@ public class ArrayListImpl implements ArrayList {
 
     @Override
     public void add(double value) {
-        if(pointer >= data.length) {
+        if (pointer >= data.length) {
             resize();
         }
 
@@ -29,7 +29,7 @@ public class ArrayListImpl implements ArrayList {
 
     @Override
     public double get(int index) {
-        if(index >= size || index < 0) {
+        if (index >= size || index < 0) {
             throw new IndexOutOfBoundsException(index, size);
         }
 
@@ -38,7 +38,7 @@ public class ArrayListImpl implements ArrayList {
 
     @Override
     public void rewrite(int index, double value) {
-        if(index >= size || index < 0) {
+        if (index >= size || index < 0) {
             throw new IndexOutOfBoundsException(index, size);
         }
 
@@ -47,13 +47,13 @@ public class ArrayListImpl implements ArrayList {
 
     @Override
     public void remove(int index) {
-        if(index >= size || index < 0) {
+        if (index >= size || index < 0) {
             throw new IndexOutOfBoundsException(index, size);
         }
 
         double[] tempData = new double[data.length - 1];
 
-        if(index == 0) {
+        if (index == 0) {
             System.arraycopy(data, 1, tempData, 0, data.length - 1);
         } else if (index == data.length - 1) {
             System.arraycopy(data, 0, tempData, 0, data.length - 1);

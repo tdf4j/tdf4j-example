@@ -4,6 +4,7 @@ import java.io.*;
 
 public interface Translator {
     void translate(String program);
+
     void setDevMode(Boolean devMode);
 
     static String loadProgram(InputStream inputStream) throws IOException {

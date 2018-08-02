@@ -27,17 +27,17 @@ class TranslatorImpl implements Translator {
             SavePrinter.savePrintln("-----------------------------------------------------------------------------------------");
 
             lexer = new Lexer();
-            if(devMode) {
+            if (devMode) {
                 lexer.showLexemes();
             }
 
             lexer.generateTokens(program);
-            if(devMode) {
+            if (devMode) {
                 lexer.showTokens();
             }
 
             parser = new Parser(new HashSet<>(lexer.lexemes.keySet()));
-            if(devMode) {
+            if (devMode) {
                 parser.showLangRules();
             }
 
@@ -45,7 +45,7 @@ class TranslatorImpl implements Translator {
                 token.accept(parser);
             }
 
-            if(devMode) {
+            if (devMode) {
                 SavePrinter.savePrintln("\u001B[32mPARSE SUCCESS\u001B[0m");
                 SavePrinter.savePrintln("OPN: " + parser.getOPN());
             }
@@ -56,13 +56,13 @@ class TranslatorImpl implements Translator {
             SavePrinter.savePrintln("-----------------------------------------------------------------------------------------");
             SavePrinter.savePrintln("\u001B[31mMAIN PROGRAM DONE\u001B[0m");
 
-            if(devMode) {
+            if (devMode) {
                 SavePrinter.savePrintln("\u001B[32mCALCULATE SUCCESS\u001B[0m");
                 stackMachine.showVariables();
             }
 
         } catch (TranslatorException e) {
-            if(devMode) {
+            if (devMode) {
                 e.printStackTrace();
             }
             printError(e);
@@ -77,7 +77,7 @@ class TranslatorImpl implements Translator {
     }
 
     private void printError(TranslatorException e) {
-        if(e instanceof ExceptionInterface) {
+        if (e instanceof ExceptionInterface) {
             ((ExceptionInterface) e).message();
         } else {
             SavePrinter.savePrintln(e.getMessage());

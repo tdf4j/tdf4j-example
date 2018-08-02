@@ -6,7 +6,7 @@ import java.util.*;
 
 /**
  * priorities of operators:
- *
+ * <p>
  * 10 - new
  * 9 - get
  * 8 - / , *
@@ -17,7 +17,7 @@ import java.util.*;
  * 3 - |, ^
  * 2 - ( , )
  * 1 - =. typeof, put, get, remove, rewrite, print
-**/
+ **/
 
 final class OPNConverter {
     private static final Map<String, Integer> priority;
@@ -25,7 +25,7 @@ final class OPNConverter {
     private static StringBuilder out;
 
     static {
-        priority = new HashMap<String, Integer>(){{
+        priority = new HashMap<String, Integer>() {{
             put("new", 10);
             put("get", 9);
             put("size", 9);
@@ -62,29 +62,68 @@ final class OPNConverter {
     }
 
     private static void lang(TreeNode root) {
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "expr" : {expr(child); break;}
-                case "expr_continue" : {expr_continue(child); break;}
-                case "$" : {out.append("$"); break;}
+                case "expr": {
+                    expr(child);
+                    break;
+                }
+                case "expr_continue": {
+                    expr_continue(child);
+                    break;
+                }
+                case "$": {
+                    out.append("$");
+                    break;
+                }
             }
         }
     }
 
     private static void expr(TreeNode root) {
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "while_loop" : {while_loop(child); break;}
-                case "if_statement" : {if_statement(child); break;}
-                case "do_while_loop" : {do_while_loop(child); break;}
-                case "for_loop" : {for_loop(child); break;}
-                case "assign_expr" : {assign_expr(child); break;}
-                case "init_expr" : {init_expr(child); break;}
-                case "put_expr" : {put_expr(child); break;}
-                case "remove_expr" : {remove_expr(child); break;}
-                case "rewrite_expr" : {rewrite_expr(child); break;}
-                case "print_expr" : {print_expr(child); break;}
-                case "DEL" : {
+                case "while_loop": {
+                    while_loop(child);
+                    break;
+                }
+                case "if_statement": {
+                    if_statement(child);
+                    break;
+                }
+                case "do_while_loop": {
+                    do_while_loop(child);
+                    break;
+                }
+                case "for_loop": {
+                    for_loop(child);
+                    break;
+                }
+                case "assign_expr": {
+                    assign_expr(child);
+                    break;
+                }
+                case "init_expr": {
+                    init_expr(child);
+                    break;
+                }
+                case "put_expr": {
+                    put_expr(child);
+                    break;
+                }
+                case "remove_expr": {
+                    remove_expr(child);
+                    break;
+                }
+                case "rewrite_expr": {
+                    rewrite_expr(child);
+                    break;
+                }
+                case "print_expr": {
+                    print_expr(child);
+                    break;
+                }
+                case "DEL": {
                     while (stack.size() != 0) {
                         out.append(stack.pop()).append(",");
                     }
@@ -94,10 +133,16 @@ final class OPNConverter {
     }
 
     private static void expr_continue(TreeNode root) {
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "expr" : {expr(child); break;}
-                case "expr_continue" : {expr_continue(child); break;}
+                case "expr": {
+                    expr(child);
+                    break;
+                }
+                case "expr_continue": {
+                    expr_continue(child);
+                    break;
+                }
             }
         }
     }
@@ -108,13 +153,15 @@ final class OPNConverter {
         int index2 = 0; //after !@p
         int iteration = Thread.getAllStackTraces().hashCode();
 
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "WHILE" : break;
-                case "LB" : break;
-                case "condition" : {
-                    String [] temp = out.toString().split(",");
-                    if(temp.length == 1 && temp[0].equals("")) {
+                case "WHILE":
+                    break;
+                case "LB":
+                    break;
+                case "condition": {
+                    String[] temp = out.toString().split(",");
+                    if (temp.length == 1 && temp[0].equals("")) {
                         index1 = 0;
                     } else {
                         index1 = out.toString().split(",").length;
@@ -122,19 +169,20 @@ final class OPNConverter {
                     condition(child);
                     break;
                 }
-                case "RB" : {
+                case "RB": {
                     while (stack.size() != 0) {
                         out.append(stack.pop()).append(",");
                     }
                     out.append("!F@p").append(iteration).append(",");
                     break;
                 }
-                case "FLB" : break;
-                case "expr_continue" : {
+                case "FLB":
+                    break;
+                case "expr_continue": {
                     expr_continue(child);
                     break;
                 }
-                case "FRB" : {
+                case "FRB": {
                     out.append("!@p").append(iteration).append(",");
                     index2 = out.toString().split(",").length;
                     break;
@@ -153,29 +201,35 @@ final class OPNConverter {
         int index2 = 0;
         int iteration = Thread.getAllStackTraces().hashCode();
 
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "IF" : break;
-                case "LB" : break;
-                case "condition" : {
+                case "IF":
+                    break;
+                case "LB":
+                    break;
+                case "condition": {
                     condition(child);
                     break;
                 }
-                case "RB" : {
+                case "RB": {
                     while (stack.size() != 0) {
                         out.append(stack.pop()).append(",");
                     }
                     out.append("!F@p").append(iteration).append(",");
                 }
-                case "FLB" : break;
-                case "expr_continue" : {expr_continue(child); break;}
-                case "FRB" : {
+                case "FLB":
+                    break;
+                case "expr_continue": {
+                    expr_continue(child);
+                    break;
+                }
+                case "FRB": {
                     out.append("!@p").append(iteration).append(",");
                     index1 = out.toString().split(",").length;
                     index2 = index1;
                     break;
                 }
-                case "else" : {
+                case "else": {
                     else_(child);
                     index2 = out.toString().split(",").length;
                     break;
@@ -188,22 +242,37 @@ final class OPNConverter {
     }
 
     private static void else_(TreeNode root) {
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "ELSE" : break;
-                case "FLB" : break;
-                case "expr_continue" : {expr_continue(child); break;}
-                case "FRB" : break;
+                case "ELSE":
+                    break;
+                case "FLB":
+                    break;
+                case "expr_continue": {
+                    expr_continue(child);
+                    break;
+                }
+                case "FRB":
+                    break;
             }
         }
     }
 
     private static void assign_expr(TreeNode root) {
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "VAR" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
-                case "ASSIGN_OP" : {stack.push(child.getToken().getValue()); break;}
-                case "value_expr" : {value_expr(child); break;}
+                case "VAR": {
+                    out.append("#").append(child.getToken().getValue()).append(",");
+                    break;
+                }
+                case "ASSIGN_OP": {
+                    stack.push(child.getToken().getValue());
+                    break;
+                }
+                case "value_expr": {
+                    value_expr(child);
+                    break;
+                }
             }
         }
     }
@@ -213,20 +282,28 @@ final class OPNConverter {
         int iteration = Thread.getAllStackTraces().hashCode();
         int index1 = 0;
 
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "DO" : break;
-                case "FLB" : break;
-                case "expr_continue" : {
+                case "DO":
+                    break;
+                case "FLB":
+                    break;
+                case "expr_continue": {
                     index1 = out.toString().split(",").length;
                     expr_continue(child);
                     break;
                 }
-                case "FRB" : break;
-                case "WHILE" : break;
-                case "LB" : break;
-                case "condition" : {condition(child); break;}
-                case "RB" : {
+                case "FRB":
+                    break;
+                case "WHILE":
+                    break;
+                case "LB":
+                    break;
+                case "condition": {
+                    condition(child);
+                    break;
+                }
+                case "RB": {
                     while (stack.size() != 0) {
                         out.append(stack.pop()).append(",");
                     }
@@ -249,22 +326,33 @@ final class OPNConverter {
         TreeNode increment = new TreeNode("");
         TreeNode expr_continue = new TreeNode("");
 
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "FOR" : break;
-                case "LB" : break;
-                case "assign_expr" : {
-                    if(assign.getName().equals(""))
+                case "FOR":
+                    break;
+                case "LB":
+                    break;
+                case "assign_expr": {
+                    if (assign.getName().equals(""))
                         assign = child;
                     else
                         increment = child;
                     break;
                 }
-                case "DEL" : break;
-                case "condition" : {condition = child; break;}
-                case "FLB" : break;
-                case "expr_continue" : {expr_continue = child; break;}
-                case "FRB" : break;
+                case "DEL":
+                    break;
+                case "condition": {
+                    condition = child;
+                    break;
+                }
+                case "FLB":
+                    break;
+                case "expr_continue": {
+                    expr_continue = child;
+                    break;
+                }
+                case "FRB":
+                    break;
             }
         }
 
@@ -297,170 +385,316 @@ final class OPNConverter {
     }
 
     private static void init_expr(TreeNode root) {
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "NEW" : {pushOP(child.getToken()); break;}
-                case "VAR" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
-                case "init_expr_continue" : {init_expr_continue(child); break;}
+                case "NEW": {
+                    pushOP(child.getToken());
+                    break;
+                }
+                case "VAR": {
+                    out.append("#").append(child.getToken().getValue()).append(",");
+                    break;
+                }
+                case "init_expr_continue": {
+                    init_expr_continue(child);
+                    break;
+                }
             }
         }
     }
 
     private static void init_expr_continue(TreeNode root) {
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "TYPEOF" : {pushOP(child.getToken()); break;}
-                case "type" : {type(child); break;}
-                case "ASSIGN_OP" : {pushOP(child.getToken()); break;}
-                case "value_expr" : {value_expr(child); break;}
+                case "TYPEOF": {
+                    pushOP(child.getToken());
+                    break;
+                }
+                case "type": {
+                    type(child);
+                    break;
+                }
+                case "ASSIGN_OP": {
+                    pushOP(child.getToken());
+                    break;
+                }
+                case "value_expr": {
+                    value_expr(child);
+                    break;
+                }
             }
         }
     }
 
     private static void print_expr(TreeNode root) {
-        for(TreeNode child : root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "PRINT" : {pushOP(child.getToken()); break;}
-                case "LB" : break;
-                case "value_expr" : {value_expr(child); break;}
-                case "RB" : break;
+                case "PRINT": {
+                    pushOP(child.getToken());
+                    break;
+                }
+                case "LB":
+                    break;
+                case "value_expr": {
+                    value_expr(child);
+                    break;
+                }
+                case "RB":
+                    break;
             }
         }
     }
 
     private static void type(TreeNode root) {
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "HASHSET" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
-                case "ARRAYLIST" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
+                case "HASHSET": {
+                    out.append("#").append(child.getToken().getValue()).append(",");
+                    break;
+                }
+                case "ARRAYLIST": {
+                    out.append("#").append(child.getToken().getValue()).append(",");
+                    break;
+                }
             }
         }
     }
 
     private static void put_expr(TreeNode root) {
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "PUT" : {pushOP(child.getToken()); break;}
-                case "LB" : break;
-                case "VAR" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
-                case "COMMA" : break;
-                case "value" : {value(child); break;}
-                case "RB" : break;
+                case "PUT": {
+                    pushOP(child.getToken());
+                    break;
+                }
+                case "LB":
+                    break;
+                case "VAR": {
+                    out.append("#").append(child.getToken().getValue()).append(",");
+                    break;
+                }
+                case "COMMA":
+                    break;
+                case "value": {
+                    value(child);
+                    break;
+                }
+                case "RB":
+                    break;
             }
         }
     }
 
     private static void remove_expr(TreeNode root) {
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "REMOVE" : {pushOP(child.getToken()); break;}
-                case "LB" : break;
-                case "VAR" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
-                case "COMMA" : break;
-                case "value" : {value(child); break;}
-                case "RB" : break;
+                case "REMOVE": {
+                    pushOP(child.getToken());
+                    break;
+                }
+                case "LB":
+                    break;
+                case "VAR": {
+                    out.append("#").append(child.getToken().getValue()).append(",");
+                    break;
+                }
+                case "COMMA":
+                    break;
+                case "value": {
+                    value(child);
+                    break;
+                }
+                case "RB":
+                    break;
             }
         }
     }
 
     private static void rewrite_expr(TreeNode root) {
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "REWRITE" : {pushOP(child.getToken()); break;}
-                case "LB" : break;
-                case "VAR" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
-                case "COMMA" : break;
-                case "value_expr" : {value_expr(child); break;}
-                case "value" : {value(child); break;}
-                case "RB" : break;
+                case "REWRITE": {
+                    pushOP(child.getToken());
+                    break;
+                }
+                case "LB":
+                    break;
+                case "VAR": {
+                    out.append("#").append(child.getToken().getValue()).append(",");
+                    break;
+                }
+                case "COMMA":
+                    break;
+                case "value_expr": {
+                    value_expr(child);
+                    break;
+                }
+                case "value": {
+                    value(child);
+                    break;
+                }
+                case "RB":
+                    break;
             }
         }
     }
 
 
     private static void condition(TreeNode root) {
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "condition_with_br" : {condition_with_br(child); break;}
-                case "condition_without_br" : {condition_without_br(child); break;}
-                case "condition_continue" : {condition_continue(child); break;}
+                case "condition_with_br": {
+                    condition_with_br(child);
+                    break;
+                }
+                case "condition_without_br": {
+                    condition_without_br(child);
+                    break;
+                }
+                case "condition_continue": {
+                    condition_continue(child);
+                    break;
+                }
             }
         }
     }
 
     private static void condition_with_br(TreeNode root) {
-        for(TreeNode child: root.getChildes()) {
-            switch(child.getName()) {
-                case "LB" : {pushOP(child.getToken()); break;}
-                case "condition" : {condition(child); break;}
-                case "RB" : {pushOP(child.getToken()); break;}
+        for (TreeNode child : root.getChildes()) {
+            switch (child.getName()) {
+                case "LB": {
+                    pushOP(child.getToken());
+                    break;
+                }
+                case "condition": {
+                    condition(child);
+                    break;
+                }
+                case "RB": {
+                    pushOP(child.getToken());
+                    break;
+                }
             }
         }
     }
 
     private static void condition_without_br(TreeNode root) {
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "compare_expr" : {compare_expr(child); break;}
+                case "compare_expr": {
+                    compare_expr(child);
+                    break;
+                }
             }
         }
     }
 
     private static void condition_continue(TreeNode root) {
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "LOP" : {pushOP(child.getToken()); break;}
-                case "condition" : {condition(child); break;}
+                case "LOP": {
+                    pushOP(child.getToken());
+                    break;
+                }
+                case "condition": {
+                    condition(child);
+                    break;
+                }
             }
         }
     }
 
     private static void compare_expr(TreeNode root) {
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "value_expr" : {value_expr(child); break;}
-                case "COP" : {pushOP(child.getToken()); break;}
+                case "value_expr": {
+                    value_expr(child);
+                    break;
+                }
+                case "COP": {
+                    pushOP(child.getToken());
+                    break;
+                }
             }
         }
     }
 
     private static void value_expr(TreeNode root) {
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "value_expr_with_br" : {value_expr_with_br(child); break;}
-                case "value_expr_without_br" : {value_without_br(child); break;}
-                case "value_expr_continue" : {value_expr_continue(child); break;}
+                case "value_expr_with_br": {
+                    value_expr_with_br(child);
+                    break;
+                }
+                case "value_expr_without_br": {
+                    value_without_br(child);
+                    break;
+                }
+                case "value_expr_continue": {
+                    value_expr_continue(child);
+                    break;
+                }
             }
         }
     }
 
     private static void value_expr_with_br(TreeNode root) {
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "LB" : {pushOP(child.getToken()); break;}
-                case "value_expr" : {value_expr(child); break;}
-                case "RB" : {pushOP(child.getToken()); break;}
+                case "LB": {
+                    pushOP(child.getToken());
+                    break;
+                }
+                case "value_expr": {
+                    value_expr(child);
+                    break;
+                }
+                case "RB": {
+                    pushOP(child.getToken());
+                    break;
+                }
             }
         }
     }
 
     private static void value_without_br(TreeNode root) {
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "value" : {value(child); break;}
-                case "value_expr_continue" : {value_expr_continue(child); break;}
-                case "get_expr" : {get_expr(child); break;}
-                case "size_expr" : {size_expr(child); break;}
+                case "value": {
+                    value(child);
+                    break;
+                }
+                case "value_expr_continue": {
+                    value_expr_continue(child);
+                    break;
+                }
+                case "get_expr": {
+                    get_expr(child);
+                    break;
+                }
+                case "size_expr": {
+                    size_expr(child);
+                    break;
+                }
             }
         }
     }
 
     private static void value(TreeNode root) {
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "VAR" : {out.append(checkTrace()).append(child.getToken().getValue()).append(","); break;}
-                case "DIGIT" : {out.append(child.getToken().getValue()).append(","); break;}
-                case "DOUBLE" : {out.append(child.getToken().getValue()).append(","); break;}
+                case "VAR": {
+                    out.append(checkTrace()).append(child.getToken().getValue()).append(",");
+                    break;
+                }
+                case "DIGIT": {
+                    out.append(child.getToken().getValue()).append(",");
+                    break;
+                }
+                case "DOUBLE": {
+                    out.append(child.getToken().getValue()).append(",");
+                    break;
+                }
             }
         }
     }
@@ -477,43 +711,72 @@ final class OPNConverter {
     }
 
     private static void value_expr_continue(TreeNode root) {
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "OP" : {pushOP(child.getToken()); break;}
-                case "value_expr" : {value_expr(child); break;}
+                case "OP": {
+                    pushOP(child.getToken());
+                    break;
+                }
+                case "value_expr": {
+                    value_expr(child);
+                    break;
+                }
             }
         }
     }
 
     private static void get_expr(TreeNode root) {
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "GET" : {pushOP(child.getToken()); break;}
-                case "LB" : break;
-                case "VAR" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
-                case "COMMA" : break;
-                case "value" : {value(child); break;}
-                case "RB" : break;
+                case "GET": {
+                    pushOP(child.getToken());
+                    break;
+                }
+                case "LB":
+                    break;
+                case "VAR": {
+                    out.append("#").append(child.getToken().getValue()).append(",");
+                    break;
+                }
+                case "COMMA":
+                    break;
+                case "value": {
+                    value(child);
+                    break;
+                }
+                case "RB":
+                    break;
             }
         }
     }
 
 
     private static void size_expr(TreeNode root) {
-        for(TreeNode child: root.getChildes()) {
+        for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "SIZE" : {pushOP(child.getToken()); break;}
-                case "LB" : break;
-                case "VAR" : {out.append("#").append(child.getToken().getValue()).append(","); break;}
-                case "RB" : break;
+                case "SIZE": {
+                    pushOP(child.getToken());
+                    break;
+                }
+                case "LB":
+                    break;
+                case "VAR": {
+                    out.append("#").append(child.getToken().getValue()).append(",");
+                    break;
+                }
+                case "RB":
+                    break;
             }
         }
     }
 
     private static void pushOP(Token op) {
         switch (op.getValue()) {
-            case "(" : {stack.push(op.getValue()); break;}
-            case ")" : {
+            case "(": {
+                stack.push(op.getValue());
+                break;
+            }
+            case ")": {
                 while (!stack.peek().equals("(")) {
                     out.append(stack.pop()).append(",");
                 }
@@ -521,12 +784,13 @@ final class OPNConverter {
                 break;
             }
             default: {
-                if(stack.size() != 0 && priority.get(op.getValue()) <= priority.get(stack.peek())) {
+                if (stack.size() != 0 && priority.get(op.getValue()) <= priority.get(stack.peek())) {
                     try {
                         while (priority.get(op.getValue()) <= priority.get(stack.peek())) {
                             out.append(stack.pop()).append(",");
                         }
-                    } catch (EmptyStackException e) {}
+                    } catch (EmptyStackException e) {
+                    }
                 }
                 stack.push(op.getValue());
                 break;

@@ -29,7 +29,7 @@ public class StackMachine implements Visitor {
 
     @Override
     public void visit(Object object) {
-        if(object instanceof String) {
+        if (object instanceof String) {
             calculate((String) object);
         } else {
             throw new IllegalArgumentException("Illegal argument: " + object);
@@ -71,10 +71,10 @@ public class StackMachine implements Visitor {
     }
 
     private void initExecutions() {
-        commands.forEach( (command, pattern) -> {
+        commands.forEach((command, pattern) -> {
             switch (command) {
 
-                case "DIGIT" : {
+                case "DIGIT": {
                     executions.put(command, com -> {
                         stack.push("" + Double.parseDouble(com));
                         cursor++;
@@ -83,7 +83,7 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "DOUBLE" : {
+                case "DOUBLE": {
                     executions.put(command, com -> {
                         stack.push("" + Double.parseDouble(com));
                         cursor++;
@@ -92,11 +92,11 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "TAKE_VALUE" : {
+                case "TAKE_VALUE": {
                     executions.put(command, com -> {
                         String varName = com.substring(1, com.length());
 
-                        if(variables.containsKey(varName)) {
+                        if (variables.containsKey(varName)) {
                             if (variables.get(varName) instanceof Double) {
                                 Double tmp = (Double) variables.get(varName);
                                 stack.push("" + tmp);
@@ -113,7 +113,7 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "TAKE_VAR_NAME" : {
+                case "TAKE_VAR_NAME": {
                     executions.put(command, com -> {
                         stack.push(com.substring(1, com.length()));
                         cursor++;
@@ -122,9 +122,9 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "GOTO_ON_FALSE" : {
+                case "GOTO_ON_FALSE": {
                     executions.put(command, com -> {
-                        if(!Boolean.parseBoolean(stack.pop()))
+                        if (!Boolean.parseBoolean(stack.pop()))
                             cursor = Integer.parseInt(com.substring(3, com.length()));
                         else
                             cursor++;
@@ -133,9 +133,9 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "GOTO_ON_TRUE" : {
+                case "GOTO_ON_TRUE": {
                     executions.put(command, com -> {
-                        if(Boolean.parseBoolean(stack.pop()))
+                        if (Boolean.parseBoolean(stack.pop()))
                             cursor = Integer.parseInt(com.substring(3, com.length()));
                         else
                             cursor++;
@@ -144,14 +144,14 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "GOTO" : {
+                case "GOTO": {
                     executions.put(command, com ->
-                        cursor = Integer.parseInt(com.substring(2, com.length())));
+                            cursor = Integer.parseInt(com.substring(2, com.length())));
 
                     break;
                 }
 
-                case "DEL" : {
+                case "DEL": {
                     executions.put(command, com -> {
                         double p2 = Double.parseDouble(stack.pop());
                         double p1 = Double.parseDouble(stack.pop());
@@ -162,7 +162,7 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "MUL" : {
+                case "MUL": {
                     executions.put(command, com -> {
                         double p2 = Double.parseDouble(stack.pop());
                         double p1 = Double.parseDouble(stack.pop());
@@ -173,7 +173,7 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "PLUS" : {
+                case "PLUS": {
                     executions.put(command, com -> {
                         double p2 = Double.parseDouble(stack.pop());
                         double p1 = Double.parseDouble(stack.pop());
@@ -185,7 +185,7 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "MINUS" : {
+                case "MINUS": {
                     executions.put(command, com -> {
                         double p2 = Double.parseDouble(stack.pop());
                         double p1 = Double.parseDouble(stack.pop());
@@ -197,7 +197,7 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "LESS" : {
+                case "LESS": {
                     executions.put(command, com -> {
                         double p2 = Double.parseDouble(stack.pop());
                         double p1 = Double.parseDouble(stack.pop());
@@ -209,7 +209,7 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "MORE" : {
+                case "MORE": {
                     executions.put(command, com -> {
                         double p2 = Double.parseDouble(stack.pop());
                         double p1 = Double.parseDouble(stack.pop());
@@ -221,7 +221,7 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "LESS_OR_EQUALS" : {
+                case "LESS_OR_EQUALS": {
                     executions.put(command, com -> {
                         double p2 = Double.parseDouble(stack.pop());
                         double p1 = Double.parseDouble(stack.pop());
@@ -233,7 +233,7 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "MORE_OR_EQUALS" : {
+                case "MORE_OR_EQUALS": {
                     executions.put(command, com -> {
                         double p2 = Double.parseDouble(stack.pop());
                         double p1 = Double.parseDouble(stack.pop());
@@ -244,7 +244,7 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "EQUALS" : {
+                case "EQUALS": {
                     executions.put(command, com -> {
                         double p2 = Double.parseDouble(stack.pop());
                         double p1 = Double.parseDouble(stack.pop());
@@ -254,7 +254,7 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "NOT_EQUALS" : {
+                case "NOT_EQUALS": {
                     executions.put(command, com -> {
                         double p2 = Double.parseDouble(stack.pop());
                         double p1 = Double.parseDouble(stack.pop());
@@ -265,7 +265,7 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "AND" : {
+                case "AND": {
                     executions.put(command, com -> {
                         boolean p2 = Boolean.parseBoolean(stack.pop());
                         boolean p1 = Boolean.parseBoolean(stack.pop());
@@ -277,7 +277,7 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "OR" : {
+                case "OR": {
                     executions.put(command, com -> {
                         boolean p2 = Boolean.parseBoolean(stack.pop());
                         boolean p1 = Boolean.parseBoolean(stack.pop());
@@ -288,7 +288,7 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "XOR" : {
+                case "XOR": {
                     executions.put(command, com -> {
                         boolean p2 = Boolean.parseBoolean(stack.pop());
                         boolean p1 = Boolean.parseBoolean(stack.pop());
@@ -299,11 +299,11 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "ASSIGN" : {
+                case "ASSIGN": {
                     executions.put(command, com -> {
                         Double value = Double.parseDouble(stack.pop());
                         String varName = stack.pop();
-                        if(variables.containsKey(varName))
+                        if (variables.containsKey(varName))
                             variables.replace(varName, value);
                         else {
                             throw new NoVariableException("Can't find variable " + varName);
@@ -315,7 +315,7 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "NEW" : {
+                case "NEW": {
                     executions.put(command, com -> {
                         variables.put(stack.peek(), null);
                         cursor++;
@@ -324,17 +324,17 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "TYPEOF" : {
+                case "TYPEOF": {
                     executions.put(command, com -> {
                         String type = stack.pop();
                         switch (type) {
-                            case "hashset" : {
+                            case "hashset": {
                                 variables.replace(
                                         stack.pop(),
                                         new HashSetImpl());
                                 break;
                             }
-                            case "arraylist" : {
+                            case "arraylist": {
                                 variables.replace(
                                         stack.pop(),
                                         new ArrayListImpl());
@@ -350,7 +350,7 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "PUT" : {
+                case "PUT": {
                     executions.put(command, com -> {
                         String parameter = stack.pop();
                         String collectionName = stack.pop();
@@ -364,7 +364,7 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "GET" : {
+                case "GET": {
                     executions.put(command, com -> {
                         String parameter = stack.pop();
                         String collectionName = stack.pop();
@@ -378,7 +378,7 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "SIZE" : {
+                case "SIZE": {
                     executions.put(command, com -> {
                         String collectionName = stack.pop();
 
@@ -391,7 +391,7 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "REMOVE" : {
+                case "REMOVE": {
                     executions.put(command, com -> {
                         String parameter = stack.pop();
                         String collectionName = stack.pop();
@@ -405,7 +405,7 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "REWRITE" : {
+                case "REWRITE": {
                     executions.put(command, com -> {
                         String parameter1 = stack.pop();
                         String parameter0 = stack.pop();
@@ -420,7 +420,7 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
-                case "PRINT" : {
+                case "PRINT": {
                     executions.put(command, com -> {
                         double value = Double.parseDouble(stack.pop());
                         SavePrinter.savePrintln("" + value);
@@ -436,18 +436,17 @@ public class StackMachine implements Visitor {
 
     public void showVariables() {
         SavePrinter.savePrintln("Current variables: ");
-        variables.forEach( (name, obj) -> SavePrinter.savePrintln(name + ": " + obj));
+        variables.forEach((name, obj) -> SavePrinter.savePrintln(name + ": " + obj));
     }
 
     private void put(Collection collection, String parameter) {
         if (collection instanceof HashSet) {
-            if(!variables.containsKey(parameter)) {
+            if (!variables.containsKey(parameter)) {
                 throw new NoVariableException("Can't find variable: " + parameter);
             }
 
             ((HashSet) collection).add(parameter, (double) variables.get(parameter));
-        }
-        else if (collection instanceof ArrayList) {
+        } else if (collection instanceof ArrayList) {
             double value = getValueFromParameter(parameter);
 
             ((ArrayList) collection).add(value);
@@ -458,8 +457,7 @@ public class StackMachine implements Visitor {
         if (collection instanceof HashSet) {
             double value = ((HashSet) collection).get(parameter);
             stack.push("" + value);
-        }
-        else if (collection instanceof ArrayList) {
+        } else if (collection instanceof ArrayList) {
             int index = getIndexFromParameter(parameter);
 
             double value = ((ArrayList) collection).get(index);
@@ -474,21 +472,19 @@ public class StackMachine implements Visitor {
     private void remove(Collection collection, String parameter) {
         if (collection instanceof HashSet) {
             ((HashSet) collection).remove(parameter);
-        }
-        else if(collection instanceof ArrayList) {
+        } else if (collection instanceof ArrayList) {
             int index = getIndexFromParameter(parameter);
             ((ArrayList) collection).remove(index);
         }
     }
 
-    private void rewrite(Collection collection, String ... parameters) {
-        if(collection instanceof HashSet) {
+    private void rewrite(Collection collection, String... parameters) {
+        if (collection instanceof HashSet) {
             String varName = parameters[0];
             double value = getValueFromParameter(parameters[1]);
 
             ((HashSet) collection).rewrite(varName, value);
-        }
-        else if(collection instanceof ArrayList) {
+        } else if (collection instanceof ArrayList) {
             int index = getIndexFromParameter(parameters[0]);
             double value = getValueFromParameter(parameters[1]);
 
@@ -516,7 +512,7 @@ public class StackMachine implements Visitor {
         double value;
 
         try {
-            if(variables.containsKey(parameter)) {
+            if (variables.containsKey(parameter)) {
                 value = (double) variables.get(parameter);
             } else {
                 value = Double.parseDouble(parameter);
@@ -541,7 +537,7 @@ public class StackMachine implements Visitor {
     private int castStringToInt(String parameter) {
         Double value = Double.parseDouble(parameter);
 
-        if(value % 1 == 0) {
+        if (value % 1 == 0) {
             return value.intValue();
         } else {
             throw new WrongTypeException("Wrong type of: " + parameter);

@@ -23,7 +23,7 @@ public class Parser implements Visitor, Visitable {
 
     @Override
     public void visit(Object object) {
-        if(object instanceof Token) {
+        if (object instanceof Token) {
             parse((Token) object);
         } else {
             throw new IllegalArgumentException("Illegal argument: " + object);
@@ -55,7 +55,7 @@ public class Parser implements Visitor, Visitable {
 
     public void showLangRules() {
         SavePrinter.savePrintln("\u001B[33mLANG RULES:\u001B[0m");
-        langRules.forEach( (num, rules) -> SavePrinter.savePrintf("%-20d%-10s%-40s%n", num, "-->", Arrays.toString(rules)));
+        langRules.forEach((num, rules) -> SavePrinter.savePrintf("%-20d%-10s%-40s%n", num, "-->", Arrays.toString(rules)));
     }
 
     private void parse(Token token) {
@@ -89,9 +89,9 @@ public class Parser implements Visitor, Visitable {
 
     private void moveCN() {
         int eleCount = stackForCNReturns.pop() - 1;
-        if(eleCount != 0) {
+        if (eleCount != 0) {
             stackForCNReturns.push(eleCount);
-        } else if(stackForCNReturns.size() != 0) {
+        } else if (stackForCNReturns.size() != 0) {
             currentTreeNode = (TreeNode) currentTreeNode.getParent();
             moveCN();
         }

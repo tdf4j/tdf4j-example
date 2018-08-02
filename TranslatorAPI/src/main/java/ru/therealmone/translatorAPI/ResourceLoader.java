@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public final class ResourceLoader  {
+public final class ResourceLoader {
     private static Map<String, Pattern> lexemes;
     private static Map<String, Integer> lexemePriority;
     private static Map<Integer, String[]> langRules;
@@ -65,7 +65,7 @@ public final class ResourceLoader  {
             String[] nextLine;
             csvReader.readNext();
 
-            while((nextLine = csvReader.readNext()) != null) {
+            while ((nextLine = csvReader.readNext()) != null) {
                 try {
                     langRules.put(Integer.parseInt(nextLine[0].trim()), nextLine[2].split("\\s\\+\\s"));
                 } catch (NumberFormatException e) {
@@ -80,7 +80,7 @@ public final class ResourceLoader  {
         }
     }
 
-    public static void  loadAnalyzeTable(String dir, String filename) {
+    public static void loadAnalyzeTable(String dir, String filename) {
         analyzeTable = new HashMap<>();
 
         try {
@@ -88,7 +88,7 @@ public final class ResourceLoader  {
             String[] description = csvReader.readNext();
             String[] nextLine;
 
-            while((nextLine = csvReader.readNext()) != null) {
+            while ((nextLine = csvReader.readNext()) != null) {
                 Map<String, Integer> tmp = new HashMap<>();
                 for (int i = 1; i < nextLine.length; i++) {
                     tmp.put(description[i], Integer.parseInt(nextLine[i]));

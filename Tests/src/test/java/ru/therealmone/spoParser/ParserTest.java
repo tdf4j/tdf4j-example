@@ -2,6 +2,7 @@ package ru.therealmone.spoParser;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 import ru.therealmone.spoLexer.Lexer;
@@ -183,7 +184,6 @@ public class ParserTest {
                 getOPN(lexer, new Parser(terminals)));
 
 
-
         //for tests
         lexer.generateTokens("for(i = 1; (i < n) & (n > i); i = i + 1) {}");
         assertEquals("#i,1,=,%i,%n,<,%n,%i,>,&,!F@17,#i,%i,1,+,=,!@3,$",
@@ -214,7 +214,7 @@ public class ParserTest {
     }
 
     private boolean check(ArrayList<Token> tokens, Parser parser) {
-        for(Token token: tokens) {
+        for (Token token : tokens) {
             token.accept(parser);
         }
 
@@ -222,7 +222,7 @@ public class ParserTest {
     }
 
     private String getOPN(Lexer lexer, Parser parser) {
-        for(Token token: lexer.tokens) {
+        for (Token token : lexer.tokens) {
             token.accept(parser);
         }
 

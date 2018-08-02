@@ -13,11 +13,11 @@ public class Token implements Visitable {
     }
 
     public String getType() {
-        return(this.type);
+        return (this.type);
     }
 
     public String getValue() {
-        return(this.value);
+        return (this.value);
     }
 
     @Override

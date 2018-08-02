@@ -22,7 +22,7 @@ public class UnexpectedSymbolException extends LexerException implements Excepti
         int count = 0;
         StringBuilder message = new StringBuilder();
 
-        for(Token token: tokens) {
+        for (Token token : tokens) {
             count += token.getValue().length() + 1;
             message.append(token.getValue()).append(" ");
         }

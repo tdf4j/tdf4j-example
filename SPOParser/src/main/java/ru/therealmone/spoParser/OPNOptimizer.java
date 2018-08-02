@@ -35,7 +35,7 @@ final class OPNOptimizer {
 
     private static void optimizeOperand(String command) {
         switch (command) {
-            case "*" : {
+            case "*": {
                 try {
                     double op2 = Double.parseDouble(stack.peek());
                     double op1 = Double.parseDouble(stack.get(stack.size() - 2));
@@ -50,7 +50,7 @@ final class OPNOptimizer {
 
                 break;
             }
-            case "/" : {
+            case "/": {
                 try {
                     double op2 = Double.parseDouble(stack.peek());
                     double op1 = Double.parseDouble(stack.get(stack.size() - 2));
@@ -65,7 +65,7 @@ final class OPNOptimizer {
 
                 break;
             }
-            case "-" : {
+            case "-": {
                 try {
                     double op2 = Double.parseDouble(stack.peek());
                     double op1 = Double.parseDouble(stack.get(stack.size() - 2));
@@ -80,7 +80,7 @@ final class OPNOptimizer {
 
                 break;
             }
-            case "+" : {
+            case "+": {
                 try {
                     double op2 = Double.parseDouble(stack.peek());
                     double op1 = Double.parseDouble(stack.get(stack.size() - 2));
@@ -102,7 +102,7 @@ final class OPNOptimizer {
         StringBuilder out = new StringBuilder();
 
         stack.forEach(command ->
-            out.append(command).append(",")
+                out.append(command).append(",")
         );
 
         out.deleteCharAt(out.length() - 1);

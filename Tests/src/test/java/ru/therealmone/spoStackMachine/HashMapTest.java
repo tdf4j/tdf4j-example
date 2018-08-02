@@ -18,7 +18,8 @@ public class HashMapTest {
             hashSet.add("1", 1);
             hashSet.add("1", 1);
             fail();
-        } catch (KeyAlreadyExistsException e) {}
+        } catch (KeyAlreadyExistsException e) {
+        }
 
         hashSet = new HashSetImpl();
         try {
@@ -41,7 +42,8 @@ public class HashMapTest {
             hashSet.get("1");
         } catch (KeyAlreadyExistsException e) {
             fail();
-        } catch (NoSuchElementException e) {}
+        } catch (NoSuchElementException e) {
+        }
 
         hashSet = new HashSetImpl();
         try {
@@ -52,7 +54,8 @@ public class HashMapTest {
             hashSet.get("qwerty");
         } catch (KeyAlreadyExistsException e) {
             fail();
-        } catch (NoSuchElementException e) {}
+        } catch (NoSuchElementException e) {
+        }
     }
 
     @Test
@@ -105,7 +108,7 @@ public class HashMapTest {
     public void resizeMethodTest() {
         hashSet = new HashSetImpl();
         try {
-            int buckets_count =((HashSetImpl) hashSet).getBucketCount();
+            int buckets_count = ((HashSetImpl) hashSet).getBucketCount();
 
             for (int i = 0; i < 1000; i++) {
                 hashSet.add("" + i, i);
