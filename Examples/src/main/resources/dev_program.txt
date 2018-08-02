@@ -1,10 +1,6 @@
-new a typeof arraylist;
-new i = 0;
+new a = 10;
+new b = 100;
 
-for(i = 0; i < 1000; i = i + 1) {
-	put(a, i);
-}
-
-for(i = 0; i < size(a); i = i + 1) {
-	print(get(a, i));
+if(a < b) {
+    print(a);
 }

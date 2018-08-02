@@ -14,9 +14,9 @@ public class Parser implements Visitor, Visitable {
 
     private Stack<String> stack;
     private Stack<Integer> stackForCNReturns;
-    private Map<Integer, String[]> langRules;
-    private Map<String, Map<String, Integer>> analyzeTable;
-    private HashSet<String> terminals;
+    private final Map<Integer, String[]> langRules;
+    private final Map<String, Map<String, Integer>> analyzeTable;
+    private final HashSet<String> terminals;
     private TreeNode root;
     private TreeNode currentTreeNode;
     private StringBuilder history;
@@ -32,25 +32,21 @@ public class Parser implements Visitor, Visitable {
 
     @Override
     public void accept(Visitor v) {
-        v.visit(OPNConverter.convertToOPN(root));
+        v.visit(getOPN());
     }
 
-    public Parser(HashSet<String> terminals) {
+    public Parser(final HashSet<String> terminals) {
         this.terminals = terminals;
-        terminals.add("$");
 
         stack = new Stack<>();
         stackForCNReturns = new Stack<>();
-        langRules = new HashMap<>();
-        analyzeTable = new HashMap<>();
+        langRules = ResourceLoader.getLangRules();
+        analyzeTable = ResourceLoader.getAnalyzeTable();
         history = new StringBuilder();
 
         stack.push("lang");
         root = new TreeNode("lang");
         currentTreeNode = root;
-
-        langRules = ResourceLoader.getLangRules();
-        analyzeTable = ResourceLoader.getAnalyzeTable();
     }
 
     public void showLangRules() {

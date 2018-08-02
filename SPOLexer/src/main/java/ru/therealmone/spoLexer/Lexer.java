@@ -11,14 +11,15 @@ import java.util.regex.*;
 
 public class Lexer {
     public ArrayList<Token> tokens;
-    public Map<String, Pattern> lexemes;
-    private Map<String, Integer> priority;
+    public final Map<String, Pattern> lexemes;
+    private final Map<String, Integer> priority;
 
     private static final char END_SYMBOL = '$';
 
     public Lexer() {
         tokens = new ArrayList<>();
         lexemes = ResourceLoader.getLexemes();
+        lexemes.put(String.valueOf(END_SYMBOL), Pattern.compile("^\\" + END_SYMBOL + "$"));
         priority = ResourceLoader.getLexemePriority();
     }
 
@@ -28,7 +29,7 @@ public class Lexer {
     }
 
     public void generateTokens(String input) {
-        input = input.replaceAll("\\$", "");
+        input = input.replaceAll("\\" + END_SYMBOL, "");
         input += END_SYMBOL;
 
         tokens.clear();

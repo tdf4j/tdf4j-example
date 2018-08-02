@@ -11,10 +11,7 @@ public class LexerTest {
 
     @BeforeClass
     public static void before() {
-        ResourceLoader.loadLexemes("../TranslatorAPI/src/main/resources/", "lexemes.xml");
-        ResourceLoader.loadLangRules("../TranslatorAPI/src/main/resources/", "langRules.csv");
-        ResourceLoader.loadAnalyzeTable("../TranslatorAPI/src/main/resources/", "analyzeTable.csv");
-        ResourceLoader.loadCommands("../TranslatorAPI/src/main/resources/", "commands.xml");
+        ResourceLoader.initialize();
     }
 
     @Test

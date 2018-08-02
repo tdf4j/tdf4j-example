@@ -8,7 +8,7 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.FileReader;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -21,20 +21,22 @@ public final class ResourceLoader {
     private static Map<String, Pattern> commands;
 
     public static void initialize() {
-        loadLexemes("TranslatorAPI/src/main/resources/", "lexemes.xml");
-        loadLangRules("TranslatorAPI/src/main/resources/", "langRules.csv");
-        loadAnalyzeTable("TranslatorAPI/src/main/resources/", "analyzeTable.csv");
-        loadCommands("TranslatorAPI/src/main/resources/", "commands.xml");
+        ResourceFinder resourceFinder = new ResourceFinder();
+
+        loadLexemes(resourceFinder.getLexemesIS());
+        loadLangRules(resourceFinder.getLangRulesIS());
+        loadAnalyzeTable(resourceFinder.getAnalyzeTableIS());
+        loadCommands(resourceFinder.getCommandsIS());
     }
 
-    public static void loadLexemes(String dir, String filename) {
+    public static void loadLexemes(InputStream is) {
         lexemes = new HashMap<>();
         lexemePriority = new HashMap<>();
 
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = dbf.newDocumentBuilder();
-            Document doc = docBuilder.parse(dir + filename);
+            Document doc = docBuilder.parse(is);
 
             Node root = doc.getDocumentElement();
             NodeList childes = root.getChildNodes();
@@ -57,11 +59,11 @@ public final class ResourceLoader {
         }
     }
 
-    public static void loadLangRules(String dir, String filename) {
+    public static void loadLangRules(InputStream is) {
         langRules = new HashMap<>();
 
         try {
-            CSVReader csvReader = new CSVReader(new FileReader(dir + filename));
+            CSVReader csvReader = new CSVReader(new InputStreamReader(is));
             String[] nextLine;
             csvReader.readNext();
 
@@ -80,11 +82,11 @@ public final class ResourceLoader {
         }
     }
 
-    public static void loadAnalyzeTable(String dir, String filename) {
+    public static void loadAnalyzeTable(InputStream is) {
         analyzeTable = new HashMap<>();
 
         try {
-            CSVReader csvReader = new CSVReader(new FileReader(dir + filename));
+            CSVReader csvReader = new CSVReader(new InputStreamReader(is));
             String[] description = csvReader.readNext();
             String[] nextLine;
 
@@ -102,13 +104,13 @@ public final class ResourceLoader {
         }
     }
 
-    public static void loadCommands(String dir, String filename) {
+    public static void loadCommands(InputStream is) {
         commands = new HashMap<>();
 
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = dbf.newDocumentBuilder();
-            Document doc = docBuilder.parse(dir + filename);
+            Document doc = docBuilder.parse(is);
 
             Node root = doc.getDocumentElement();
             NodeList childes = root.getChildNodes();
