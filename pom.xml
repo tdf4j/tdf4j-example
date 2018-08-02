@@ -35,7 +35,7 @@
 		<module>SPOParser</module>
         <module>TranslatorAPI</module>
         <module>SPOStackMachine</module>
-        <module>ApplicationAPI</module>
+        <module>JavaTranslator</module>
         <module>Examples</module>
         <module>Tests</module>
     </modules>

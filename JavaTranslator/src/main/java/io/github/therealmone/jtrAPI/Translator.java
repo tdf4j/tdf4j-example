@@ -1,4 +1,4 @@
-package io.github.therealmone.applicationAPI;
+package io.github.therealmone.jtrAPI;
 
 import io.github.therealmone.translatorAPI.Exceptions.TranslatorException;
 

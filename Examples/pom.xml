@@ -14,8 +14,8 @@
     <dependencies>
         <dependency>
             <groupId>io.github.therealmone</groupId>
-            <artifactId>ApplicationAPI</artifactId>
-            <version>1.0</version>
+            <artifactId>JavaTranslator</artifactId>
+            <version>1.1</version>
         </dependency>
     </dependencies>
 </project>

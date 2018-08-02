@@ -1,4 +1,4 @@
-package io.github.therealmone.applicationAPI;
+package io.github.therealmone.jtrAPI;
 
 import java.io.FileInputStream;
 import java.io.IOException;
