@@ -142,49 +142,49 @@ public class ParserTest {
         HashSet<String> terminals = new HashSet<>(lexer.lexemes.keySet());
 
         lexer.generateTokens(""); //main program
-        assertEquals("$", //opn
-                getOPN(lexer, new Parser(terminals)));
+        assertEquals("$", //rpn
+                getRPN(lexer, new Parser(terminals)));
 
         //TODO: Написать больше тестов
         //while tests
         lexer.generateTokens("while(a < b) {a = a + 1;}");
         assertEquals("%a,%b,<,!F@10,#a,%a,1,+,=,!@0,$",
-                getOPN(lexer, new Parser(terminals)));
+                getRPN(lexer, new Parser(terminals)));
 
         lexer.generateTokens("while(a < b & c > d) {}");
         assertEquals("%a,%b,<,%c,%d,>,&,!F@9,!@0,$",
-                getOPN(lexer, new Parser(terminals)));
+                getRPN(lexer, new Parser(terminals)));
 
         lexer.generateTokens("while(((a < b) & (c > d)) | ((a > c) & (b < d))) {}");
         assertEquals("%a,%b,<,%c,%d,>,&,%a,%c,>,%b,%d,<,&,|,!F@17,!@0,$",
-                getOPN(lexer, new Parser(terminals)));
+                getRPN(lexer, new Parser(terminals)));
 
         lexer.generateTokens("while((a < b) & (c > d) | (a > c) & (b < d)) {}");
         assertEquals("%a,%b,<,%c,%d,>,&,%a,%c,>,%b,%d,<,&,|,!F@17,!@0,$",
-                getOPN(lexer, new Parser(terminals)));
+                getRPN(lexer, new Parser(terminals)));
 
         lexer.generateTokens("while(a < b) {if (a < b) {}}");
         assertEquals("%a,%b,<,!F@10,%a,%b,<,!F@9,!@9,!@0,$",
-                getOPN(lexer, new Parser(terminals)));
+                getRPN(lexer, new Parser(terminals)));
 
         lexer.generateTokens("while(a < b) {do{} while(a < b)}");
         assertEquals("%a,%b,<,!F@9,%a,%b,<,!T@4,!@0,$",
-                getOPN(lexer, new Parser(terminals)));
+                getRPN(lexer, new Parser(terminals)));
 
 
         lexer.generateTokens("while(a < b) {for(i = 1; i < 100; i = i + 1) {}}");
         assertEquals("%a,%b,<,!F@18,#i,1,=,%i,100,<,!F@17,#i,%i,1,+,=,!@7,!@0,$",
-                getOPN(lexer, new Parser(terminals)));
+                getRPN(lexer, new Parser(terminals)));
 
         lexer.generateTokens("while(a < b) {new a typeof hashset; new i = 1; put(a, i);}");
         assertEquals("%a,%b,<,!F@16,#a,new,#hashset,typeof,#i,new,1,=,#a,#i,put,!@0,$",
-                getOPN(lexer, new Parser(terminals)));
+                getRPN(lexer, new Parser(terminals)));
 
 
         //for tests
         lexer.generateTokens("for(i = 1; (i < n) & (n > i); i = i + 1) {}");
         assertEquals("#i,1,=,%i,%n,<,%n,%i,>,&,!F@17,#i,%i,1,+,=,!@3,$",
-                getOPN(lexer, new Parser(terminals)));
+                getRPN(lexer, new Parser(terminals)));
 
     }
 
@@ -195,19 +195,19 @@ public class ParserTest {
 
         lexer.generateTokens("print(100 / (25 + 25));");
         assertEquals("2.0,print,$",
-                getOPN(lexer, new Parser(terminals)));
+                getRPN(lexer, new Parser(terminals)));
 
         lexer.generateTokens("print(1 / (100 * (50 - (1 / 0.16))));");
         assertEquals("2.2857142857142857E-4,print,$",
-                getOPN(lexer, new Parser(terminals)));
+                getRPN(lexer, new Parser(terminals)));
 
         lexer.generateTokens("print(100 / (25 + 25 - a));");
         assertEquals("100,50.0,%a,-,/,print,$",
-                getOPN(lexer, new Parser(terminals)));
+                getRPN(lexer, new Parser(terminals)));
 
         lexer.generateTokens("print(1 / (100 * (50 - (1 / 0.16 - a))));");
         assertEquals("1,100,50,6.25,%a,-,-,*,/,print,$",
-                getOPN(lexer, new Parser(terminals)));
+                getRPN(lexer, new Parser(terminals)));
     }
 
     private boolean check(ArrayList<Token> tokens, Parser parser) {
@@ -218,11 +218,11 @@ public class ParserTest {
         return true;
     }
 
-    private String getOPN(Lexer lexer, Parser parser) {
+    private String getRPN(Lexer lexer, Parser parser) {
         for (Token token : lexer.tokens) {
             token.accept(parser);
         }
 
-        return parser.getOPN();
+        return parser.getRPN();
     }
 }

@@ -48,11 +48,11 @@ public class StackMachine implements Visitor {
         initExecutions();
     }
 
-    private void calculate(String opn) {
-        String[] splittedOPN = opn.split(",");
+    private void calculate(String rpn) {
+        String[] splittedRPN = rpn.split(",");
 
-        while (!splittedOPN[cursor].equals("$")) {
-            executions.get(match(splittedOPN[cursor])).execute(splittedOPN[cursor]);
+        while (!splittedRPN[cursor].equals("$")) {
+            executions.get(match(splittedRPN[cursor])).execute(splittedRPN[cursor]);
         }
     }
 

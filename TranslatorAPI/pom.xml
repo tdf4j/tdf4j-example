@@ -13,6 +13,10 @@
     <version>1.0</version>
     <packaging>jar</packaging>
 
+    <name>TranslatorAPI</name>
+    <description>Inner API for translator</description>
+    <url>https://github.com/therealmonE/SPOTranslator/tree/master/TranslatorAPI</url>
+
     <dependencies>
         <!-- https://mvnrepository.com/artifact/com.opencsv/opencsv -->
         <dependency>
@@ -21,5 +25,18 @@
             <version>4.1</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

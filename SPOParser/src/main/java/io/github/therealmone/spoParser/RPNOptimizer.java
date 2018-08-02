@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Stack;
 
 //Есть смысл оптимизировать только математические операции, так как все остальные всегда требуют ссылку на переменную
-final class OPNOptimizer {
+final class RPNOptimizer {
     private static Stack<String> stack;
     private static final List<String> operatorsToOptimize;
 
@@ -18,9 +18,9 @@ final class OPNOptimizer {
         }};
     }
 
-    static String optimize(String opn) {
+    static String optimize(String rpn) {
         stack = new Stack<>();
-        String[] commands = opn.split(",");
+        String[] commands = rpn.split(",");
 
         for (String command : commands) {
             if (operatorsToOptimize.contains(command)) {

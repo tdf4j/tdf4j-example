@@ -19,7 +19,7 @@ import java.util.*;
  * 1 - =. typeof, put, get, remove, rewrite, print
  **/
 
-final class OPNConverter {
+final class RPNConverter {
     private static final Map<String, Integer> priority;
     private static Stack<String> stack;
     private static StringBuilder out;
@@ -53,7 +53,7 @@ final class OPNConverter {
         }};
     }
 
-    static String convertToOPN(TreeNode root) {
+    static String convertToRPN(TreeNode root) {
         stack = new Stack<>();
         out = new StringBuilder();
 

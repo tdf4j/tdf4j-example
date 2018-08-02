@@ -33,7 +33,7 @@ public class Parser implements Visitor, Visitable {
 
     @Override
     public void accept(Visitor v) {
-        v.visit(getOPN());
+        v.visit(getRPN());
     }
 
     public Parser(final HashSet<String> terminals) {
@@ -122,7 +122,7 @@ public class Parser implements Visitor, Visitable {
         }
     }
 
-    public String getOPN() {
-        return OPNOptimizer.optimize(OPNConverter.convertToOPN(root));
+    public String getRPN() {
+        return RPNOptimizer.optimize(RPNConverter.convertToRPN(root));
     }
 }

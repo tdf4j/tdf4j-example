@@ -11,6 +11,10 @@
 
     <artifactId>SPOStackMachine</artifactId>
 
+    <name>SPOStackMachine</name>
+    <description>Virtual machine which executes given RPN</description>
+    <url>https://github.com/therealmonE/SPOTranslator/tree/master/SPOStackMachine</url>
+
     <dependencies>
         <dependency>
             <groupId>io.github.therealmone</groupId>
@@ -18,5 +22,18 @@
             <version>1.0</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
