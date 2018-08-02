@@ -1,6 +1,6 @@
 package ru.therealmone.examples;
 
-import ru.therealmone.applicationAPI.Translator;
+import io.github.therealmone.applicationAPI.Translator;
 
 import java.io.FileInputStream;
 import java.io.IOException;
