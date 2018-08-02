@@ -1,5 +1,7 @@
 package ru.therealmone.applicationAPI;
 
+import ru.therealmone.translatorAPI.Exceptions.TranslatorException;
+
 import java.io.*;
 
 public interface Translator {
@@ -7,16 +9,18 @@ public interface Translator {
 
     void setDevMode(Boolean devMode);
 
-    static String loadProgram(InputStream inputStream) throws IOException {
-        StringBuilder out = new StringBuilder();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+    static String loadProgram(InputStream inputStream) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            StringBuilder out = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                out.append(line);
+            }
 
-        String line;
-        while ((line = reader.readLine()) != null) {
-            out.append(line);
+            return out.toString();
+        } catch (IOException e) {
+            throw new TranslatorException("Can't load program.", e);
         }
-
-        return out.toString();
     }
 
     static Translator create() {
