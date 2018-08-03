@@ -6,10 +6,10 @@
 	<parent>
 		<groupId>io.github.therealmone</groupId>
 		<artifactId>SPOTranslator</artifactId>
-		<version>1.1</version>
+		<version>1.1.0</version>
 	</parent>
 	<artifactId>SPOLexer</artifactId>
-	<version>1.1</version>
+	<version>1.1.0</version>
     <packaging>jar</packaging>
 
 	<name>SPOLexer</name>
@@ -20,79 +20,20 @@
 		<dependency>
 			<groupId>io.github.therealmone</groupId>
 			<artifactId>SPOParser</artifactId>
-			<version>1.0</version>
+			<version>1.1.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>io.github.therealmone</groupId>
 			<artifactId>SPOStackMachine</artifactId>
-			<version>1.1</version>
+			<version>1.1.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>io.github.therealmone</groupId>
 			<artifactId>TranslatorAPI</artifactId>
-			<version>1.0</version>
+			<version>1.1.0</version>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<version>2.7</version>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>2.2.1</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<encoding>UTF-8</encoding>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.5</version>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
 
 </project>

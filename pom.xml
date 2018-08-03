@@ -5,12 +5,33 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.therealmone</groupId>
 	<artifactId>SPOTranslator</artifactId>
-	<version>1.1</version>
+	<version>1.1.0</version>
 	<packaging>pom</packaging>
 
     <name>Java translator</name>
     <description>Java translator from a "handmade" language</description>
     <url>https://github.com/therealmonE/SPOTranslator</url>
+
+    <developers>
+        <developer>
+            <id>therealmone</id>
+            <name>Roman Fatnev</name>
+            <email>r.fatnev@gmail.com</email>
+            <organization/>
+            <organizationUrl/>
+            <roles>
+                <role>Project-Administrator</role>
+                <role>Developer</role>
+            </roles>
+            <timezone>+3</timezone>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/therealmonE/SPOTranslator</url>
+        <connection>scm:git:git//github.com/therealmonE/SPOTranslator.git</connection>
+        <developerConnection>scm:git:git@github.com:therealmonE/SPOTranslator.git</developerConnection>
+    </scm>
 
     <licenses>
         <license>
@@ -48,6 +69,77 @@
                 <scope>test</scope>
             </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+
+                <plugins>
+
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.7</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <encoding>UTF-8</encoding>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                </plugins>
+
+            </build>
+        </profile>
+    </profiles>
 
     <build>
         <plugins>

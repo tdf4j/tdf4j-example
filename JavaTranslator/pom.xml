@@ -5,12 +5,12 @@
     <parent>
         <artifactId>SPOTranslator</artifactId>
         <groupId>io.github.therealmone</groupId>
-        <version>1.1</version>
+        <version>1.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>JavaTranslator</artifactId>
-    <version>1.1</version>
+    <version>1.1.0</version>
 
     <name>Java translator API</name>
     <description>API for using java translator</description>
@@ -20,127 +20,60 @@
         <dependency>
             <groupId>io.github.therealmone</groupId>
             <artifactId>SPOLexer</artifactId>
-            <version>1.1</version>
+            <version>1.1.0</version>
         </dependency>
 
         <dependency>
             <groupId>io.github.therealmone</groupId>
             <artifactId>SPOParser</artifactId>
-            <version>1.0</version>
+            <version>1.1.0</version>
         </dependency>
 
         <dependency>
             <groupId>io.github.therealmone</groupId>
             <artifactId>SPOStackMachine</artifactId>
-            <version>1.1</version>
+            <version>1.1.0</version>
         </dependency>
 
         <dependency>
             <groupId>io.github.therealmone</groupId>
             <artifactId>TranslatorAPI</artifactId>
-            <version>1.0</version>
+            <version>1.1.0</version>
         </dependency>
     </dependencies>
 
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
 
-                <plugins>
+                    <archive>
+                        <manifest>
+                            <mainClass>io.github.therealmone.jtrAPI.CMD</mainClass>
+                        </manifest>
+                    </archive>
 
-                    <plugin>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                        <version>3.1.0</version>
-                        <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
 
-                            <archive>
-                                <manifest>
-                                    <mainClass>io.github.therealmone.jtrAPI.CMD</mainClass>
-                                </manifest>
-                            </archive>
+                </configuration>
 
-                            <descriptorRefs>
-                                <descriptorRef>jar-with-dependencies</descriptorRef>
-                            </descriptorRefs>
+                <executions>
 
-                        </configuration>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
 
-                        <executions>
-
-                            <execution>
-                                <id>make-assembly</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>single</goal>
-                                </goals>
-                            </execution>
-
-                        </executions>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.7</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                        </configuration>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>2.2.1</version>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.9.1</version>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <encoding>UTF-8</encoding>
-                        </configuration>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.5</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                </plugins>
-
-            </build>
-        </profile>
-    </profiles>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
