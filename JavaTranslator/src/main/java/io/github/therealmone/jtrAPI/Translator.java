@@ -27,4 +27,8 @@ public interface Translator {
         return new TranslatorImpl();
     }
 
+    static void setOutputStream(OutputStream out) {
+        System.setOut(new PrintStream(out));
+    }
+
 }

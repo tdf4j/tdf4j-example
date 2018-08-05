@@ -37,8 +37,12 @@
 translator.translate("new a = 100; print(a);");</code></pre>
         </li>
         <li>
-            <strong>You can also load program from InputStream</strong>
+            <strong>You can load program from InputStream</strong>
             <pre><code>translator.translate(Translator.loadProgram(new FileInputStream("example.txt")));</code></pre>
+        </li>
+        <li>
+            <strong>You can set your own OutputStream</strong>
+            <pre><code>Translator.setOutputStream(new FileOutputStream(new File("out.txt")));</code></pre>
         </li>
     </ul>
 </p>
