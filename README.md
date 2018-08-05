@@ -19,17 +19,15 @@
     &lt;groupId>io.github.therealmone&lt;/groupId>
     &lt;artifactId>JavaTranslator&lt;/artifactId>
     &lt;version>1.1.0&lt;/version>
-    &lt;classifier>jar-with-dependencies&lt;/classifier>
 &lt;/dependency></code></pre>
                 </li>
                 <li>
                     <p>Gradle
-                    <pre><code>compile 'io.github.therealmone:JavaTranslator:1.1.0:jar-with-dependencies'</code></pre>
+                    <pre><code>compile 'io.github.therealmone:JavaTranslator:1.1.0'</code></pre>
                </li>
                <li>
                 <p>Apache Ivy
-                <pre><code>&lt;dependency org="io.github.therealmone" name="JavaTranslator" rev="1.1.0" />
-    &lt;artifact name="JavaTranslator" type="jar" ext="jar" m:classifier="jar-with-dependencies" /></code></pre>
+                <pre><code>&lt;dependency org="io.github.therealmone" name="JavaTranslator" rev="1.1.0" /></code></pre>
                </li>
             </ul>
         </li>
