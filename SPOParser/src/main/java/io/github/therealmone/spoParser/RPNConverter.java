@@ -9,7 +9,7 @@ import java.util.*;
  * <p>
  * 10 - new
  * 9 - get
- * 8 - / , *
+ * 8 - / , *, div, mod
  * 7 - + , -
  * 6 - < , > , <= , >= , ==, !=
  * 5 - !
@@ -31,6 +31,8 @@ final class RPNConverter {
             put("size", 9);
             put("/", 8);
             put("*", 8);
+            put("div", 8);
+            put("mod", 8);
             put("+", 7);
             put("-", 7);
             put("<", 6);

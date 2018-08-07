@@ -10,8 +10,7 @@ import java.io.IOException;
 public class DevProg {
     public static void main(String[] args) throws IOException {
         Translator translator = Translator.create();
-        Translator.setOutputStream(new FileOutputStream(new File("out.txt")));
-        translator.setDevMode(true);
+        translator.setDevMode(false);
 
         translator.translate(
                 Translator.loadProgram(new FileInputStream("examples/src/main/resources/dev_program.txt"))

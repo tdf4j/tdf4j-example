@@ -75,9 +75,9 @@
         <template>^=$</template>
     </lexeme>
 
-    <lexeme priority="1">
+    <lexeme priority="2">
         <type>OP</type>
-        <template>^[\+\-\/\*]$</template>
+        <template>^[\+\-\/\*]|(div)|(mod)$</template>
     </lexeme>
 
     <lexeme priority="1">

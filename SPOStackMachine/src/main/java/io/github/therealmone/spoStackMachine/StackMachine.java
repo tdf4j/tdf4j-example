@@ -173,6 +173,28 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
+                case "DIV": {
+                    executions.put(command, com -> {
+                        double p2 = Double.parseDouble(stack.pop());
+                        double p1 = Double.parseDouble(stack.pop());
+                        stack.push("" + ((int) (p1 / p2)));
+                        cursor++;
+                    });
+
+                    break;
+                }
+
+                case "MOD": {
+                    executions.put(command, com -> {
+                        double p2 = Double.parseDouble(stack.pop());
+                        double p1 = Double.parseDouble(stack.pop());
+                        stack.push("" + (p1 % p2));
+                        cursor++;
+                    });
+
+                    break;
+                }
+
                 case "PLUS": {
                     executions.put(command, com -> {
                         double p2 = Double.parseDouble(stack.pop());

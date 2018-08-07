@@ -15,6 +15,8 @@ final class RPNOptimizer {
             add("/");
             add("-");
             add("+");
+            add("div");
+            add("mod");
         }};
     }
 
@@ -89,6 +91,36 @@ final class RPNOptimizer {
                     stack.pop();
 
                     stack.push("" + (op1 + op2));
+                } catch (NumberFormatException e) {
+                    stack.push(command);
+                }
+
+                break;
+            }
+            case "div": {
+                try {
+                    double op2 = Double.parseDouble(stack.peek());
+                    double op1 = Double.parseDouble(stack.get(stack.size() - 2));
+
+                    stack.pop();
+                    stack.pop();
+
+                    stack.push("" + ((int) (op1 / op2)));
+                } catch (NumberFormatException e) {
+                    stack.push(command);
+                }
+
+                break;
+            }
+            case "mod": {
+                try {
+                    double op2 = Double.parseDouble(stack.peek());
+                    double op1 = Double.parseDouble(stack.get(stack.size() - 2));
+
+                    stack.pop();
+                    stack.pop();
+
+                    stack.push("" + (op1 % op2));
                 } catch (NumberFormatException e) {
                     stack.push(command);
                 }

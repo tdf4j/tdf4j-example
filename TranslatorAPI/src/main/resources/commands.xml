@@ -41,6 +41,16 @@
     </command>
 
     <command>
+        <type>DIV</type>
+        <template>^div$</template>
+    </command>
+
+    <command>
+        <type>MOD</type>
+        <template>^mod$</template>
+    </command>
+
+    <command>
         <type>MUL</type>
         <template>^\*$</template>
     </command>

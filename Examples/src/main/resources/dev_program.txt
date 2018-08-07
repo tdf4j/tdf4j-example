@@ -1,6 +1,2 @@
-new a = 10;
-new b = 100;
-
-if(a < b) {
-    print(a);
-}
+new a = 109.9;
+print(a mod 10.9);
