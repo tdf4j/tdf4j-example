@@ -57,22 +57,26 @@ public class StackMachine implements Visitor {
     }
 
     private String match(String com) {
-        try {
-            for (Map.Entry<String, Pattern> entry : commands.entrySet()) {
-                Matcher m = entry.getValue().matcher(com);
-                if (m.matches()) {
-                    return entry.getKey();
-                }
+        for (Map.Entry<String, Pattern> entry : commands.entrySet()) {
+            Matcher m = entry.getValue().matcher(com);
+            if (m.matches()) {
+                return entry.getKey();
             }
-            throw new UnknownCommandException(com);
-        } catch (UnknownCommandException e) {
-            throw new StackMachineException("Unknown command", e);
         }
+        throw new UnknownCommandException(com);
     }
 
     private void initExecutions() {
         commands.forEach((command, pattern) -> {
             switch (command) {
+
+                case "STRING": {
+                    executions.put(command, com -> {
+                        stack.push(com);
+                        cursor++;
+                    });
+                    break;
+                }
 
                 case "DIGIT": {
                     executions.put(command, com -> {
@@ -444,8 +448,7 @@ public class StackMachine implements Visitor {
 
                 case "PRINT": {
                     executions.put(command, com -> {
-                        double value = Double.parseDouble(stack.pop());
-                        SavePrinter.savePrintln("" + value);
+                        print(stack.pop());
 
                         cursor++;
                     });
@@ -459,6 +462,17 @@ public class StackMachine implements Visitor {
     public void showVariables() {
         SavePrinter.savePrintln("Current variables: ");
         variables.forEach((name, obj) -> SavePrinter.savePrintln(name + ": " + obj));
+    }
+
+    private void print(String parameter) {
+        if(variables.containsKey(parameter)) {
+            SavePrinter.savePrintln(variables.get(parameter).toString());
+        } else if (parameter.matches("^\"(.*?)\"$")) {
+            SavePrinter.savePrintln(parameter.replaceAll("\"", ""));
+        } else {
+            double value = getValueFromParameter(parameter);
+            SavePrinter.savePrintln("" + value);
+        }
     }
 
     private void put(Collection collection, String parameter) {

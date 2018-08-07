@@ -5,6 +5,17 @@
         <template>^[a-z]+$</template>
     </lexeme>
 
+    <lexeme priority="1">
+        <type>STRING</type>
+        <template>^"(.*?)"$</template>
+    </lexeme>
+
+    <!--This lexeme is necessary for STRING lexeme-->
+    <lexeme priority="0">
+        <type>HALFSTRING</type>
+        <template>^"[^"]*</template>
+    </lexeme>
+
     <lexeme priority="2">
         <type>NEW</type>
         <template>^new$</template>
@@ -58,6 +69,11 @@
     <lexeme priority="1">
         <type>COMMA</type>
         <template>^,$</template>
+    </lexeme>
+
+    <lexeme priority="1">
+        <type>QUOTE</type>
+        <template>^"$</template>
     </lexeme>
 
     <lexeme priority="2">

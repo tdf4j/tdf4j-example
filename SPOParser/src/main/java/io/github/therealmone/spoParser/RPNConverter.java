@@ -437,8 +437,8 @@ final class RPNConverter {
                 }
                 case "LB":
                     break;
-                case "value_expr": {
-                    value_expr(child);
+                case "print_parameters": {
+                    print_parameters(child);
                     break;
                 }
                 case "RB":
@@ -768,6 +768,39 @@ final class RPNConverter {
                 }
                 case "RB":
                     break;
+            }
+        }
+    }
+
+    private static void print_parameters(TreeNode root) {
+        for (TreeNode child : root.getChildes()) {
+            switch (child.getName()) {
+                case "STRING": {
+                    String value = child.getToken().getValue();
+                    out.append(value).append(",");
+                    break;
+                }
+                case "value_expr": {
+                    value_expr(child);
+                    break;
+                }
+                case "print_parameters_continue": {
+                    print_parameters_continue(child);
+                    break;
+                }
+            }
+        }
+    }
+
+    private static void print_parameters_continue(TreeNode root) {
+        for (TreeNode child : root.getChildes()) {
+            switch (child.getName()) {
+                case "COMMA":
+                    break;
+                case "print_parameters": {
+                    print_parameters(child);
+                    break;
+                }
             }
         }
     }

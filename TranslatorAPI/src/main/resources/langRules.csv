@@ -18,7 +18,7 @@ NUMBER,PROD,VALUE
 17,if_statement,IF + LB + condition + RB + FLB + expr_continue + FRB + else
 18,assign_expr,VAR + ASSIGN_OP + value_expr
 19,do_while_loop,DO + FLB + expr_continue + FRB + WHILE + LB + condition + RB
-20,print_expr,PRINT + LB + value_expr + RB
+20,print_expr,PRINT + LB + print_parameters + RB
 21,put_expr,PUT + LB + VAR + COMMA + value + RB
 22,remove_expr,REMOVE + LB + VAR + COMMA + value + RB
 23,rewrite_expr,REWRITE + LB + VAR + COMMA + value + COMMA + value_expr + RB
@@ -49,3 +49,5 @@ NUMBER,PROD,VALUE
 48,else,ELSE + FLB + expr_continue + FRB
 49,get_expr,GET + LB + VAR + COMMA + value + RB + value_expr_continue
 50,size_expr,SIZE + LB + VAR + RB + value_expr_continue
+51,print_parameters,STRING
+52,print_parameters,value_expr

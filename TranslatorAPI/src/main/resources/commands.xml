@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <commands>
     <command>
+        <type>STRING</type>
+        <template>^"(.*?)"$</template>
+    </command>
+
+    <command>
         <type>DIGIT</type>
         <template>^-?(0|([1-9][0-9]*))$</template>
     </command>
