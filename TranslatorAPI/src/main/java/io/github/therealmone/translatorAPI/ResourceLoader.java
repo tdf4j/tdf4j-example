@@ -20,7 +20,7 @@ public final class ResourceLoader {
     private static Map<String, Map<String, Integer>> analyzeTable;
     private static Map<String, Pattern> commands;
 
-    public static void initialize() {
+    public synchronized static void initialize() {
         Thread current = Thread.currentThread();
 
         loadLexemes(current.getContextClassLoader().getResourceAsStream("lexemes.xml"));

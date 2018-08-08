@@ -17,7 +17,7 @@ public class Parser implements Visitor, Visitable {
     private Stack<Integer> stackForCNReturns;
     private final Map<Integer, String[]> langRules;
     private final Map<String, Map<String, Integer>> analyzeTable;
-    private final HashSet<String> terminals;
+    private final Set<String> terminals;
     private TreeNode root;
     private TreeNode currentTreeNode;
     private StringBuilder history;
@@ -36,7 +36,7 @@ public class Parser implements Visitor, Visitable {
         v.visit(getRPN());
     }
 
-    public Parser(final HashSet<String> terminals) {
+    public Parser(final Set<String> terminals) {
         this.terminals = terminals;
 
         stack = new Stack<>();

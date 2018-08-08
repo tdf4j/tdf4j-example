@@ -5,13 +5,12 @@ import io.github.therealmone.translatorAPI.SavePrinter;
 import io.github.therealmone.translatorAPI.Token;
 import io.github.therealmone.spoLexer.exceptions.UnexpectedSymbolException;
 
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.*;
 
 public class Lexer {
-    public ArrayList<Token> tokens;
-    public final Map<String, Pattern> lexemes;
+    private List<Token> tokens;
+    private final Map<String, Pattern> lexemes;
     private final Map<String, Integer> priority;
 
     private static final char END_SYMBOL = '$';
@@ -81,7 +80,7 @@ public class Lexer {
     }
 
     public void showTokens() {
-        SavePrinter.savePrintln("GENERATED TOKENS: ");
+        SavePrinter.savePrintln("\u001B[33mGENERATED TOKENS:\u001B[0m");
         tokens.forEach(token -> SavePrinter.savePrintf("%-20s%-10s%-40s%n", token.getType(), "-->", token.getValue()));
     }
 
@@ -89,5 +88,13 @@ public class Lexer {
         Pattern p = lexemes.get(lexeme);
         Matcher m = p.matcher(string);
         return m.matches();
+    }
+
+    public Set<String> getTerminals() {
+        return Collections.unmodifiableSet(this.lexemes.keySet());
+    }
+
+    public List<Token> getTokens() {
+        return Collections.unmodifiableList(tokens);
     }
 }

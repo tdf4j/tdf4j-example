@@ -9,47 +9,64 @@ import io.github.therealmone.translatorAPI.ResourceLoader;
 import io.github.therealmone.translatorAPI.SavePrinter;
 import io.github.therealmone.translatorAPI.Token;
 
-import java.util.HashSet;
 import java.util.List;
 
 class TranslatorImpl implements Translator {
     private boolean devMode = false;
+    private Lexer lexer;
+    private Parser parser;
+    private StackMachine stackMachine;
+
+    TranslatorImpl() {
+        ResourceLoader.initialize();
+    }
 
     @Override
     public void translate(String program) {
+        if(devMode) {
+            devModeTranslate(program);
+        } else {
+            defaultTranslate(program);
+        }
+    }
+
+    private void defaultTranslate(String program) {
         try {
-            ResourceLoader.initialize();
+            lexer = new Lexer();
+            lexer.generateTokens(program);
 
-            Lexer lexer;
-            Parser parser;
-            StackMachine stackMachine;
+            parser = new Parser(lexer.getTerminals());
+            for (Token token : lexer.getTokens()) {
+                token.accept(parser);
+            }
 
+            stackMachine = new StackMachine();
+            parser.accept(stackMachine);
+        } catch (TranslatorException e) {
+            printError(e);
+        }
+    }
+
+    private void devModeTranslate(String program) {
+        try {
             SavePrinter.savePrintln("\u001B[31mMAIN PROGRAM\u001B[0m");
             SavePrinter.savePrintln("-----------------------------------------------------------------------------------------");
 
             lexer = new Lexer();
-            if (devMode) {
-                lexer.showLexemes();
-            }
+            lexer.showLexemes();
 
             lexer.generateTokens(program);
-            if (devMode) {
-                lexer.showTokens();
-            }
+            lexer.showTokens();
 
-            parser = new Parser(new HashSet<>(lexer.lexemes.keySet()));
-            if (devMode) {
-                parser.showLangRules();
-            }
+            parser = new Parser(lexer.getTerminals());
+            parser.showLangRules();
 
-            for (Token token : lexer.tokens) {
+            for (Token token : lexer.getTokens()) {
                 token.accept(parser);
             }
 
-            if (devMode) {
-                SavePrinter.savePrintln("\u001B[32mPARSE SUCCESS\u001B[0m");
-                SavePrinter.savePrintln("RPN: " + listToString(parser.getRPN()));
-            }
+            SavePrinter.savePrintln("\u001B[32mPARSE SUCCESS\u001B[0m");
+            SavePrinter.savePrintln("RPN: " + listToString(parser.getRPN()));
 
             stackMachine = new StackMachine();
             parser.accept(stackMachine);
@@ -57,15 +74,11 @@ class TranslatorImpl implements Translator {
             SavePrinter.savePrintln("-----------------------------------------------------------------------------------------");
             SavePrinter.savePrintln("\u001B[31mMAIN PROGRAM DONE\u001B[0m");
 
-            if (devMode) {
-                SavePrinter.savePrintln("\u001B[32mCALCULATE SUCCESS\u001B[0m");
-                stackMachine.showVariables();
-            }
+            SavePrinter.savePrintln("\u001B[32mCALCULATE SUCCESS\u001B[0m");
+            stackMachine.showVariables();
 
         } catch (TranslatorException e) {
-            if (devMode) {
-                e.printStackTrace();
-            }
+            e.printStackTrace();
             printError(e);
             SavePrinter.savePrintln("-----------------------------------------------------------------------------------------");
             SavePrinter.savePrintln("\u001B[31mMAIN PROGRAM FAILED\u001B[0m");

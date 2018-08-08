@@ -5,13 +5,13 @@ import io.github.therealmone.translatorAPI.Interfaces.ExceptionInterface;
 import io.github.therealmone.translatorAPI.SavePrinter;
 import io.github.therealmone.translatorAPI.Token;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class UnexpectedSymbolException extends LexerException implements ExceptionInterface {
     private String input;
-    private ArrayList<Token> tokens;
+    private List<Token> tokens;
 
-    public UnexpectedSymbolException(String input, ArrayList<Token> tokens) {
+    public UnexpectedSymbolException(String input, List<Token> tokens) {
         super("Got unexpected symbol " + input.charAt(0));
         this.input = input;
         this.tokens = tokens;
