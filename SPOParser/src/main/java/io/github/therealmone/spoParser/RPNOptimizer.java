@@ -20,11 +20,10 @@ final class RPNOptimizer {
         }};
     }
 
-    static String optimize(String rpn) {
+    static List<String> optimize(List<String> rpn) {
         stack = new Stack<>();
-        String[] commands = rpn.split(",");
 
-        for (String command : commands) {
+        for (String command : rpn) {
             if (operatorsToOptimize.contains(command)) {
                 optimizeOperand(command);
             } else {
@@ -32,7 +31,7 @@ final class RPNOptimizer {
             }
         }
 
-        return convertToString();
+        return new ArrayList<>(stack);
     }
 
     private static void optimizeOperand(String command) {
@@ -134,17 +133,5 @@ final class RPNOptimizer {
                 break;
             }
         }
-    }
-
-    private static String convertToString() {
-        StringBuilder out = new StringBuilder();
-
-        stack.forEach(command ->
-                out.append(command).append(",")
-        );
-
-        out.deleteCharAt(out.length() - 1);
-
-        return out.toString();
     }
 }

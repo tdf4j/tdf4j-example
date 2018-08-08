@@ -122,7 +122,7 @@ public class Parser implements Visitor, Visitable {
         }
     }
 
-    public String getRPN() {
+    public List<String> getRPN() {
         return RPNOptimizer.optimize(RPNConverter.convertToRPN(root));
     }
 }

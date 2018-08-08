@@ -10,6 +10,7 @@ import io.github.therealmone.translatorAPI.SavePrinter;
 import io.github.therealmone.translatorAPI.Token;
 
 import java.util.HashSet;
+import java.util.List;
 
 class TranslatorImpl implements Translator {
     private boolean devMode = false;
@@ -47,7 +48,7 @@ class TranslatorImpl implements Translator {
 
             if (devMode) {
                 SavePrinter.savePrintln("\u001B[32mPARSE SUCCESS\u001B[0m");
-                SavePrinter.savePrintln("RPN: " + parser.getRPN());
+                SavePrinter.savePrintln("RPN: " + listToString(parser.getRPN()));
             }
 
             stackMachine = new StackMachine();
@@ -82,5 +83,14 @@ class TranslatorImpl implements Translator {
         } else {
             SavePrinter.savePrintln(e.getMessage());
         }
+    }
+
+    private String listToString(List<String> list) {
+        StringBuilder out = new StringBuilder();
+        for(String string : list) {
+            out.append(string).append(",");
+        }
+        out.deleteCharAt(out.length() - 1);
+        return out.toString();
     }
 }

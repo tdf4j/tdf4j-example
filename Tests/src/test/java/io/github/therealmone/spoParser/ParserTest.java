@@ -11,6 +11,7 @@ import io.github.therealmone.translatorAPI.Token;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class ParserTest {
 
@@ -223,6 +224,15 @@ public class ParserTest {
             token.accept(parser);
         }
 
-        return parser.getRPN();
+        return listToString(parser.getRPN());
+    }
+
+    private String listToString(List<String> list) {
+        StringBuilder out = new StringBuilder();
+        for(String string : list) {
+            out.append(string).append(",");
+        }
+        out.deleteCharAt(out.length() - 1);
+        return out.toString();
     }
 }

@@ -10,6 +10,7 @@ import io.github.therealmone.translatorAPI.ResourceLoader;
 import io.github.therealmone.translatorAPI.SavePrinter;
 import io.github.therealmone.translatorAPI.Interfaces.Visitor;
 
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Stack;
@@ -26,8 +27,8 @@ public class StackMachine implements Visitor {
 
     @Override
     public void visit(Object object) {
-        if (object instanceof String) {
-            calculate((String) object);
+        if (object instanceof List) {
+            calculate((List<String>) object);
         } else {
             throw new IllegalArgumentException("Illegal argument: " + object);
         }
@@ -45,11 +46,9 @@ public class StackMachine implements Visitor {
         initExecutions();
     }
 
-    private void calculate(String rpn) {
-        String[] splittedRPN = rpn.split(",");
-
-        while (!splittedRPN[cursor].equals("$")) {
-            executions.get(match(splittedRPN[cursor])).execute(splittedRPN[cursor]);
+    private void calculate(List<String> rpn) {
+        while (!rpn.get(cursor).equals("$")) {
+            executions.get(match(rpn.get(cursor))).execute(rpn.get(cursor));
         }
     }
 

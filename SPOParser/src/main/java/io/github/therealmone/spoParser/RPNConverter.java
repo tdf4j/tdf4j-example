@@ -22,7 +22,7 @@ import java.util.*;
 final class RPNConverter {
     private static final Map<String, Integer> priority;
     private static Stack<String> stack;
-    private static StringBuilder out;
+    private static List<String> out;
 
     static {
         priority = new HashMap<String, Integer>() {{
@@ -56,12 +56,12 @@ final class RPNConverter {
         }};
     }
 
-    static String convertToRPN(TreeNode root) {
+    static List<String> convertToRPN(TreeNode root) {
         stack = new Stack<>();
-        out = new StringBuilder();
+        out = new ArrayList<>();
 
         lang(root);
-        return out.toString();
+        return out;
     }
 
     private static void lang(TreeNode root) {
@@ -76,7 +76,7 @@ final class RPNConverter {
                     break;
                 }
                 case "$": {
-                    out.append("$");
+                    out.add("$");
                     break;
                 }
             }
@@ -128,7 +128,7 @@ final class RPNConverter {
                 }
                 case "DEL": {
                     while (stack.size() != 0) {
-                        out.append(stack.pop()).append(",");
+                        out.add(stack.pop());
                     }
                 }
             }
@@ -163,20 +163,19 @@ final class RPNConverter {
                 case "LB":
                     break;
                 case "condition": {
-                    String[] temp = out.toString().split(",");
-                    if (temp.length == 1 && temp[0].equals("")) {
+                    if (out.size() == 1 && out.get(0).equals("")) {
                         index1 = 0;
                     } else {
-                        index1 = out.toString().split(",").length;
+                        index1 = out.size();
                     }
                     condition(child);
                     break;
                 }
                 case "RB": {
                     while (stack.size() != 0) {
-                        out.append(stack.pop()).append(",");
+                        out.add(stack.pop());
                     }
-                    out.append("!F@p").append(iteration).append(",");
+                    out.add("!F@p" + iteration);
                     break;
                 }
                 case "FLB":
@@ -186,15 +185,15 @@ final class RPNConverter {
                     break;
                 }
                 case "FRB": {
-                    out.append("!@p").append(iteration).append(",");
-                    index2 = out.toString().split(",").length;
+                    out.add("!@p" + iteration);
+                    index2 = out.size();
                     break;
                 }
             }
         }
 
-        out.replace(out.indexOf("!F@p" + iteration) + 3, out.indexOf("!F@p" + iteration) + 4 + String.valueOf(iteration).length(), "" + index2);
-        out.replace(out.indexOf("!@p" + iteration) + 2, out.indexOf("!@p" + iteration) + 3 + String.valueOf(iteration).length(), "" + index1);
+        out.set(out.indexOf("!F@p" + iteration), "!F@" + index2);
+        out.set(out.indexOf("!@p" + iteration), "!@" + index1);
 
     }
 
@@ -216,9 +215,9 @@ final class RPNConverter {
                 }
                 case "RB": {
                     while (stack.size() != 0) {
-                        out.append(stack.pop()).append(",");
+                        out.add(stack.pop());
                     }
-                    out.append("!F@p").append(iteration).append(",");
+                    out.add("!F@p" + iteration);
                 }
                 case "FLB":
                     break;
@@ -227,21 +226,21 @@ final class RPNConverter {
                     break;
                 }
                 case "FRB": {
-                    out.append("!@p").append(iteration).append(",");
-                    index1 = out.toString().split(",").length;
+                    out.add("!@p" + iteration);
+                    index1 = out.size();
                     index2 = index1;
                     break;
                 }
                 case "else": {
                     else_(child);
-                    index2 = out.toString().split(",").length;
+                    index2 = out.size();
                     break;
                 }
             }
         }
 
-        out.replace(out.indexOf("!F@p" + iteration) + 3, out.indexOf("!F@p" + iteration) + 4 + String.valueOf(iteration).length(), "" + index1);
-        out.replace(out.indexOf("!@p" + iteration) + 2, out.indexOf("!@p" + iteration) + 3 + String.valueOf(iteration).length(), "" + index2);
+        out.set(out.indexOf("!F@p" + iteration), "!F@" + index1);
+        out.set(out.indexOf("!@p" + iteration), "!@" + index2);
     }
 
     private static void else_(TreeNode root) {
@@ -265,7 +264,7 @@ final class RPNConverter {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "VAR": {
-                    out.append("#").append(child.getToken().getValue()).append(",");
+                    out.add("#" + child.getToken().getValue());
                     break;
                 }
                 case "ASSIGN_OP": {
@@ -292,7 +291,7 @@ final class RPNConverter {
                 case "FLB":
                     break;
                 case "expr_continue": {
-                    index1 = out.toString().split(",").length;
+                    index1 = out.size();
                     expr_continue(child);
                     break;
                 }
@@ -308,14 +307,14 @@ final class RPNConverter {
                 }
                 case "RB": {
                     while (stack.size() != 0) {
-                        out.append(stack.pop()).append(",");
+                        out.add(stack.pop());
                     }
-                    out.append("!T@p").append(iteration).append(",");
+                    out.add("!T@p" + iteration);
                 }
             }
         }
 
-        out.replace(out.indexOf("!T@p" + iteration) + 3, out.indexOf("!T@p" + iteration) + 4 + String.valueOf(iteration).length(), "" + index1);
+        out.set(out.indexOf("!T@p" + iteration), "!T@" + index1);
     }
 
     private static void for_loop(TreeNode root) {
@@ -361,30 +360,30 @@ final class RPNConverter {
 
         assign_expr(assign);
         while (stack.size() != 0) {
-            out.append(stack.pop()).append(",");
+            out.add(stack.pop());
         }
 
-        index1 = out.toString().split(",").length;
+        index1 = out.size();
         condition(condition);
         while (stack.size() != 0) {
-            out.append(stack.pop()).append(",");
+            out.add(stack.pop());
         }
-        out.append("!F@p").append(iteration).append(",");
+        out.add("!F@p" + iteration);
 
         expr_continue(expr_continue);
         while (stack.size() != 0) {
-            out.append(stack.pop()).append(",");
+            out.add(stack.pop());
         }
 
         assign_expr(increment);
         while (stack.size() != 0) {
-            out.append(stack.pop()).append(",");
+            out.add(stack.pop());
         }
-        out.append("!@p").append(iteration).append(",");
-        index2 = out.toString().split(",").length;
+        out.add("!@p" + iteration);
+        index2 = out.size();
 
-        out.replace(out.indexOf("!F@p" + iteration) + 3, out.indexOf("!F@p" + iteration) + 4 + String.valueOf(iteration).length(), "" + index2);
-        out.replace(out.indexOf("!@p" + iteration) + 2, out.indexOf("!@p" + iteration) + 3 + String.valueOf(iteration).length(), "" + index1);
+        out.set(out.indexOf("!F@p" + iteration), "!F@" + index2);
+        out.set(out.indexOf("!@p" + iteration), "!@" + index1);
     }
 
     private static void init_expr(TreeNode root) {
@@ -395,7 +394,7 @@ final class RPNConverter {
                     break;
                 }
                 case "VAR": {
-                    out.append("#").append(child.getToken().getValue()).append(",");
+                    out.add("#" + child.getToken().getValue());
                     break;
                 }
                 case "init_expr_continue": {
@@ -452,11 +451,11 @@ final class RPNConverter {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "HASHSET": {
-                    out.append("#").append(child.getToken().getValue()).append(",");
+                    out.add("#" + child.getToken().getValue());
                     break;
                 }
                 case "ARRAYLIST": {
-                    out.append("#").append(child.getToken().getValue()).append(",");
+                    out.add("#" + child.getToken().getValue());
                     break;
                 }
             }
@@ -473,7 +472,7 @@ final class RPNConverter {
                 case "LB":
                     break;
                 case "VAR": {
-                    out.append("#").append(child.getToken().getValue()).append(",");
+                    out.add("#" + child.getToken().getValue());
                     break;
                 }
                 case "COMMA":
@@ -498,7 +497,7 @@ final class RPNConverter {
                 case "LB":
                     break;
                 case "VAR": {
-                    out.append("#").append(child.getToken().getValue()).append(",");
+                    out.add("#" + child.getToken().getValue());
                     break;
                 }
                 case "COMMA":
@@ -523,7 +522,7 @@ final class RPNConverter {
                 case "LB":
                     break;
                 case "VAR": {
-                    out.append("#").append(child.getToken().getValue()).append(",");
+                    out.add("#" + child.getToken().getValue());
                     break;
                 }
                 case "COMMA":
@@ -687,15 +686,15 @@ final class RPNConverter {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "VAR": {
-                    out.append(checkTrace()).append(child.getToken().getValue()).append(",");
+                    out.add(checkTrace() + child.getToken().getValue());
                     break;
                 }
                 case "DIGIT": {
-                    out.append(child.getToken().getValue()).append(",");
+                    out.add(child.getToken().getValue());
                     break;
                 }
                 case "DOUBLE": {
-                    out.append(child.getToken().getValue()).append(",");
+                    out.add(child.getToken().getValue());
                     break;
                 }
             }
@@ -738,7 +737,7 @@ final class RPNConverter {
                 case "LB":
                     break;
                 case "VAR": {
-                    out.append("#").append(child.getToken().getValue()).append(",");
+                    out.add("#" + child.getToken().getValue());
                     break;
                 }
                 case "COMMA":
@@ -764,7 +763,7 @@ final class RPNConverter {
                 case "LB":
                     break;
                 case "VAR": {
-                    out.append("#").append(child.getToken().getValue()).append(",");
+                    out.add("#" + child.getToken().getValue());
                     break;
                 }
                 case "RB":
@@ -778,7 +777,7 @@ final class RPNConverter {
             switch (child.getName()) {
                 case "STRING": {
                     String value = child.getToken().getValue();
-                    out.append(value).append(",");
+                    out.add(value);
                     break;
                 }
                 case "value_expr": {
@@ -816,7 +815,7 @@ final class RPNConverter {
             }
             case ")": {
                 while (!stack.peek().equals("(")) {
-                    out.append(stack.pop()).append(",");
+                    out.add(stack.pop());
                 }
                 stack.pop();
                 break;
@@ -825,7 +824,7 @@ final class RPNConverter {
                 if (stack.size() != 0 && priority.get(op.getValue()) <= priority.get(stack.peek())) {
                     try {
                         while (priority.get(op.getValue()) <= priority.get(stack.peek())) {
-                            out.append(stack.pop()).append(",");
+                            out.add(stack.pop());
                         }
                     } catch (EmptyStackException e) {
                     }

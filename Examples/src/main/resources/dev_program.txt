@@ -10,5 +10,5 @@ for(i = 0; i < 100; i = i + 1) {
 }
 
 
-print("Test concat with value_expr. " ++ "This value should equals 10: " ++ 101.123123 div 10);
-print("Test concat with value_expr. " ++ "This value should equals 1.123: " ++ 101.123123 mod 10);
+print("Test concat with value_expr, " ++ "this value should equals 10: " ++ 101.123123 div 10);
+print("Test concat with value_expr, " ++ "this value should equals 1.123: " ++ 101.123123 mod 10);
