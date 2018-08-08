@@ -21,15 +21,15 @@ public final class ResourceLoader {
     private static Map<String, Pattern> commands;
 
     public static void initialize() {
-        ResourceFinder resourceFinder = new ResourceFinder();
+        Thread current = Thread.currentThread();
 
-        loadLexemes(resourceFinder.getLexemesIS());
-        loadLangRules(resourceFinder.getLangRulesIS());
-        loadAnalyzeTable(resourceFinder.getAnalyzeTableIS());
-        loadCommands(resourceFinder.getCommandsIS());
+        loadLexemes(current.getContextClassLoader().getResourceAsStream("lexemes.xml"));
+        loadLangRules(current.getContextClassLoader().getResourceAsStream("langRules.csv"));
+        loadAnalyzeTable(current.getContextClassLoader().getResourceAsStream("analyzeTable.csv"));
+        loadCommands(current.getContextClassLoader().getResourceAsStream("commands.xml"));
     }
 
-    public static void loadLexemes(InputStream is) {
+    private static void loadLexemes(InputStream is) {
         lexemes = new HashMap<>();
         lexemePriority = new HashMap<>();
 
@@ -59,7 +59,7 @@ public final class ResourceLoader {
         }
     }
 
-    public static void loadLangRules(InputStream is) {
+    private static void loadLangRules(InputStream is) {
         langRules = new HashMap<>();
 
         try {
@@ -82,7 +82,7 @@ public final class ResourceLoader {
         }
     }
 
-    public static void loadAnalyzeTable(InputStream is) {
+    private static void loadAnalyzeTable(InputStream is) {
         analyzeTable = new HashMap<>();
 
         try {
@@ -104,7 +104,7 @@ public final class ResourceLoader {
         }
     }
 
-    public static void loadCommands(InputStream is) {
+    private static void loadCommands(InputStream is) {
         commands = new HashMap<>();
 
         try {

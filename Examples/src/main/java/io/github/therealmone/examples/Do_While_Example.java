@@ -2,15 +2,12 @@ package io.github.therealmone.examples;
 
 import io.github.therealmone.jtrAPI.Translator;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-
 public class Do_While_Example {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         Translator translator = Translator.create();
 
         translator.translate(
-                Translator.loadProgram(new FileInputStream("examples/src/main/resources/do_while_example.txt"))
+                Translator.loadProgram(Thread.currentThread().getContextClassLoader().getResourceAsStream("do_while_example.txt"))
         );
     }
 }
