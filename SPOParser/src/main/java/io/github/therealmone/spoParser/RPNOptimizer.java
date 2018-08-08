@@ -37,6 +37,7 @@ final class RPNOptimizer {
 
     private static void optimizeOperand(String command) {
         switch (command) {
+
             case "*": {
                 try {
                     double op2 = Double.parseDouble(stack.peek());
@@ -52,6 +53,7 @@ final class RPNOptimizer {
 
                 break;
             }
+
             case "/": {
                 try {
                     double op2 = Double.parseDouble(stack.peek());
@@ -67,6 +69,7 @@ final class RPNOptimizer {
 
                 break;
             }
+
             case "-": {
                 try {
                     double op2 = Double.parseDouble(stack.peek());
@@ -82,6 +85,7 @@ final class RPNOptimizer {
 
                 break;
             }
+
             case "+": {
                 try {
                     double op2 = Double.parseDouble(stack.peek());
@@ -97,6 +101,7 @@ final class RPNOptimizer {
 
                 break;
             }
+
             case "div": {
                 try {
                     double op2 = Double.parseDouble(stack.peek());
@@ -112,6 +117,7 @@ final class RPNOptimizer {
 
                 break;
             }
+
             case "mod": {
                 try {
                     double op2 = Double.parseDouble(stack.peek());

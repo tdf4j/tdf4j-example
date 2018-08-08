@@ -15,7 +15,7 @@ import java.util.*;
  * 5 - !
  * 4 - &
  * 3 - |, ^
- * 2 - ( , )
+ * 2 - ( , ), ++
  * 1 - =. typeof, put, get, remove, rewrite, print
  **/
 
@@ -46,6 +46,7 @@ final class RPNConverter {
             put("^", 3);
             put("(", 2);
             put(")", 2);
+            put("++", 2);
             put("=", 1);
             put("typeof", 1);
             put("put", 1);
@@ -795,8 +796,10 @@ final class RPNConverter {
     private static void print_parameters_continue(TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "COMMA":
+                case "CONCAT": {
+                    pushOP(child.getToken());
                     break;
+                }
                 case "print_parameters": {
                     print_parameters(child);
                     break;

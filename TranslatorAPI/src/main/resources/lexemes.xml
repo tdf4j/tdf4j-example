@@ -71,6 +71,11 @@
         <template>^,$</template>
     </lexeme>
 
+    <lexeme priority="3">
+        <type>CONCAT</type>
+        <template>^\+\+$</template>
+    </lexeme>
+
     <lexeme priority="1">
         <type>QUOTE</type>
         <template>^"$</template>

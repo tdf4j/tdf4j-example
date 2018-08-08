@@ -66,6 +66,11 @@
     </command>
 
     <command>
+        <type>CONCAT</type>
+        <template>^\+\+$</template>
+    </command>
+
+    <command>
         <type>MINUS</type>
         <template>^\-$</template>
     </command>

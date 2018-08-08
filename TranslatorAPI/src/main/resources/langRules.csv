@@ -49,5 +49,7 @@ NUMBER,PROD,VALUE
 48,else,ELSE + FLB + expr_continue + FRB
 49,get_expr,GET + LB + VAR + COMMA + value + RB + value_expr_continue
 50,size_expr,SIZE + LB + VAR + RB + value_expr_continue
-51,print_parameters,STRING
-52,print_parameters,value_expr
+51,print_parameters,STRING + print_parameters_continue
+52,print_parameters,value_expr + print_parameters_continue
+53,print_parameters_continue,CONCAT + print_parameters
+54,print_parameters_continue,EMPTY

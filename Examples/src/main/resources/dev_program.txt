@@ -1,3 +1,14 @@
-print("Print string test");
-print("This value equals 100: ");
-print(10 * 10);
+new i = 0;
+new a typeof arraylist;
+
+for(i = 0; i < 100; i = i + 1) {
+    put(a, i);
+}
+
+for(i = 0; i < 100; i = i + 1) {
+    print("Value №" ++ i ++ " = " ++ get(a, i));
+}
+
+
+print("Test concat with value_expr. " ++ "This value should equals 10: " ++ 101.123123 div 10);
+print("Test concat with value_expr. " ++ "This value should equals 1.123: " ++ 101.123123 mod 10);

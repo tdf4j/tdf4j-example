@@ -208,6 +208,18 @@ public class StackMachine implements Visitor {
                     break;
                 }
 
+                case "CONCAT": {
+                    executions.put(command, com -> {
+                        String p2 = stack.pop().replaceAll("\"", "");
+                        String p1 = stack.pop().replaceAll("\"", "");
+                        stack.push("\"" + (p1 + p2) + "\"");
+                        cursor++;
+
+                    });
+
+                    break;
+                }
+
                 case "MINUS": {
                     executions.put(command, com -> {
                         double p2 = Double.parseDouble(stack.pop());
