@@ -1,19 +1,17 @@
-package io.github.therealmone.spoStackMachine;
+package io.github.therealmone.spoStackMachine.collections.hashset;
 
-import io.github.therealmone.spoStackMachine.collections.hashset.HashSetImpl;
 import io.github.therealmone.spoStackMachine.collections.hashset.exceptions.KeyAlreadyExistsException;
 import io.github.therealmone.spoStackMachine.collections.hashset.exceptions.NoSuchElementException;
 import org.junit.Test;
-import io.github.therealmone.spoStackMachine.collections.HashSet;
 
 import static org.junit.Assert.*;
 
-public class HashMapTest {
+public class HashSetTest {
     private HashSet hashSet;
 
     @Test
     public void addAndGetMethodsTest() {
-        hashSet = new HashSetImpl();
+        hashSet = HashSet.getInstance();
         try {
             hashSet.add("1", 1);
             hashSet.add("1", 1);
@@ -21,7 +19,7 @@ public class HashMapTest {
         } catch (KeyAlreadyExistsException e) {
         }
 
-        hashSet = new HashSetImpl();
+        hashSet = HashSet.getInstance();
         try {
             hashSet.add("1", 1);
             assertEquals(1, hashSet.get("1"), 0);
@@ -36,7 +34,7 @@ public class HashMapTest {
 
     @Test
     public void deleteMethodTest() {
-        hashSet = new HashSetImpl();
+        hashSet = HashSet.getInstance();
         try {
             hashSet.add("1", 1);
             hashSet.get("1");
@@ -45,7 +43,7 @@ public class HashMapTest {
         } catch (NoSuchElementException e) {
         }
 
-        hashSet = new HashSetImpl();
+        hashSet = HashSet.getInstance();
         try {
             hashSet.add("1", 1);
             hashSet.add("2", 2);
@@ -60,7 +58,7 @@ public class HashMapTest {
 
     @Test
     public void containsMethodTest() {
-        hashSet = new HashSetImpl();
+        hashSet = HashSet.getInstance();
         try {
             hashSet.add("1", 1);
             assertTrue(hashSet.contains("1"));
@@ -68,7 +66,7 @@ public class HashMapTest {
             fail();
         }
 
-        hashSet = new HashSetImpl();
+        hashSet = HashSet.getInstance();
         try {
             hashSet.add("1", 1);
             hashSet.add("2", 2);
@@ -83,7 +81,7 @@ public class HashMapTest {
 
     @Test
     public void rewriteMethodTest() {
-        hashSet = new HashSetImpl();
+        hashSet = HashSet.getInstance();
         try {
             hashSet.add("1", 1);
             hashSet.rewrite("1", 1000);
@@ -92,7 +90,7 @@ public class HashMapTest {
             fail();
         }
 
-        hashSet = new HashSetImpl();
+        hashSet = HashSet.getInstance();
         try {
             hashSet.add("1", 1);
             hashSet.add("2", 2);
@@ -106,7 +104,7 @@ public class HashMapTest {
 
     @Test
     public void resizeMethodTest() {
-        hashSet = new HashSetImpl();
+        hashSet = HashSet.getInstance();
         try {
             int buckets_count = ((HashSetImpl) hashSet).getBucketCount();
 

@@ -1,15 +1,12 @@
 package io.github.therealmone.spoStackMachine;
 
-import io.github.therealmone.spoStackMachine.collections.ArrayList;
+import io.github.therealmone.spoStackMachine.collections.arraylist.ArrayList;
 import io.github.therealmone.spoStackMachine.collections.Collection;
-import io.github.therealmone.spoStackMachine.collections.HashSet;
-import io.github.therealmone.spoStackMachine.collections.arraylist.ArrayListImpl;
-import io.github.therealmone.spoStackMachine.collections.hashset.HashSetImpl;
+import io.github.therealmone.spoStackMachine.collections.hashset.HashSet;
 import io.github.therealmone.spoStackMachine.exceptions.NoVariableException;
 import io.github.therealmone.spoStackMachine.exceptions.UnknownCommandException;
 import io.github.therealmone.spoStackMachine.exceptions.WrongTypeException;
 import io.github.therealmone.translatorAPI.ResourceLoader;
-import io.github.therealmone.translatorAPI.Exceptions.StackMachineException;
 import io.github.therealmone.translatorAPI.SavePrinter;
 import io.github.therealmone.translatorAPI.Interfaces.Visitor;
 
@@ -357,13 +354,13 @@ public class StackMachine implements Visitor {
                             case "hashset": {
                                 variables.replace(
                                         stack.pop(),
-                                        new HashSetImpl());
+                                        HashSet.getInstance());
                                 break;
                             }
                             case "arraylist": {
                                 variables.replace(
                                         stack.pop(),
-                                        new ArrayListImpl());
+                                        ArrayList.getInstance());
                                 break;
                             }
                             default: {

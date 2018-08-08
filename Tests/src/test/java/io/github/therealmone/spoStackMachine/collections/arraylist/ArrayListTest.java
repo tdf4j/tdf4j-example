@@ -1,10 +1,8 @@
-package io.github.therealmone.spoStackMachine;
+package io.github.therealmone.spoStackMachine.collections.arraylist;
 
-import io.github.therealmone.spoStackMachine.collections.arraylist.ArrayListImpl;
 import io.github.therealmone.spoStackMachine.collections.arraylist.exceptions.IndexOutOfBoundsException;
 import org.junit.Assert;
 import org.junit.Test;
-import io.github.therealmone.spoStackMachine.collections.ArrayList;
 
 import java.lang.reflect.Field;
 
@@ -15,7 +13,7 @@ public class ArrayListTest {
 
     @Test
     public void testAddAndGetMethod() {
-        arrayList = new ArrayListImpl();
+        arrayList = ArrayList.getInstance();
 
         arrayList.add(1);
         arrayList.add(2);
@@ -40,7 +38,7 @@ public class ArrayListTest {
 
     @Test
     public void testRemoveMethod() {
-        arrayList = new ArrayListImpl();
+        arrayList = ArrayList.getInstance();
 
         //Beginning
         arrayList.add(1);
@@ -53,7 +51,7 @@ public class ArrayListTest {
         assertEquals(2, arrayList.size());
 
         //Middle
-        arrayList = new ArrayListImpl();
+        arrayList = ArrayList.getInstance();
 
         arrayList.add(1);
         arrayList.add(2);
@@ -65,7 +63,7 @@ public class ArrayListTest {
         assertEquals(2, arrayList.size());
 
         //End
-        arrayList = new ArrayListImpl();
+        arrayList = ArrayList.getInstance();
 
         arrayList.add(1);
         arrayList.add(2);
@@ -79,7 +77,7 @@ public class ArrayListTest {
 
     @Test
     public void testRewriteMethod() {
-        arrayList = new ArrayListImpl();
+        arrayList = ArrayList.getInstance();
 
         arrayList.add(1);
         arrayList.add(2);
@@ -96,7 +94,7 @@ public class ArrayListTest {
 
     @Test
     public void testResizeMethod() throws Throwable {
-        arrayList = new ArrayListImpl();
+        arrayList = ArrayList.getInstance();
 
         Field dataField = arrayList.getClass().getDeclaredField("data");
         dataField.setAccessible(true);

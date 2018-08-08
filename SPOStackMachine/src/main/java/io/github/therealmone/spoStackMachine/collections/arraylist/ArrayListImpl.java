@@ -1,16 +1,15 @@
 package io.github.therealmone.spoStackMachine.collections.arraylist;
 
-import io.github.therealmone.spoStackMachine.collections.ArrayList;
 import io.github.therealmone.spoStackMachine.collections.arraylist.exceptions.IndexOutOfBoundsException;
 
-public class ArrayListImpl implements ArrayList {
+class ArrayListImpl implements ArrayList {
     private int size;
     private double[] data;
     private int pointer;
 
     private static final int DATA_INIT_SIZE = 10;
 
-    public ArrayListImpl() {
+    ArrayListImpl() {
         size = 0;
         data = new double[DATA_INIT_SIZE];
         pointer = 0;
