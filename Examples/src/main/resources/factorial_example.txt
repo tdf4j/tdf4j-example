@@ -1,0 +1,10 @@
+new factorial = 7;
+new i = 0;
+new temp = 1;
+
+for(i = 1; i <= factorial; i = i + 1) {
+    temp = temp * i;
+}
+
+print("Factorial is: ");
+print(temp);
