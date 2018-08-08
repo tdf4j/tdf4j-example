@@ -6,21 +6,22 @@ import io.github.therealmone.translatorAPI.SavePrinter;
 import io.github.therealmone.translatorAPI.Token;
 
 public class UnexpectedTokenException extends ParserException implements ExceptionInterface {
-    private String expected;
-    private Token token;
-    private String history;
+    private final String expected;
+    private final Token token;
+    private final String history;
 
-    public UnexpectedTokenException(Token token, String expected, String history) {
+    public UnexpectedTokenException(final Token token, final String expected, final String history) {
         super("Got unexpected token " + token.getValue());
         this.expected = expected;
         this.token = token;
         this.history = history;
     }
 
-    public UnexpectedTokenException(Token token, String history) {
+    public UnexpectedTokenException(final Token token, final String history) {
         super("Got unexpected token " + token.getValue());
         this.token = token;
         this.history = history;
+        this.expected = null;
     }
 
     @Override

@@ -17,8 +17,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class StackMachineImpl implements StackMachine {
-    private Map<String, Pattern> commands;
-    private Map<String, Command> executions;
+    private final Map<String, Pattern> commands;
+    private final Map<String, Command> executions;
     private Map<String, Object> variables;
     private Stack<String> stack;
     private int cursor;
@@ -34,24 +34,22 @@ class StackMachineImpl implements StackMachine {
     }
 
     StackMachineImpl() {
-        commands = new HashMap<>();
+        commands = ResourceLoader.getCommands();
         executions = new HashMap<>();
         variables = new HashMap<>();
         stack = new Stack<>();
         cursor = 0;
 
-        commands = ResourceLoader.getCommands();
-
         initExecutions();
     }
 
-    private void calculate(List<String> rpn) {
+    private void calculate(final List<String> rpn) {
         while (!rpn.get(cursor).equals("$")) {
             executions.get(match(rpn.get(cursor))).execute(rpn.get(cursor));
         }
     }
 
-    private String match(String com) {
+    private String match(final String com) {
         for (Map.Entry<String, Pattern> entry : commands.entrySet()) {
             Matcher m = entry.getValue().matcher(com);
             if (m.matches()) {
@@ -472,7 +470,7 @@ class StackMachineImpl implements StackMachine {
         variables.forEach((name, obj) -> SavePrinter.savePrintln(name + ": " + obj));
     }
 
-    private void print(String parameter) {
+    private void print(final String parameter) {
         if(variables.containsKey(parameter)) {
             SavePrinter.savePrintln(variables.get(parameter).toString());
         } else if (parameter.matches("^\"(.*?)\"$")) {
@@ -483,7 +481,7 @@ class StackMachineImpl implements StackMachine {
         }
     }
 
-    private void put(Collection collection, String parameter) {
+    private void put(final Collection collection, final String parameter) {
         if (collection instanceof HashSet) {
             if (!variables.containsKey(parameter)) {
                 throw new NoVariableException("Can't find variable: " + parameter);
@@ -497,7 +495,7 @@ class StackMachineImpl implements StackMachine {
         }
     }
 
-    private void get(Collection collection, String parameter) {
+    private void get(final Collection collection, final String parameter) {
         if (collection instanceof HashSet) {
             double value = ((HashSet) collection).get(parameter);
             stack.push("" + value);
@@ -509,11 +507,11 @@ class StackMachineImpl implements StackMachine {
         }
     }
 
-    private void size(Collection collection) {
+    private void size(final Collection collection) {
         stack.push("" + collection.size());
     }
 
-    private void remove(Collection collection, String parameter) {
+    private void remove(final Collection collection, final String parameter) {
         if (collection instanceof HashSet) {
             ((HashSet) collection).remove(parameter);
         } else if (collection instanceof ArrayList) {
@@ -522,7 +520,7 @@ class StackMachineImpl implements StackMachine {
         }
     }
 
-    private void rewrite(Collection collection, String... parameters) {
+    private void rewrite(final Collection collection, final String... parameters) {
         if (collection instanceof HashSet) {
             String varName = parameters[0];
             double value = getValueFromParameter(parameters[1]);
@@ -536,7 +534,7 @@ class StackMachineImpl implements StackMachine {
         }
     }
 
-    private int getIndexFromParameter(String parameter) {
+    private int getIndexFromParameter(final String parameter) {
         int index;
 
         try {
@@ -552,7 +550,7 @@ class StackMachineImpl implements StackMachine {
         return index;
     }
 
-    private double getValueFromParameter(String parameter) {
+    private double getValueFromParameter(final String parameter) {
         double value;
 
         try {
@@ -568,7 +566,7 @@ class StackMachineImpl implements StackMachine {
         return value;
     }
 
-    private Collection getCollectionByName(String collectionName) {
+    private Collection getCollectionByName(final String collectionName) {
         Collection collection;
         try {
             collection = (Collection) variables.get(collectionName);
@@ -578,7 +576,7 @@ class StackMachineImpl implements StackMachine {
         return collection;
     }
 
-    private int castStringToInt(String parameter) {
+    private int castStringToInt(final String parameter) {
         Double value = Double.parseDouble(parameter);
 
         if (value % 1 == 0) {

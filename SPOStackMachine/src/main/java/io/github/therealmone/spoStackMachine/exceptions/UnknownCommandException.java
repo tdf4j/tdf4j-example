@@ -5,9 +5,9 @@ import io.github.therealmone.translatorAPI.Interfaces.ExceptionInterface;
 import io.github.therealmone.translatorAPI.SavePrinter;
 
 public class UnknownCommandException extends StackMachineException implements ExceptionInterface {
-    private String command;
+    private final String command;
 
-    public UnknownCommandException(String command) {
+    public UnknownCommandException(final String command) {
         super("Unknown command " + command);
         this.command = command;
     }

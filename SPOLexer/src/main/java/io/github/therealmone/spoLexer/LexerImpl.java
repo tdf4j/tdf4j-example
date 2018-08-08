@@ -55,8 +55,8 @@ class LexerImpl implements Lexer {
         tokens.add(new Token("$", "$"));
     }
 
-    private boolean checkLexemes(String str) {
-        for (Map.Entry<String, Pattern> entry : lexemes.entrySet()) {
+    private boolean checkLexemes(final String str) {
+        for (final Map.Entry<String, Pattern> entry : lexemes.entrySet()) {
             if (match(entry.getKey(), str)) {
                 return true;
             }
@@ -65,11 +65,11 @@ class LexerImpl implements Lexer {
         return false;
     }
 
-    private String chooseLexeme(String str) {
+    private String chooseLexeme(final String str) {
         int tmpPriority = 0;
         String lexType = "";
 
-        for (Map.Entry<String, Pattern> entry : lexemes.entrySet()) {
+        for (final Map.Entry<String, Pattern> entry : lexemes.entrySet()) {
             if (match(entry.getKey(), str)) {
                 if (priority.get(entry.getKey()) > tmpPriority) {
                     lexType = entry.getKey();
@@ -87,7 +87,7 @@ class LexerImpl implements Lexer {
         tokens.forEach(token -> SavePrinter.savePrintf("%-20s%-10s%-40s%n", token.getType(), "-->", token.getValue()));
     }
 
-    boolean match(String lexeme, String string) {
+    boolean match(final String lexeme, final String string) {
         Pattern p = lexemes.get(lexeme);
         Matcher m = p.matcher(string);
         return m.matches();

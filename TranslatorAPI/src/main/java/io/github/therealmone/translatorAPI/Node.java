@@ -1,18 +1,19 @@
 package io.github.therealmone.translatorAPI;
 
 public class Node {
-    private String name;
+    private final String name;
     private Node next;
     private Node parent;
 
     public Node() {
+        this.name = null;
     }
 
-    public Node(String name) {
+    public Node(final String name) {
         this.name = name;
     }
 
-    public Node(String name, Node parent) {
+    public Node(final String name, final Node parent) {
         this.name = name;
         this.parent = parent;
     }
@@ -21,7 +22,7 @@ public class Node {
         return this.parent;
     }
 
-    public void setParent(Node parent) {
+    public void setParent(final Node parent) {
         this.parent = parent;
     }
 
@@ -29,7 +30,7 @@ public class Node {
         return this.name;
     }
 
-    public void setNext(Node next) {
+    public void setNext(final Node next) {
         this.next = next;
     }
 

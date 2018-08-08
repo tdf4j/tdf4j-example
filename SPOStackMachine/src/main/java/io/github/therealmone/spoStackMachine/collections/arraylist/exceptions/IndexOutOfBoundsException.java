@@ -5,10 +5,10 @@ import io.github.therealmone.translatorAPI.Interfaces.ExceptionInterface;
 import io.github.therealmone.translatorAPI.SavePrinter;
 
 public class IndexOutOfBoundsException extends ArrayListException implements ExceptionInterface {
-    private int index;
-    private int length;
+    private final int index;
+    private final int length;
 
-    public IndexOutOfBoundsException(int index, int length) {
+    public IndexOutOfBoundsException(final int index, final int length) {
         super("Index out of bound: " + index + ". Length = " + length);
         this.index = index;
         this.length = length;

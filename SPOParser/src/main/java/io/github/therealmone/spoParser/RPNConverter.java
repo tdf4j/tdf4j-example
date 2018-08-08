@@ -56,7 +56,7 @@ final class RPNConverter {
         }};
     }
 
-    static List<String> convertToRPN(TreeNode root) {
+    static List<String> convertToRPN(final TreeNode root) {
         stack = new Stack<>();
         out = new ArrayList<>();
 
@@ -64,7 +64,7 @@ final class RPNConverter {
         return out;
     }
 
-    private static void lang(TreeNode root) {
+    private static void lang(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "expr": {
@@ -83,7 +83,7 @@ final class RPNConverter {
         }
     }
 
-    private static void expr(TreeNode root) {
+    private static void expr(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "while_loop": {
@@ -135,7 +135,7 @@ final class RPNConverter {
         }
     }
 
-    private static void expr_continue(TreeNode root) {
+    private static void expr_continue(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "expr": {
@@ -150,7 +150,7 @@ final class RPNConverter {
         }
     }
 
-    private static void while_loop(TreeNode root) {
+    private static void while_loop(final TreeNode root) {
         //while(a < b) {a + b} -> (index1)ab<!F@pab+!@p(index2) ; !@Fp - to index2 , !@p - to index1
         int index1 = 0; //at a
         int index2 = 0; //after !@p
@@ -197,7 +197,7 @@ final class RPNConverter {
 
     }
 
-    private static void if_statement(TreeNode root) {
+    private static void if_statement(final TreeNode root) {
         //if (a < b) {a + b} -> ab<!F@pab+!@p (index1) ' else ' (index2) ; !F@p - to index1 , !@p - to index2 // if no else, then index2 = index1
         int index1 = 0;
         int index2 = 0;
@@ -243,7 +243,7 @@ final class RPNConverter {
         out.set(out.indexOf("!@p" + iteration), "!@" + index2);
     }
 
-    private static void else_(TreeNode root) {
+    private static void else_(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "ELSE":
@@ -260,7 +260,7 @@ final class RPNConverter {
         }
     }
 
-    private static void assign_expr(TreeNode root) {
+    private static void assign_expr(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "VAR": {
@@ -279,7 +279,7 @@ final class RPNConverter {
         }
     }
 
-    private static void do_while_loop(TreeNode root) {
+    private static void do_while_loop(final TreeNode root) {
         //do {a + b} while (a < b) -> (index1)ab+ab<!@T ; !@T - to index1
         int iteration = Thread.getAllStackTraces().hashCode();
         int index1 = 0;
@@ -317,7 +317,7 @@ final class RPNConverter {
         out.set(out.indexOf("!T@p" + iteration), "!T@" + index1);
     }
 
-    private static void for_loop(TreeNode root) {
+    private static void for_loop(final TreeNode root) {
         //for(i = 1; i < 1; i = i + 1) {a = 0;} -> i1= (index1) i1<!F@pa0=ii1+=!@p (index2) ; !@Fp - to index2, !@p - to index1
         int iteration = Thread.getAllStackTraces().hashCode();
         int index1; //at i
@@ -386,7 +386,7 @@ final class RPNConverter {
         out.set(out.indexOf("!@p" + iteration), "!@" + index1);
     }
 
-    private static void init_expr(TreeNode root) {
+    private static void init_expr(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "NEW": {
@@ -405,7 +405,7 @@ final class RPNConverter {
         }
     }
 
-    private static void init_expr_continue(TreeNode root) {
+    private static void init_expr_continue(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "TYPEOF": {
@@ -428,7 +428,7 @@ final class RPNConverter {
         }
     }
 
-    private static void print_expr(TreeNode root) {
+    private static void print_expr(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "PRINT": {
@@ -447,7 +447,7 @@ final class RPNConverter {
         }
     }
 
-    private static void type(TreeNode root) {
+    private static void type(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "HASHSET": {
@@ -462,7 +462,7 @@ final class RPNConverter {
         }
     }
 
-    private static void put_expr(TreeNode root) {
+    private static void put_expr(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "PUT": {
@@ -487,7 +487,7 @@ final class RPNConverter {
         }
     }
 
-    private static void remove_expr(TreeNode root) {
+    private static void remove_expr(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "REMOVE": {
@@ -512,7 +512,7 @@ final class RPNConverter {
         }
     }
 
-    private static void rewrite_expr(TreeNode root) {
+    private static void rewrite_expr(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "REWRITE": {
@@ -542,7 +542,7 @@ final class RPNConverter {
     }
 
 
-    private static void condition(TreeNode root) {
+    private static void condition(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "condition_with_br": {
@@ -561,7 +561,7 @@ final class RPNConverter {
         }
     }
 
-    private static void condition_with_br(TreeNode root) {
+    private static void condition_with_br(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "LB": {
@@ -580,7 +580,7 @@ final class RPNConverter {
         }
     }
 
-    private static void condition_without_br(TreeNode root) {
+    private static void condition_without_br(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "compare_expr": {
@@ -591,7 +591,7 @@ final class RPNConverter {
         }
     }
 
-    private static void condition_continue(TreeNode root) {
+    private static void condition_continue(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "LOP": {
@@ -606,7 +606,7 @@ final class RPNConverter {
         }
     }
 
-    private static void compare_expr(TreeNode root) {
+    private static void compare_expr(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "value_expr": {
@@ -621,7 +621,7 @@ final class RPNConverter {
         }
     }
 
-    private static void value_expr(TreeNode root) {
+    private static void value_expr(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "value_expr_with_br": {
@@ -640,7 +640,7 @@ final class RPNConverter {
         }
     }
 
-    private static void value_expr_with_br(TreeNode root) {
+    private static void value_expr_with_br(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "LB": {
@@ -659,7 +659,7 @@ final class RPNConverter {
         }
     }
 
-    private static void value_without_br(TreeNode root) {
+    private static void value_without_br(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "value": {
@@ -682,7 +682,7 @@ final class RPNConverter {
         }
     }
 
-    private static void value(TreeNode root) {
+    private static void value(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "VAR": {
@@ -712,7 +712,7 @@ final class RPNConverter {
                 : "%";
     }
 
-    private static void value_expr_continue(TreeNode root) {
+    private static void value_expr_continue(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "OP": {
@@ -727,7 +727,7 @@ final class RPNConverter {
         }
     }
 
-    private static void get_expr(TreeNode root) {
+    private static void get_expr(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "GET": {
@@ -753,7 +753,7 @@ final class RPNConverter {
     }
 
 
-    private static void size_expr(TreeNode root) {
+    private static void size_expr(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "SIZE": {
@@ -772,7 +772,7 @@ final class RPNConverter {
         }
     }
 
-    private static void print_parameters(TreeNode root) {
+    private static void print_parameters(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "STRING": {
@@ -792,7 +792,7 @@ final class RPNConverter {
         }
     }
 
-    private static void print_parameters_continue(TreeNode root) {
+    private static void print_parameters_continue(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "CONCAT": {
@@ -807,7 +807,7 @@ final class RPNConverter {
         }
     }
 
-    private static void pushOP(Token op) {
+    private static void pushOP(final Token op) {
         switch (op.getValue()) {
             case "(": {
                 stack.push(op.getValue());
@@ -821,13 +821,8 @@ final class RPNConverter {
                 break;
             }
             default: {
-                if (stack.size() != 0 && priority.get(op.getValue()) <= priority.get(stack.peek())) {
-                    try {
-                        while (priority.get(op.getValue()) <= priority.get(stack.peek())) {
-                            out.add(stack.pop());
-                        }
-                    } catch (EmptyStackException e) {
-                    }
+                while (!stack.isEmpty() && priority.get(op.getValue()) <= priority.get(stack.peek())) {
+                    out.add(stack.pop());
                 }
                 stack.push(op.getValue());
                 break;

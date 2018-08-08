@@ -4,9 +4,9 @@ import io.github.therealmone.translatorAPI.Node;
 
 class Element extends Node {
     private double value;
-    private int hashCode;
+    private final int hashCode;
 
-    Element(String name, double value) {
+    Element(final String name, final double value) {
         super(name);
         this.value = value;
         this.hashCode = name.hashCode();

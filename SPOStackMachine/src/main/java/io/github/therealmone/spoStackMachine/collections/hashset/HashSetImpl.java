@@ -18,7 +18,7 @@ class HashSetImpl implements HashSet {
     @Override
     public int size() {
         int size = 0;
-        for (Bucket bucket : buckets) {
+        for (final Bucket bucket : buckets) {
             size += bucket.getEleCount();
         }
 
@@ -50,7 +50,7 @@ class HashSetImpl implements HashSet {
     }
 
     @Override
-    public void add(String key, double value) {
+    public void add(final String key, final double value) {
         if (!contains(key)) {
             int index = getIndex(key);
 
@@ -66,7 +66,7 @@ class HashSetImpl implements HashSet {
     }
 
     @Override
-    public double get(String key) {
+    public double get(final String key) {
         int index = getIndex(key);
 
         if (buckets[index].getEleCount() == 0) {
@@ -86,7 +86,7 @@ class HashSetImpl implements HashSet {
     }
 
     @Override
-    public boolean contains(String key) {
+    public boolean contains(final String key) {
         int index = getIndex(key);
 
         if (buckets[index].getEleCount() == 0) {
@@ -106,7 +106,7 @@ class HashSetImpl implements HashSet {
     }
 
     @Override
-    public void remove(String key) {
+    public void remove(final String key) {
         if (contains(key)) {
             int index = getIndex(key);
             Element current = (Element) buckets[index].getNext();
@@ -127,7 +127,7 @@ class HashSetImpl implements HashSet {
     }
 
     @Override
-    public void rewrite(String key, double value) {
+    public void rewrite(final String key, final double value) {
         if (contains(key)) {
             int index = getIndex(key);
             Element current = (Element) buckets[index].getNext();
@@ -168,7 +168,7 @@ class HashSetImpl implements HashSet {
         }
     }
 
-    private void putToBucket(int index, Element element) {
+    private void putToBucket(final int index, final Element element) {
         if (buckets[index].getNext() != null) {
             Element current = (Element) buckets[index].getNext();
 
@@ -186,11 +186,11 @@ class HashSetImpl implements HashSet {
         buckets[index].incCount();
     }
 
-    private int getIndex(String key) {
+    private int getIndex(final String key) {
         return Math.abs(key.hashCode() % BUCKET_COUNT);
     }
 
-    public int getBucketCount() {
+    int getBucketCount() {
         return this.BUCKET_COUNT;
     }
 }

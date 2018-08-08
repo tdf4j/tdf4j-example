@@ -1,15 +1,15 @@
 package io.github.therealmone.translatorAPI.Exceptions;
 
 public class ParserException extends TranslatorException {
-    public ParserException(String message, Throwable cause) {
+    public ParserException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public ParserException(Throwable cause) {
+    public ParserException(final Throwable cause) {
         super(cause);
     }
 
-    public ParserException(String message) {
+    public ParserException(final String message) {
         super(message);
     }
 }

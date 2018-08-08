@@ -20,10 +20,10 @@ final class RPNOptimizer {
         }};
     }
 
-    static List<String> optimize(List<String> rpn) {
+    static List<String> optimize(final List<String> rpn) {
         stack = new Stack<>();
 
-        for (String command : rpn) {
+        for (final String command : rpn) {
             if (operatorsToOptimize.contains(command)) {
                 optimizeOperand(command);
             } else {
@@ -34,7 +34,7 @@ final class RPNOptimizer {
         return new ArrayList<>(stack);
     }
 
-    private static void optimizeOperand(String command) {
+    private static void optimizeOperand(final String command) {
         switch (command) {
 
             case "*": {

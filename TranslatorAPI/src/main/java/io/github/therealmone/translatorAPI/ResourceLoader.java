@@ -29,7 +29,7 @@ public final class ResourceLoader {
         loadCommands(current.getContextClassLoader().getResourceAsStream("commands.xml"));
     }
 
-    private static void loadLexemes(InputStream is) {
+    private static void loadLexemes(final InputStream is) {
         lexemes = new HashMap<>();
         lexemePriority = new HashMap<>();
 
@@ -59,7 +59,7 @@ public final class ResourceLoader {
         }
     }
 
-    private static void loadLangRules(InputStream is) {
+    private static void loadLangRules(final InputStream is) {
         langRules = new HashMap<>();
 
         try {
@@ -82,7 +82,7 @@ public final class ResourceLoader {
         }
     }
 
-    private static void loadAnalyzeTable(InputStream is) {
+    private static void loadAnalyzeTable(final InputStream is) {
         analyzeTable = new HashMap<>();
 
         try {
@@ -104,7 +104,7 @@ public final class ResourceLoader {
         }
     }
 
-    private static void loadCommands(InputStream is) {
+    private static void loadCommands(final InputStream is) {
         commands = new HashMap<>();
 
         try {
@@ -131,7 +131,7 @@ public final class ResourceLoader {
         }
     }
 
-    private static void addLexeme(String type, String pattern, Integer priority) {
+    private static void addLexeme(final String type, final String pattern, final Integer priority) {
         if (!lexemes.containsKey(type)) {
             lexemes.put(type, Pattern.compile(pattern));
             lexemePriority.put(type, priority);

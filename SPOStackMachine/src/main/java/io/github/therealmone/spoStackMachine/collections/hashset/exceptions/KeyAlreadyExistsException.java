@@ -5,9 +5,9 @@ import io.github.therealmone.translatorAPI.Interfaces.ExceptionInterface;
 import io.github.therealmone.translatorAPI.SavePrinter;
 
 public class KeyAlreadyExistsException extends HashMapException implements ExceptionInterface {
-    private String key;
+    private final String key;
 
-    public KeyAlreadyExistsException(String key) {
+    public KeyAlreadyExistsException(final String key) {
         super("Key " + key + " already exists.");
         this.key = key;
     }

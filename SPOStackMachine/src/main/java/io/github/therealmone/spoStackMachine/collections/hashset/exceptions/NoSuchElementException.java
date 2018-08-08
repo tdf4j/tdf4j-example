@@ -5,9 +5,9 @@ import io.github.therealmone.translatorAPI.Interfaces.ExceptionInterface;
 import io.github.therealmone.translatorAPI.SavePrinter;
 
 public class NoSuchElementException extends HashMapException implements ExceptionInterface {
-    private String key;
+    private final String key;
 
-    public NoSuchElementException(String key) {
+    public NoSuchElementException(final String key) {
         super("Can't find key " + key);
         this.key = key;
     }

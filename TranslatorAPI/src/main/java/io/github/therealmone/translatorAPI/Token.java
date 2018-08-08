@@ -4,10 +4,10 @@ import io.github.therealmone.translatorAPI.Interfaces.Visitable;
 import io.github.therealmone.translatorAPI.Interfaces.Visitor;
 
 public class Token implements Visitable {
-    private String type;
-    private String value;
+    private final String type;
+    private final String value;
 
-    public Token(String type, String value) {
+    public Token(final String type, final String value) {
         this.type = type;
         this.value = value;
     }

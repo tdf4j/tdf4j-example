@@ -55,10 +55,10 @@ class ParserImpl implements Parser {
         langRules.forEach((num, rules) -> SavePrinter.savePrintf("%-20d%-10s%-40s%n", num, "-->", Arrays.toString(rules)));
     }
 
-    private void parse(Token token) {
+    private void parse(final Token token) {
         while (!terminals.contains(stack.peek())) {
             if (!stack.peek().equals("lang")) {
-                for (TreeNode child : currentTreeNode.getChildes()) {
+                for (final TreeNode child : currentTreeNode.getChildes()) {
                     if (child.getName().equals(stack.peek()) && child.getChildes().size() == 0) {
                         currentTreeNode = child;
                         break;
@@ -70,7 +70,7 @@ class ParserImpl implements Parser {
         }
 
         if (stack.peek().equals(token.getType())) {
-            for (TreeNode child : currentTreeNode.getChildes()) {
+            for (final TreeNode child : currentTreeNode.getChildes()) {
                 if (child.getName().equals(token.getType()) && child.getToken() == null) {
                     moveCN();
                     child.setToken(token);
@@ -94,7 +94,7 @@ class ParserImpl implements Parser {
         }
     }
 
-    private void openNonTerminal(Token token) {
+    private void openNonTerminal(final Token token) {
         String peek = stack.peek();
 
         try {
