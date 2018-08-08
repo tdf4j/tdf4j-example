@@ -33,7 +33,7 @@
         </li>
         <li>
             <strong>Now you can create Translator object and invoke translate() method</strong>
-            <pre><code>Translator translator = Translator.create();
+            <pre><code>Translator translator = Translator.getInstance();
 translator.translate("new a = 100; print(a);");</code></pre>
         </li>
         <li>

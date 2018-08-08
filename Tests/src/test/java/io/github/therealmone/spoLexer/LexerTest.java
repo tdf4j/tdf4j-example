@@ -15,7 +15,7 @@ public class LexerTest {
 
     @Test
     public void testGenerate() {
-        Lexer lexer = new Lexer();
+        Lexer lexer = Lexer.getInstance();
 
         //Success tests
         lexer.generateTokens("value");
@@ -210,7 +210,7 @@ public class LexerTest {
 
     @Test
     public void testCompile() {
-        Lexer lexer = new Lexer();
+        LexerImpl lexer = new LexerImpl();
 
         //Success tests
         assertTrue(lexer.match("VAR", "value"));

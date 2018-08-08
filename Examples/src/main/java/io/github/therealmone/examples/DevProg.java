@@ -4,7 +4,7 @@ import io.github.therealmone.jtrAPI.Translator;
 
 public class DevProg {
     public static void main(String[] args) {
-        Translator translator = Translator.create();
+        Translator translator = Translator.getInstance();
         translator.setDevMode(false);
 
         translator.translate(

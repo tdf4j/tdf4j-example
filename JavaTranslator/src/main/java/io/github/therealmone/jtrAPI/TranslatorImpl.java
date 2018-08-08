@@ -32,15 +32,15 @@ class TranslatorImpl implements Translator {
 
     private void defaultTranslate(String program) {
         try {
-            lexer = new Lexer();
+            lexer = Lexer.getInstance();
             lexer.generateTokens(program);
 
-            parser = new Parser(lexer.getTerminals());
+            parser = Parser.getInstance(lexer.getTerminals());
             for (Token token : lexer.getTokens()) {
                 token.accept(parser);
             }
 
-            stackMachine = new StackMachine();
+            stackMachine = StackMachine.getInstance();
             parser.accept(stackMachine);
         } catch (TranslatorException e) {
             printError(e);
@@ -52,13 +52,13 @@ class TranslatorImpl implements Translator {
             SavePrinter.savePrintln("\u001B[31mMAIN PROGRAM\u001B[0m");
             SavePrinter.savePrintln("-----------------------------------------------------------------------------------------");
 
-            lexer = new Lexer();
+            lexer = Lexer.getInstance();
             lexer.showLexemes();
 
             lexer.generateTokens(program);
             lexer.showTokens();
 
-            parser = new Parser(lexer.getTerminals());
+            parser = Parser.getInstance(lexer.getTerminals());
             parser.showLangRules();
 
             for (Token token : lexer.getTokens()) {
@@ -68,7 +68,7 @@ class TranslatorImpl implements Translator {
             SavePrinter.savePrintln("\u001B[32mPARSE SUCCESS\u001B[0m");
             SavePrinter.savePrintln("RPN: " + listToString(parser.getRPN()));
 
-            stackMachine = new StackMachine();
+            stackMachine = StackMachine.getInstance();
             parser.accept(stackMachine);
 
             SavePrinter.savePrintln("-----------------------------------------------------------------------------------------");

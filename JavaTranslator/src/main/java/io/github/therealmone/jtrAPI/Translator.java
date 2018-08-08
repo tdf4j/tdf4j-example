@@ -23,7 +23,7 @@ public interface Translator {
         }
     }
 
-    static Translator create() {
+    static Translator getInstance() {
         return new TranslatorImpl();
     }
 
