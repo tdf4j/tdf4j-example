@@ -3,7 +3,7 @@ package io.github.therealmone.spoLexer.exceptions;
 import io.github.therealmone.translatorAPI.Exceptions.LexerException;
 import io.github.therealmone.translatorAPI.Interfaces.ExceptionInterface;
 import io.github.therealmone.translatorAPI.SavePrinter;
-import io.github.therealmone.translatorAPI.Token;
+import io.github.therealmone.translatorAPI.Beans.Token;
 
 import java.util.List;
 

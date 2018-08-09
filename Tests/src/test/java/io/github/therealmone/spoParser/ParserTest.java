@@ -1,13 +1,14 @@
 package io.github.therealmone.spoParser;
 
 import io.github.therealmone.spoLexer.Lexer;
+import io.github.therealmone.translatorAPI.Beans.Lexeme;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 import io.github.therealmone.translatorAPI.ResourceLoader;
-import io.github.therealmone.translatorAPI.Token;
+import io.github.therealmone.translatorAPI.Beans.Token;
 
 import java.util.List;
 import java.util.Set;
@@ -22,7 +23,7 @@ public class ParserTest {
     @Test
     public void parserTests() {
         Lexer lexer = Lexer.getInstance();
-        Set<String> terminals = lexer.getTerminals();
+        Set<Lexeme> terminals = lexer.getTerminals();
 
         //while tests
         lexer.generateTokens("while(a > b) {}");
@@ -139,7 +140,7 @@ public class ParserTest {
     @Test
     public void converterTests() {
         Lexer lexer = Lexer.getInstance();
-        Set<String> terminals = lexer.getTerminals();
+        Set<Lexeme> terminals = lexer.getTerminals();
 
         lexer.generateTokens(""); //main program
         assertEquals("$", //rpn
@@ -191,7 +192,7 @@ public class ParserTest {
     @Test
     public void testOptimizer() {
         Lexer lexer = Lexer.getInstance();
-        Set<String> terminals = lexer.getTerminals();
+        Set<Lexeme> terminals = lexer.getTerminals();
 
         lexer.generateTokens("print(100 / (25 + 25));");
         assertEquals("2.0,print,$",

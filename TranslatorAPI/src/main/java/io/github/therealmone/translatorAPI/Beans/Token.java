@@ -1,4 +1,4 @@
-package io.github.therealmone.translatorAPI;
+package io.github.therealmone.translatorAPI.Beans;
 
 import io.github.therealmone.translatorAPI.Interfaces.Visitable;
 import io.github.therealmone.translatorAPI.Interfaces.Visitor;

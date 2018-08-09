@@ -1,8 +1,9 @@
 package io.github.therealmone.spoLexer;
 
+import io.github.therealmone.translatorAPI.Beans.Lexeme;
 import io.github.therealmone.translatorAPI.ResourceLoader;
 import io.github.therealmone.translatorAPI.SavePrinter;
-import io.github.therealmone.translatorAPI.Token;
+import io.github.therealmone.translatorAPI.Beans.Token;
 import io.github.therealmone.spoLexer.exceptions.UnexpectedSymbolException;
 
 import java.util.*;
@@ -10,22 +11,26 @@ import java.util.regex.*;
 
 class LexerImpl implements Lexer {
     private List<Token> tokens;
-    private final Map<String, Pattern> lexemes;
-    private final Map<String, Integer> priority;
+    private final Set<Lexeme> lexemes;
 
     private static final char END_SYMBOL = '$';
 
     LexerImpl() {
         tokens = new ArrayList<>();
         lexemes = ResourceLoader.getLexemes();
-        lexemes.put(String.valueOf(END_SYMBOL), Pattern.compile("^\\" + END_SYMBOL + "$"));
-        priority = ResourceLoader.getLexemePriority();
+
+        Lexeme endLexeme = new Lexeme();
+        endLexeme.setType(String.valueOf(END_SYMBOL));
+        endLexeme.setPattern(Pattern.compile("^\\" + END_SYMBOL + "$"));
+        endLexeme.setPriority(0);
+
+        lexemes.add(endLexeme);
     }
 
     @Override
     public void showLexemes() {
         SavePrinter.savePrintln("\u001B[33mLEXEMES:\u001B[0m");
-        lexemes.forEach((lexeme, pattern) -> SavePrinter.savePrintf("%-20s%-10s%-40s%n", lexeme, "-->", pattern));
+        lexemes.forEach(lexeme -> SavePrinter.savePrintf("%-20s%-10s%-40s%n", lexeme.getType(), "-->", lexeme.getPattern().pattern()));
     }
 
     @Override
@@ -56,8 +61,8 @@ class LexerImpl implements Lexer {
     }
 
     private boolean checkLexemes(final String str) {
-        for (final Map.Entry<String, Pattern> entry : lexemes.entrySet()) {
-            if (match(entry.getKey(), str)) {
+        for(Lexeme lexeme : lexemes) {
+            if(lexeme.getPattern().matcher(str).matches()) {
                 return true;
             }
         }
@@ -69,11 +74,11 @@ class LexerImpl implements Lexer {
         int tmpPriority = 0;
         String lexType = "";
 
-        for (final Map.Entry<String, Pattern> entry : lexemes.entrySet()) {
-            if (match(entry.getKey(), str)) {
-                if (priority.get(entry.getKey()) > tmpPriority) {
-                    lexType = entry.getKey();
-                    tmpPriority = priority.get(entry.getKey());
+        for(Lexeme lexeme : lexemes) {
+            if(lexeme.getPattern().matcher(str).matches()) {
+                if(lexeme.getPriority() > tmpPriority) {
+                    lexType = lexeme.getType();
+                    tmpPriority = lexeme.getPriority();
                 }
             }
         }
@@ -87,15 +92,9 @@ class LexerImpl implements Lexer {
         tokens.forEach(token -> SavePrinter.savePrintf("%-20s%-10s%-40s%n", token.getType(), "-->", token.getValue()));
     }
 
-    boolean match(final String lexeme, final String string) {
-        Pattern p = lexemes.get(lexeme);
-        Matcher m = p.matcher(string);
-        return m.matches();
-    }
-
     @Override
-    public Set<String> getTerminals() {
-        return Collections.unmodifiableSet(this.lexemes.keySet());
+    public Set<Lexeme> getTerminals() {
+        return Collections.unmodifiableSet(lexemes);
     }
 
     @Override

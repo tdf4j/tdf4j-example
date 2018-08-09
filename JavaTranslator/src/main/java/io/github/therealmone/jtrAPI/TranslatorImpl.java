@@ -7,7 +7,7 @@ import io.github.therealmone.translatorAPI.Exceptions.TranslatorException;
 import io.github.therealmone.translatorAPI.Interfaces.ExceptionInterface;
 import io.github.therealmone.translatorAPI.ResourceLoader;
 import io.github.therealmone.translatorAPI.SavePrinter;
-import io.github.therealmone.translatorAPI.Token;
+import io.github.therealmone.translatorAPI.Beans.Token;
 
 import java.util.List;
 

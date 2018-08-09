@@ -1,6 +1,7 @@
 package io.github.therealmone.spoLexer;
 
-import io.github.therealmone.translatorAPI.Token;
+import io.github.therealmone.translatorAPI.Beans.Lexeme;
+import io.github.therealmone.translatorAPI.Beans.Token;
 
 import java.util.List;
 import java.util.Set;
@@ -12,7 +13,7 @@ public interface Lexer {
 
     void showTokens();
 
-    Set<String> getTerminals();
+    Set<Lexeme> getTerminals();
 
     void showLexemes();
 

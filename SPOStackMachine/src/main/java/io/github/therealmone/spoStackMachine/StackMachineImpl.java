@@ -6,18 +6,17 @@ import io.github.therealmone.spoStackMachine.collections.hashset.HashSet;
 import io.github.therealmone.spoStackMachine.exceptions.NoVariableException;
 import io.github.therealmone.spoStackMachine.exceptions.UnknownCommandException;
 import io.github.therealmone.spoStackMachine.exceptions.WrongTypeException;
+import io.github.therealmone.translatorAPI.Beans.CommandBean;
+import io.github.therealmone.translatorAPI.Beans.Lexeme;
 import io.github.therealmone.translatorAPI.ResourceLoader;
 import io.github.therealmone.translatorAPI.SavePrinter;
 
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Stack;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class StackMachineImpl implements StackMachine {
-    private final Map<String, Pattern> commands;
+    private final Set<CommandBean> commands;
     private final Map<String, Command> executions;
     private Map<String, Object> variables;
     private Stack<String> stack;
@@ -50,21 +49,22 @@ class StackMachineImpl implements StackMachine {
     }
 
     private String match(final String com) {
-        for (Map.Entry<String, Pattern> entry : commands.entrySet()) {
-            Matcher m = entry.getValue().matcher(com);
+        for (CommandBean commandBean : commands) {
+            Matcher m = commandBean.getPattern().matcher(com);
             if (m.matches()) {
-                return entry.getKey();
+                return commandBean.getType();
             }
         }
+
         throw new UnknownCommandException(com);
     }
 
     private void initExecutions() {
-        commands.forEach((command, pattern) -> {
-            switch (command) {
+        commands.forEach(commandBean -> {
+            switch (commandBean.getType()) {
 
                 case "STRING": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         stack.push(com);
                         cursor++;
                     });
@@ -72,7 +72,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "DIGIT": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         stack.push("" + Double.parseDouble(com));
                         cursor++;
                     });
@@ -81,7 +81,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "DOUBLE": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         stack.push("" + Double.parseDouble(com));
                         cursor++;
                     });
@@ -90,7 +90,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "TAKE_VALUE": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         String varName = com.substring(1, com.length());
 
                         if (variables.containsKey(varName)) {
@@ -111,7 +111,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "TAKE_VAR_NAME": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         stack.push(com.substring(1, com.length()));
                         cursor++;
                     });
@@ -120,7 +120,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "GOTO_ON_FALSE": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         if (!Boolean.parseBoolean(stack.pop()))
                             cursor = Integer.parseInt(com.substring(3, com.length()));
                         else
@@ -131,7 +131,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "GOTO_ON_TRUE": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         if (Boolean.parseBoolean(stack.pop()))
                             cursor = Integer.parseInt(com.substring(3, com.length()));
                         else
@@ -142,14 +142,14 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "GOTO": {
-                    executions.put(command, com ->
+                    executions.put(commandBean.getType(), com ->
                             cursor = Integer.parseInt(com.substring(2, com.length())));
 
                     break;
                 }
 
                 case "DEL": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         double p2 = Double.parseDouble(stack.pop());
                         double p1 = Double.parseDouble(stack.pop());
                         stack.push("" + (p1 / p2));
@@ -160,7 +160,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "MUL": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         double p2 = Double.parseDouble(stack.pop());
                         double p1 = Double.parseDouble(stack.pop());
                         stack.push("" + (p1 * p2));
@@ -171,7 +171,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "DIV": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         double p2 = Double.parseDouble(stack.pop());
                         double p1 = Double.parseDouble(stack.pop());
                         stack.push("" + ((int) (p1 / p2)));
@@ -182,7 +182,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "MOD": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         double p2 = Double.parseDouble(stack.pop());
                         double p1 = Double.parseDouble(stack.pop());
                         stack.push("" + (p1 % p2));
@@ -193,7 +193,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "PLUS": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         double p2 = Double.parseDouble(stack.pop());
                         double p1 = Double.parseDouble(stack.pop());
                         stack.push("" + (p1 + p2));
@@ -205,7 +205,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "CONCAT": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         String p2 = stack.pop().replaceAll("\"", "");
                         String p1 = stack.pop().replaceAll("\"", "");
                         stack.push("\"" + (p1 + p2) + "\"");
@@ -217,7 +217,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "MINUS": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         double p2 = Double.parseDouble(stack.pop());
                         double p1 = Double.parseDouble(stack.pop());
                         stack.push("" + (p1 - p2));
@@ -229,7 +229,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "LESS": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         double p2 = Double.parseDouble(stack.pop());
                         double p1 = Double.parseDouble(stack.pop());
                         stack.push("" + (p1 < p2));
@@ -241,7 +241,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "MORE": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         double p2 = Double.parseDouble(stack.pop());
                         double p1 = Double.parseDouble(stack.pop());
                         stack.push("" + (p1 > p2));
@@ -253,7 +253,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "LESS_OR_EQUALS": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         double p2 = Double.parseDouble(stack.pop());
                         double p1 = Double.parseDouble(stack.pop());
                         stack.push("" + (p1 <= p2));
@@ -265,7 +265,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "MORE_OR_EQUALS": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         double p2 = Double.parseDouble(stack.pop());
                         double p1 = Double.parseDouble(stack.pop());
                         stack.push("" + (p1 >= p2));
@@ -276,7 +276,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "EQUALS": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         double p2 = Double.parseDouble(stack.pop());
                         double p1 = Double.parseDouble(stack.pop());
                         stack.push("" + (p1 == p2));
@@ -286,7 +286,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "NOT_EQUALS": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         double p2 = Double.parseDouble(stack.pop());
                         double p1 = Double.parseDouble(stack.pop());
                         stack.push("" + (p1 != p2));
@@ -297,7 +297,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "AND": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         boolean p2 = Boolean.parseBoolean(stack.pop());
                         boolean p1 = Boolean.parseBoolean(stack.pop());
                         stack.push("" + (p1 && p2));
@@ -309,7 +309,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "OR": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         boolean p2 = Boolean.parseBoolean(stack.pop());
                         boolean p1 = Boolean.parseBoolean(stack.pop());
                         stack.push("" + (p1 || p2));
@@ -320,7 +320,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "XOR": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         boolean p2 = Boolean.parseBoolean(stack.pop());
                         boolean p1 = Boolean.parseBoolean(stack.pop());
                         stack.push("" + (p1 ^ p2));
@@ -331,7 +331,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "ASSIGN": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         Double value = Double.parseDouble(stack.pop());
                         String varName = stack.pop();
                         if (variables.containsKey(varName))
@@ -347,7 +347,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "NEW": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         variables.put(stack.peek(), null);
                         cursor++;
                     });
@@ -356,7 +356,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "TYPEOF": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         String type = stack.pop();
                         switch (type) {
                             case "hashset": {
@@ -382,7 +382,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "PUT": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         String parameter = stack.pop();
                         String collectionName = stack.pop();
 
@@ -396,7 +396,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "GET": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         String parameter = stack.pop();
                         String collectionName = stack.pop();
 
@@ -410,7 +410,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "SIZE": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         String collectionName = stack.pop();
 
                         Collection collection = getCollectionByName(collectionName);
@@ -423,7 +423,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "REMOVE": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         String parameter = stack.pop();
                         String collectionName = stack.pop();
 
@@ -437,7 +437,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "REWRITE": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         String parameter1 = stack.pop();
                         String parameter0 = stack.pop();
                         String collectionName = stack.pop();
@@ -452,7 +452,7 @@ class StackMachineImpl implements StackMachine {
                 }
 
                 case "PRINT": {
-                    executions.put(command, com -> {
+                    executions.put(commandBean.getType(), com -> {
                         print(stack.pop());
 
                         cursor++;

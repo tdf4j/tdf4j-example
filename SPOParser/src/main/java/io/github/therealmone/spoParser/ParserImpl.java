@@ -1,8 +1,9 @@
 package io.github.therealmone.spoParser;
 
+import io.github.therealmone.translatorAPI.Beans.Lexeme;
 import io.github.therealmone.translatorAPI.ResourceLoader;
 import io.github.therealmone.translatorAPI.SavePrinter;
-import io.github.therealmone.translatorAPI.Token;
+import io.github.therealmone.translatorAPI.Beans.Token;
 import io.github.therealmone.spoParser.exceptions.UnexpectedTokenException;
 import io.github.therealmone.translatorAPI.Exceptions.ParserException;
 import io.github.therealmone.translatorAPI.Interfaces.Visitor;
@@ -16,7 +17,7 @@ class ParserImpl implements Parser {
     private Stack<Integer> stackForCNReturns;
     private final Map<Integer, String[]> langRules;
     private final Map<String, Map<String, Integer>> analyzeTable;
-    private final Set<String> terminals;
+    private final Set<Lexeme> terminals;
     private TreeNode root;
     private TreeNode currentTreeNode;
     private StringBuilder history;
@@ -35,7 +36,7 @@ class ParserImpl implements Parser {
         v.visit(getRPN());
     }
 
-    ParserImpl(final Set<String> terminals) {
+    ParserImpl(final Set<Lexeme> terminals) {
         this.terminals = terminals;
 
         stack = new Stack<>();
@@ -56,7 +57,7 @@ class ParserImpl implements Parser {
     }
 
     private void parse(final Token token) {
-        while (!terminals.contains(stack.peek())) {
+        while (!isTerminal(stack.peek())) {
             if (!stack.peek().equals("lang")) {
                 for (final TreeNode child : currentTreeNode.getChildes()) {
                     if (child.getName().equals(stack.peek()) && child.getChildes().size() == 0) {
@@ -125,5 +126,15 @@ class ParserImpl implements Parser {
     @Override
     public List<String> getRPN() {
         return RPNOptimizer.optimize(RPNConverter.convertToRPN(root));
+    }
+
+    private boolean isTerminal(String lexeme) {
+        for(Lexeme terminal : terminals) {
+            if(terminal.getType().equals(lexeme)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

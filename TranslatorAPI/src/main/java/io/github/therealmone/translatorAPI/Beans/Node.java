@@ -1,4 +1,4 @@
-package io.github.therealmone.translatorAPI;
+package io.github.therealmone.translatorAPI.Beans;
 
 public class Node {
     private final String name;
