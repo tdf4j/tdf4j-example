@@ -2,7 +2,7 @@ package io.github.therealmone.spoStackMachine.collections.hashset.exceptions;
 
 import io.github.therealmone.spoStackMachine.exceptions.HashMapException;
 import io.github.therealmone.translatorAPI.Interfaces.ExceptionInterface;
-import io.github.therealmone.translatorAPI.SavePrinter;
+import io.github.therealmone.translatorAPI.Utils.SavePrinter;
 
 public class NoSuchElementException extends HashMapException implements ExceptionInterface {
     private final String key;

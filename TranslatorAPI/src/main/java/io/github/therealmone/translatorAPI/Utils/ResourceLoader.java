@@ -1,4 +1,4 @@
-package io.github.therealmone.translatorAPI;
+package io.github.therealmone.translatorAPI.Utils;
 
 import com.opencsv.CSVReader;
 import io.github.therealmone.translatorAPI.Beans.CommandBean;
@@ -15,11 +15,16 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 public final class ResourceLoader {
+    private static Caster caster;
     private static Set<Lexeme> lexemes;
     private static Map<Integer, String[]> langRules;
     private static Map<String, Map<String, Integer>> analyzeTable;
     private static Set<CommandBean> commands;
     private static boolean loaded = false;
+
+    static {
+        caster = new Caster();
+    }
 
     public synchronized static void initialize() {
         if(!loaded) {
@@ -60,7 +65,7 @@ public final class ResourceLoader {
 
             while ((nextLine = csvReader.readNext()) != null) {
                 try {
-                    langRules.put(Integer.parseInt(nextLine[0].trim()), nextLine[2].split("\\s\\+\\s"));
+                    langRules.put(caster.castToInt(nextLine[0].trim()), nextLine[2].split("\\s\\+\\s"));
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
@@ -84,7 +89,7 @@ public final class ResourceLoader {
             while ((nextLine = csvReader.readNext()) != null) {
                 Map<String, Integer> tmp = new HashMap<>();
                 for (int i = 1; i < nextLine.length; i++) {
-                    tmp.put(description[i], Integer.parseInt(nextLine[i]));
+                    tmp.put(description[i], caster.castToInt(nextLine[i]));
                 }
                 analyzeTable.put(nextLine[0], tmp);
             }
@@ -127,7 +132,7 @@ public final class ResourceLoader {
         @Override
         public void begin(String namespace, String name, Attributes attributes) throws Exception {
             Lexeme lexeme = getDigester().peek();
-            int priority = Integer.parseInt(attributes.getValue("priority"));
+            int priority = caster.castToInt(attributes.getValue("priority"));
             lexeme.setPriority(priority);
         }
 

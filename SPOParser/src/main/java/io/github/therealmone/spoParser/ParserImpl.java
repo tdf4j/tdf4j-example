@@ -1,8 +1,8 @@
 package io.github.therealmone.spoParser;
 
 import io.github.therealmone.translatorAPI.Beans.Lexeme;
-import io.github.therealmone.translatorAPI.ResourceLoader;
-import io.github.therealmone.translatorAPI.SavePrinter;
+import io.github.therealmone.translatorAPI.Utils.ResourceLoader;
+import io.github.therealmone.translatorAPI.Utils.SavePrinter;
 import io.github.therealmone.translatorAPI.Beans.Token;
 import io.github.therealmone.spoParser.exceptions.UnexpectedTokenException;
 import io.github.therealmone.translatorAPI.Exceptions.ParserException;
@@ -96,30 +96,27 @@ class ParserImpl implements Parser {
     }
 
     private void openNonTerminal(final Token token) {
-        String peek = stack.peek();
+        if(analyzeTable.get(stack.peek()) == null) {
+            throw new ParserException("Can't find rule for " + stack.peek() + "(token = " + token.getType() + ")");
+        }
 
-        try {
-            int ruleNumber = analyzeTable.get(stack.pop()).get(token.getType());
+        int ruleNumber = analyzeTable.get(stack.pop()).get(token.getType());
 
-            if (ruleNumber != 0) {
-                String[] tmp = langRules.get(ruleNumber);
-                stackForCNReturns.push(tmp.length);
+        if (ruleNumber != 0) {
+            String[] tmp = langRules.get(ruleNumber);
+            stackForCNReturns.push(tmp.length);
 
-                for (int i = 0; i < tmp.length; i++) {
-                    if (!tmp[i].equals("EMPTY")) {
-                        stack.push(tmp[tmp.length - i - 1]);
-                        currentTreeNode.addChild(new TreeNode(tmp[i], currentTreeNode));
-                    } else {
-                        moveCN();
-                    }
+            for (int i = 0; i < tmp.length; i++) {
+                if (!tmp[i].equals("EMPTY")) {
+                    stack.push(tmp[tmp.length - i - 1]);
+                    currentTreeNode.addChild(new TreeNode(tmp[i], currentTreeNode));
+                } else {
+                    moveCN();
                 }
-
-            } else {
-                throw new UnexpectedTokenException(token, history.toString());
             }
 
-        } catch (NullPointerException e) {
-            throw new ParserException("Can't find rule for " + peek + "(token = " + token.getType() + ")", e);
+        } else {
+            throw new UnexpectedTokenException(token, history.toString());
         }
     }
 

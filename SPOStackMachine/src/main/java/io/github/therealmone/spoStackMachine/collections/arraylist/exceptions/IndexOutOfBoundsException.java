@@ -2,7 +2,7 @@ package io.github.therealmone.spoStackMachine.collections.arraylist.exceptions;
 
 import io.github.therealmone.spoStackMachine.exceptions.ArrayListException;
 import io.github.therealmone.translatorAPI.Interfaces.ExceptionInterface;
-import io.github.therealmone.translatorAPI.SavePrinter;
+import io.github.therealmone.translatorAPI.Utils.SavePrinter;
 
 public class IndexOutOfBoundsException extends ArrayListException implements ExceptionInterface {
     private final int index;

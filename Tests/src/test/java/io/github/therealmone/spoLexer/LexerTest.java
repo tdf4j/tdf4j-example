@@ -2,7 +2,7 @@ package io.github.therealmone.spoLexer;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import io.github.therealmone.translatorAPI.ResourceLoader;
+import io.github.therealmone.translatorAPI.Utils.ResourceLoader;
 
 import static org.junit.Assert.*;
 

@@ -1,5 +1,7 @@
 package io.github.therealmone.spoParser;
 
+import io.github.therealmone.translatorAPI.Utils.Caster;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -8,8 +10,10 @@ import java.util.Stack;
 final class RPNOptimizer {
     private static Stack<String> stack;
     private static final List<String> operatorsToOptimize;
+    private static final Caster caster;
 
     static {
+        caster = new Caster();
         operatorsToOptimize = new ArrayList<String>() {{
             add("*");
             add("/");
@@ -38,96 +42,78 @@ final class RPNOptimizer {
         switch (command) {
 
             case "*": {
-                try {
-                    double op2 = Double.parseDouble(stack.peek());
-                    double op1 = Double.parseDouble(stack.get(stack.size() - 2));
-
-                    stack.pop();
-                    stack.pop();
+                if(caster.isNotDouble(stack.peek()) || caster.isNotDouble(stack.get(stack.size() - 2))) {
+                    stack.push(command);
+                } else {
+                    double op2 = caster.castToDouble(stack.pop());
+                    double op1 = caster.castToDouble(stack.pop());
 
                     stack.push("" + (op1 * op2));
-                } catch (NumberFormatException e) {
-                    stack.push(command);
                 }
 
                 break;
             }
 
             case "/": {
-                try {
-                    double op2 = Double.parseDouble(stack.peek());
-                    double op1 = Double.parseDouble(stack.get(stack.size() - 2));
-
-                    stack.pop();
-                    stack.pop();
+                if(caster.isNotDouble(stack.peek()) || caster.isNotDouble(stack.get(stack.size() - 2))) {
+                    stack.push(command);
+                } else {
+                    double op2 = caster.castToDouble(stack.pop());
+                    double op1 = caster.castToDouble(stack.pop());
 
                     stack.push("" + (op1 / op2));
-                } catch (NumberFormatException e) {
-                    stack.push(command);
                 }
 
                 break;
             }
 
             case "-": {
-                try {
-                    double op2 = Double.parseDouble(stack.peek());
-                    double op1 = Double.parseDouble(stack.get(stack.size() - 2));
-
-                    stack.pop();
-                    stack.pop();
+                if(caster.isNotDouble(stack.peek()) || caster.isNotDouble(stack.get(stack.size() - 2))) {
+                    stack.push(command);
+                } else {
+                    double op2 = caster.castToDouble(stack.pop());
+                    double op1 = caster.castToDouble(stack.pop());
 
                     stack.push("" + (op1 - op2));
-                } catch (NumberFormatException e) {
-                    stack.push(command);
                 }
 
                 break;
             }
 
             case "+": {
-                try {
-                    double op2 = Double.parseDouble(stack.peek());
-                    double op1 = Double.parseDouble(stack.get(stack.size() - 2));
-
-                    stack.pop();
-                    stack.pop();
+                if(caster.isNotDouble(stack.peek()) || caster.isNotDouble(stack.get(stack.size() - 2))) {
+                    stack.push(command);
+                } else {
+                    double op2 = caster.castToDouble(stack.pop());
+                    double op1 = caster.castToDouble(stack.pop());
 
                     stack.push("" + (op1 + op2));
-                } catch (NumberFormatException e) {
-                    stack.push(command);
                 }
 
                 break;
             }
 
             case "div": {
-                try {
-                    double op2 = Double.parseDouble(stack.peek());
-                    double op1 = Double.parseDouble(stack.get(stack.size() - 2));
-
-                    stack.pop();
-                    stack.pop();
+                if(caster.isNotDouble(stack.peek()) || caster.isNotDouble(stack.get(stack.size() - 2))) {
+                    stack.push(command);
+                } else {
+                    double op2 = caster.castToDouble(stack.pop());
+                    double op1 = caster.castToDouble(stack.pop());
 
                     stack.push("" + ((int) (op1 / op2)));
-                } catch (NumberFormatException e) {
-                    stack.push(command);
                 }
 
                 break;
             }
 
             case "mod": {
-                try {
-                    double op2 = Double.parseDouble(stack.peek());
-                    double op1 = Double.parseDouble(stack.get(stack.size() - 2));
-
-                    stack.pop();
-                    stack.pop();
+                if(caster.isNotDouble(stack.peek()) || caster.isNotDouble(stack.get(stack.size() - 2))) {
+                    stack.push(command);
+                } else {
+                    double op2 = caster.castToDouble(stack.pop());
+                    double op1 = caster.castToDouble(stack.pop());
 
                     stack.push("" + (op1 % op2));
-                } catch (NumberFormatException e) {
-                    stack.push(command);
                 }
 
                 break;

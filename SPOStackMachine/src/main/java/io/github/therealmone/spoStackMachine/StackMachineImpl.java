@@ -7,15 +7,14 @@ import io.github.therealmone.spoStackMachine.exceptions.NoVariableException;
 import io.github.therealmone.spoStackMachine.exceptions.UnknownCommandException;
 import io.github.therealmone.spoStackMachine.exceptions.WrongTypeException;
 import io.github.therealmone.translatorAPI.Beans.CommandBean;
-import io.github.therealmone.translatorAPI.Beans.Lexeme;
-import io.github.therealmone.translatorAPI.ResourceLoader;
-import io.github.therealmone.translatorAPI.SavePrinter;
+import io.github.therealmone.translatorAPI.Utils.Caster;
+import io.github.therealmone.translatorAPI.Utils.ResourceLoader;
+import io.github.therealmone.translatorAPI.Utils.SavePrinter;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 class StackMachineImpl implements StackMachine {
+    private final Caster caster;
     private final Set<CommandBean> commands;
     private final Map<String, Command> executions;
     private Map<String, Object> variables;
@@ -33,6 +32,7 @@ class StackMachineImpl implements StackMachine {
     }
 
     StackMachineImpl() {
+        caster = new Caster();
         commands = ResourceLoader.getCommands();
         executions = new HashMap<>();
         variables = new HashMap<>();
@@ -50,8 +50,7 @@ class StackMachineImpl implements StackMachine {
 
     private String match(final String com) {
         for (CommandBean commandBean : commands) {
-            Matcher m = commandBean.getPattern().matcher(com);
-            if (m.matches()) {
+            if (commandBean.getPattern().matcher(com).matches()) {
                 return commandBean.getType();
             }
         }
@@ -73,7 +72,7 @@ class StackMachineImpl implements StackMachine {
 
                 case "DIGIT": {
                     executions.put(commandBean.getType(), com -> {
-                        stack.push("" + Double.parseDouble(com));
+                        stack.push("" + caster.castToDouble(com));
                         cursor++;
                     });
 
@@ -82,7 +81,7 @@ class StackMachineImpl implements StackMachine {
 
                 case "DOUBLE": {
                     executions.put(commandBean.getType(), com -> {
-                        stack.push("" + Double.parseDouble(com));
+                        stack.push("" + caster.castToDouble(com));
                         cursor++;
                     });
 
@@ -121,8 +120,8 @@ class StackMachineImpl implements StackMachine {
 
                 case "GOTO_ON_FALSE": {
                     executions.put(commandBean.getType(), com -> {
-                        if (!Boolean.parseBoolean(stack.pop()))
-                            cursor = Integer.parseInt(com.substring(3, com.length()));
+                        if (!caster.castToBoolean(stack.pop()))
+                            cursor = caster.castToInt(com.substring(3, com.length()));
                         else
                             cursor++;
                     });
@@ -132,8 +131,8 @@ class StackMachineImpl implements StackMachine {
 
                 case "GOTO_ON_TRUE": {
                     executions.put(commandBean.getType(), com -> {
-                        if (Boolean.parseBoolean(stack.pop()))
-                            cursor = Integer.parseInt(com.substring(3, com.length()));
+                        if (caster.castToBoolean(stack.pop()))
+                            cursor = caster.castToInt(com.substring(3, com.length()));
                         else
                             cursor++;
                     });
@@ -143,15 +142,15 @@ class StackMachineImpl implements StackMachine {
 
                 case "GOTO": {
                     executions.put(commandBean.getType(), com ->
-                            cursor = Integer.parseInt(com.substring(2, com.length())));
+                            cursor = caster.castToInt(com.substring(2, com.length())));
 
                     break;
                 }
 
                 case "DEL": {
                     executions.put(commandBean.getType(), com -> {
-                        double p2 = Double.parseDouble(stack.pop());
-                        double p1 = Double.parseDouble(stack.pop());
+                        double p2 = caster.castToDouble(stack.pop());
+                        double p1 = caster.castToDouble(stack.pop());
                         stack.push("" + (p1 / p2));
                         cursor++;
                     });
@@ -161,8 +160,8 @@ class StackMachineImpl implements StackMachine {
 
                 case "MUL": {
                     executions.put(commandBean.getType(), com -> {
-                        double p2 = Double.parseDouble(stack.pop());
-                        double p1 = Double.parseDouble(stack.pop());
+                        double p2 = caster.castToDouble(stack.pop());
+                        double p1 = caster.castToDouble(stack.pop());
                         stack.push("" + (p1 * p2));
                         cursor++;
                     });
@@ -172,8 +171,8 @@ class StackMachineImpl implements StackMachine {
 
                 case "DIV": {
                     executions.put(commandBean.getType(), com -> {
-                        double p2 = Double.parseDouble(stack.pop());
-                        double p1 = Double.parseDouble(stack.pop());
+                        double p2 = caster.castToDouble(stack.pop());
+                        double p1 = caster.castToDouble(stack.pop());
                         stack.push("" + ((int) (p1 / p2)));
                         cursor++;
                     });
@@ -183,8 +182,8 @@ class StackMachineImpl implements StackMachine {
 
                 case "MOD": {
                     executions.put(commandBean.getType(), com -> {
-                        double p2 = Double.parseDouble(stack.pop());
-                        double p1 = Double.parseDouble(stack.pop());
+                        double p2 = caster.castToDouble(stack.pop());
+                        double p1 = caster.castToDouble(stack.pop());
                         stack.push("" + (p1 % p2));
                         cursor++;
                     });
@@ -194,8 +193,8 @@ class StackMachineImpl implements StackMachine {
 
                 case "PLUS": {
                     executions.put(commandBean.getType(), com -> {
-                        double p2 = Double.parseDouble(stack.pop());
-                        double p1 = Double.parseDouble(stack.pop());
+                        double p2 = caster.castToDouble(stack.pop());
+                        double p1 = caster.castToDouble(stack.pop());
                         stack.push("" + (p1 + p2));
                         cursor++;
 
@@ -218,8 +217,8 @@ class StackMachineImpl implements StackMachine {
 
                 case "MINUS": {
                     executions.put(commandBean.getType(), com -> {
-                        double p2 = Double.parseDouble(stack.pop());
-                        double p1 = Double.parseDouble(stack.pop());
+                        double p2 = caster.castToDouble(stack.pop());
+                        double p1 = caster.castToDouble(stack.pop());
                         stack.push("" + (p1 - p2));
                         cursor++;
 
@@ -230,8 +229,8 @@ class StackMachineImpl implements StackMachine {
 
                 case "LESS": {
                     executions.put(commandBean.getType(), com -> {
-                        double p2 = Double.parseDouble(stack.pop());
-                        double p1 = Double.parseDouble(stack.pop());
+                        double p2 = caster.castToDouble(stack.pop());
+                        double p1 = caster.castToDouble(stack.pop());
                         stack.push("" + (p1 < p2));
                         cursor++;
 
@@ -242,8 +241,8 @@ class StackMachineImpl implements StackMachine {
 
                 case "MORE": {
                     executions.put(commandBean.getType(), com -> {
-                        double p2 = Double.parseDouble(stack.pop());
-                        double p1 = Double.parseDouble(stack.pop());
+                        double p2 = caster.castToDouble(stack.pop());
+                        double p1 = caster.castToDouble(stack.pop());
                         stack.push("" + (p1 > p2));
                         cursor++;
 
@@ -254,8 +253,8 @@ class StackMachineImpl implements StackMachine {
 
                 case "LESS_OR_EQUALS": {
                     executions.put(commandBean.getType(), com -> {
-                        double p2 = Double.parseDouble(stack.pop());
-                        double p1 = Double.parseDouble(stack.pop());
+                        double p2 = caster.castToDouble(stack.pop());
+                        double p1 = caster.castToDouble(stack.pop());
                         stack.push("" + (p1 <= p2));
                         cursor++;
 
@@ -266,8 +265,8 @@ class StackMachineImpl implements StackMachine {
 
                 case "MORE_OR_EQUALS": {
                     executions.put(commandBean.getType(), com -> {
-                        double p2 = Double.parseDouble(stack.pop());
-                        double p1 = Double.parseDouble(stack.pop());
+                        double p2 = caster.castToDouble(stack.pop());
+                        double p1 = caster.castToDouble(stack.pop());
                         stack.push("" + (p1 >= p2));
                         cursor++;
                     });
@@ -277,8 +276,8 @@ class StackMachineImpl implements StackMachine {
 
                 case "EQUALS": {
                     executions.put(commandBean.getType(), com -> {
-                        double p2 = Double.parseDouble(stack.pop());
-                        double p1 = Double.parseDouble(stack.pop());
+                        double p2 = caster.castToDouble(stack.pop());
+                        double p1 = caster.castToDouble(stack.pop());
                         stack.push("" + (p1 == p2));
                         cursor++;
                     });
@@ -287,8 +286,8 @@ class StackMachineImpl implements StackMachine {
 
                 case "NOT_EQUALS": {
                     executions.put(commandBean.getType(), com -> {
-                        double p2 = Double.parseDouble(stack.pop());
-                        double p1 = Double.parseDouble(stack.pop());
+                        double p2 = caster.castToDouble(stack.pop());
+                        double p1 = caster.castToDouble(stack.pop());
                         stack.push("" + (p1 != p2));
                         cursor++;
                     });
@@ -298,8 +297,8 @@ class StackMachineImpl implements StackMachine {
 
                 case "AND": {
                     executions.put(commandBean.getType(), com -> {
-                        boolean p2 = Boolean.parseBoolean(stack.pop());
-                        boolean p1 = Boolean.parseBoolean(stack.pop());
+                        boolean p2 = caster.castToBoolean(stack.pop());
+                        boolean p1 = caster.castToBoolean(stack.pop());
                         stack.push("" + (p1 && p2));
                         cursor++;
 
@@ -310,8 +309,8 @@ class StackMachineImpl implements StackMachine {
 
                 case "OR": {
                     executions.put(commandBean.getType(), com -> {
-                        boolean p2 = Boolean.parseBoolean(stack.pop());
-                        boolean p1 = Boolean.parseBoolean(stack.pop());
+                        boolean p2 = caster.castToBoolean(stack.pop());
+                        boolean p1 = caster.castToBoolean(stack.pop());
                         stack.push("" + (p1 || p2));
                         cursor++;
                     });
@@ -321,8 +320,8 @@ class StackMachineImpl implements StackMachine {
 
                 case "XOR": {
                     executions.put(commandBean.getType(), com -> {
-                        boolean p2 = Boolean.parseBoolean(stack.pop());
-                        boolean p1 = Boolean.parseBoolean(stack.pop());
+                        boolean p2 = caster.castToBoolean(stack.pop());
+                        boolean p1 = caster.castToBoolean(stack.pop());
                         stack.push("" + (p1 ^ p2));
                         cursor++;
                     });
@@ -332,7 +331,7 @@ class StackMachineImpl implements StackMachine {
 
                 case "ASSIGN": {
                     executions.put(commandBean.getType(), com -> {
-                        Double value = Double.parseDouble(stack.pop());
+                        Double value = caster.castToDouble(stack.pop());
                         String varName = stack.pop();
                         if (variables.containsKey(varName))
                             variables.replace(varName, value);
@@ -535,54 +534,35 @@ class StackMachineImpl implements StackMachine {
     }
 
     private int getIndexFromParameter(final String parameter) {
-        int index;
-
-        try {
-            if (variables.containsKey(parameter)) {
-                index = castStringToInt("" + variables.get(parameter));
-            } else {
-                index = castStringToInt(parameter);
+        if(variables.containsKey(parameter)) {
+            if(!(variables.get(parameter) instanceof Double)) {
+                throw new WrongTypeException("Wrong type of: " + parameter);
             }
-        } catch (NumberFormatException | ClassCastException e) {
-            throw new WrongTypeException("Wrong type of: " + parameter, e);
-        }
 
-        return index;
+            return caster.castToInt((Double) variables.get(parameter));
+        } else {
+            return caster.castToInt(parameter);
+        }
     }
 
     private double getValueFromParameter(final String parameter) {
-        double value;
-
-        try {
-            if (variables.containsKey(parameter)) {
-                value = (double) variables.get(parameter);
-            } else {
-                value = Double.parseDouble(parameter);
+        if(variables.containsKey(parameter)) {
+            if(!(variables.get(parameter) instanceof Double)) {
+                throw new WrongTypeException("Wrong type of: " + parameter);
             }
-        } catch (NumberFormatException e) {
-            throw new WrongTypeException("Wrong type of: " + parameter, e);
-        }
 
-        return value;
+            return (Double) variables.get(parameter);
+        } else {
+            return caster.castToDouble(parameter);
+        }
     }
 
     private Collection getCollectionByName(final String collectionName) {
-        Collection collection;
-        try {
-            collection = (Collection) variables.get(collectionName);
-        } catch (ClassCastException e) {
-            throw new WrongTypeException("Wrong type of: " + collectionName, e);
+        if(!(variables.get(collectionName) instanceof Collection)) {
+            throw new WrongTypeException("Wrong type of: " + collectionName);
         }
-        return collection;
+
+        return (Collection) variables.get(collectionName);
     }
 
-    private int castStringToInt(final String parameter) {
-        Double value = Double.parseDouble(parameter);
-
-        if (value % 1 == 0) {
-            return value.intValue();
-        } else {
-            throw new WrongTypeException("Wrong type of: " + parameter);
-        }
-    }
 }

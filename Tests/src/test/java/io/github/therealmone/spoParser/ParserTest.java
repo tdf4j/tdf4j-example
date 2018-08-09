@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-import io.github.therealmone.translatorAPI.ResourceLoader;
+import io.github.therealmone.translatorAPI.Utils.ResourceLoader;
 import io.github.therealmone.translatorAPI.Beans.Token;
 
 import java.util.List;

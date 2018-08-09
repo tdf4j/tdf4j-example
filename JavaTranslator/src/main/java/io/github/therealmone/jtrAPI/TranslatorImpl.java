@@ -5,8 +5,8 @@ import io.github.therealmone.spoParser.Parser;
 import io.github.therealmone.spoStackMachine.StackMachine;
 import io.github.therealmone.translatorAPI.Exceptions.TranslatorException;
 import io.github.therealmone.translatorAPI.Interfaces.ExceptionInterface;
-import io.github.therealmone.translatorAPI.ResourceLoader;
-import io.github.therealmone.translatorAPI.SavePrinter;
+import io.github.therealmone.translatorAPI.Utils.ResourceLoader;
+import io.github.therealmone.translatorAPI.Utils.SavePrinter;
 import io.github.therealmone.translatorAPI.Beans.Token;
 
 import java.util.List;

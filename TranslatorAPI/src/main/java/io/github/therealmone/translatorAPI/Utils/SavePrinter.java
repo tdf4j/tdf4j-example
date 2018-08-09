@@ -1,4 +1,4 @@
-package io.github.therealmone.translatorAPI;
+package io.github.therealmone.translatorAPI.Utils;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
