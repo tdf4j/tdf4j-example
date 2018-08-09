@@ -30,11 +30,14 @@ public class StackMachineTest {
                         "print(get(a, one));" +
                         "print(get(a, two));" +
                         "remove(a, one);" +
-                        "print(get(a, one));");
+                        "print(get(a, one));"
+        );
         assertEquals(
                 "1.0\r\n" +
                         "2.0\r\n" +
-                        "Can't find key one.\r\n", out.toString());
+                        "Can't find key one.\r\n",
+                out.toString()
+        );
 
 
         out.reset();
@@ -42,7 +45,8 @@ public class StackMachineTest {
                 "new a typeof hashset;" +
                         "new i = 100;" +
                         "put(a, i);" +
-                        "put(a, i);");
+                        "put(a, i);"
+        );
         assertEquals("Key i already exists.\r\n", out.toString());
 
 
@@ -57,27 +61,32 @@ public class StackMachineTest {
                         "for(i = 0; i < 5; i = i + 1) {" +
                         "   print(get(a, i));" +
                         "}" +
-                        "print(get(a, -1));");
+                        "print(get(a, -1));"
+        );
         assertEquals(
                 "0.0\r\n" +
                         "1.0\r\n" +
                         "2.0\r\n" +
                         "3.0\r\n" +
                         "4.0\r\n" +
-                        "Index out of bound: -1. Length = 5\r\n", out.toString());
+                        "Index out of bound: -1. Length = 5\r\n",
+                out.toString()
+        );
 
 
         out.reset();
         translator.translate(
                 "new a typeof hashset;" +
-                        "new i = get(a, 100);");
+                        "new i = get(a, 100);"
+        );
         assertEquals("Can't find key 100.0.\r\n", out.toString());
 
 
         out.reset();
         translator.translate(
                 "new a typeof arraylist;" +
-                        "new i = get(a, i);");
+                        "new i = get(a, i);"
+        );
         assertEquals("Wrong type of: i\r\n", out.toString());
     }
 
@@ -88,7 +97,8 @@ public class StackMachineTest {
                 "new a typeof hashset;" +
                         "new i = 100;" +
                         "put(a, i);" +
-                        "print(get(a, i));");
+                        "print(get(a, i));"
+        );
         assertEquals("100.0\r\n", out.toString());
 
 
@@ -96,7 +106,8 @@ public class StackMachineTest {
         translator.translate(
                 "new a typeof arraylist;" +
                         "put(a, 100);" +
-                        "print(get(a, 0));");
+                        "print(get(a, 0));"
+        );
         assertEquals("100.0\r\n", out.toString());
 
 
@@ -108,7 +119,8 @@ public class StackMachineTest {
         out.reset();
         translator.translate(
                 "new i = 100;" +
-                        "print(\"This value equals \" ++ i);");
+                        "print(\"This value equals \" ++ i);"
+        );
         assertEquals("This value equals 100.0\r\n", out.toString());
 
 
@@ -117,14 +129,16 @@ public class StackMachineTest {
                 "new a typeof hashset;" +
                         "new i = 100;" +
                         "put(a, i);" +
-                        "print(\"This value equals \" ++ i ++ \": \" ++ get(a, i));");
+                        "print(\"This value equals \" ++ i ++ \": \" ++ get(a, i));"
+        );
         assertEquals("This value equals 100.0: 100.0\r\n", out.toString());
 
 
         out.reset();
         translator.translate(
                 "new a typeof hashset;" +
-                        "print(a);");
+                        "print(a);"
+        );
         assertEquals("Wrong type of a\r\n", out.toString());
     }
 
@@ -168,5 +182,96 @@ public class StackMachineTest {
         out.reset();
         translator.translate("print(2 * (2 + 2));");
         assertEquals("8.0\r\n", out.toString());
+    }
+
+    @Test
+    public void errorsTest() {
+        out.reset();
+        translator.translate("new a = hashset;");
+        assertEquals(
+                "Unexpected token HASHSET at '^' mark. \r\n" +
+                         "new a = hashset\r\n" +
+                         "        ^\r\n",
+                out.toString()
+        );
+
+
+        out.reset();
+        translator.translate("get(a, 1);");
+        assertEquals(
+                "Unexpected token GET at '^' mark. \r\n" +
+                        "get\r\n" +
+                        "^\r\n",
+                out.toString()
+        );
+
+
+        out.reset();
+        translator.translate("while(a & b);");
+        assertEquals(
+                "Unexpected token LOP at '^' mark. \r\n" +
+                        "while ( a &\r\n" +
+                        "          ^\r\n" +
+                        "Expected: COP\r\n",
+                out.toString()
+        );
+
+
+        out.reset();
+        translator.translate("print(i);");
+        assertEquals("Can't find variable i\r\n", out.toString());
+
+
+        out.reset();
+        translator.translate(
+                "new a typeof hashset;" +
+                        "print(get(a, i));"
+        );
+        assertEquals("Can't find key i.\r\n", out.toString());
+
+
+        out.reset();
+        translator.translate("@");
+        assertEquals(
+                "Unexpected symbol at '^' mark. \r\n" +
+                        "@$\r\n" +
+                        "^\r\n",
+                out.toString()
+        );
+
+
+        out.reset();
+        translator.translate(
+                "new a typeof hashset;" +
+                        "new i = 0;" +
+                        "put(a, i);" +
+                        "put(a, i);"
+        );
+        assertEquals("Key i already exists.\r\n",out.toString());
+
+
+        out.reset();
+        translator.translate(
+                "new a typeof hashset;" +
+                        "print(get(a, i));"
+        );
+        assertEquals("Can't find key i.\r\n",out.toString());
+
+
+        out.reset();
+        translator.translate(
+                "new a typeof hashset;" +
+                        "put(a, i);"
+        );
+        assertEquals("Can't find variable: i\r\n",out.toString());
+
+
+        out.reset();
+        translator.translate(
+                "new a typeof arraylist;" +
+                        "new i typeof hashset;" +
+                        "put(a, i);"
+        );
+        assertEquals("Wrong type of: i\r\n",out.toString());
     }
 }

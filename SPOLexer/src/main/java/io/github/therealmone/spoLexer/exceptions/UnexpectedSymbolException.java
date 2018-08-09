@@ -27,7 +27,7 @@ public class UnexpectedSymbolException extends LexerException implements Excepti
             message.append(token.getValue()).append(" ");
         }
 
-        SavePrinter.savePrintln("Unexpected symbol at '^' mark. \n" + message + input);
+        SavePrinter.savePrintln("Unexpected symbol at '^' mark. \r\n" + message + input);
         for (int i = 0; i < count; i++) {
             SavePrinter.savePrint(" ");
         }

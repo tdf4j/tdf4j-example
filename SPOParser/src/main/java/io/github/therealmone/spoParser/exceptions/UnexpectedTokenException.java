@@ -26,7 +26,7 @@ public class UnexpectedTokenException extends ParserException implements Excepti
 
     @Override
     public void message() {
-        SavePrinter.savePrintln("Unexpected token " + token.getType() + " at '^' mark. \n" + history + token.getValue());
+        SavePrinter.savePrintln("Unexpected token " + token.getType() + " at '^' mark. \r\n" + history + token.getValue());
         for (int i = 0; i < history.length(); i++) {
             SavePrinter.savePrint(" ");
         }
