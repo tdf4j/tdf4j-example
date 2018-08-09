@@ -56,7 +56,7 @@ final class RPNConverter {
         }};
     }
 
-    static List<String> convertToRPN(final TreeNode root) {
+    static synchronized List<String> convertToRPN(final TreeNode root) {
         stack = new Stack<>();
         out = new ArrayList<>();
 

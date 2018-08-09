@@ -14,23 +14,27 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-//TODO csv ?
 public final class ResourceLoader {
     private static Set<Lexeme> lexemes;
     private static Map<Integer, String[]> langRules;
     private static Map<String, Map<String, Integer>> analyzeTable;
     private static Set<CommandBean> commands;
+    private static boolean loaded = false;
 
     public synchronized static void initialize() {
-        Thread current = Thread.currentThread();
+        if(!loaded) {
+            Thread current = Thread.currentThread();
 
-        try {
-            loadLexemes(current.getContextClassLoader().getResourceAsStream("lexemes.xml"));
-            loadLangRules(current.getContextClassLoader().getResourceAsStream("langRules.csv"));
-            loadAnalyzeTable(current.getContextClassLoader().getResourceAsStream("analyzeTable.csv"));
-            loadCommands(current.getContextClassLoader().getResourceAsStream("commands.xml"));
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
+            try {
+                loadLexemes(current.getContextClassLoader().getResourceAsStream("lexemes.xml"));
+                loadLangRules(current.getContextClassLoader().getResourceAsStream("langRules.csv"));
+                loadAnalyzeTable(current.getContextClassLoader().getResourceAsStream("analyzeTable.csv"));
+                loadCommands(current.getContextClassLoader().getResourceAsStream("commands.xml"));
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
+
+            loaded = true;
         }
     }
 
@@ -103,20 +107,20 @@ public final class ResourceLoader {
         digester.parse(is);
     }
 
-    public static Set<Lexeme> getLexemes() {
-        return lexemes;
+    public synchronized static Set<Lexeme> getLexemes() {
+        return new HashSet<>(lexemes);
     }
 
-    public static Map<Integer, String[]> getLangRules() {
-        return langRules;
+    public synchronized static Map<Integer, String[]> getLangRules() {
+        return new HashMap<>(langRules);
     }
 
-    public static Map<String, Map<String, Integer>> getAnalyzeTable() {
-        return analyzeTable;
+    public synchronized static Map<String, Map<String, Integer>> getAnalyzeTable() {
+        return new HashMap<>(analyzeTable);
     }
 
-    public static Set<CommandBean> getCommands() {
-        return commands;
+    public synchronized static Set<CommandBean> getCommands() {
+        return new HashSet<>(commands);
     }
 
     private static class LexemeRule extends Rule {

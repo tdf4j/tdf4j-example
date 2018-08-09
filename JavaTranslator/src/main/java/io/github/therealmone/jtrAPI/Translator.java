@@ -1,6 +1,7 @@
 package io.github.therealmone.jtrAPI;
 
 import io.github.therealmone.translatorAPI.Exceptions.TranslatorException;
+import io.github.therealmone.translatorAPI.SavePrinter;
 
 import java.io.*;
 
@@ -28,7 +29,7 @@ public interface Translator {
     }
 
     static void setOutputStream(OutputStream out) {
-        System.setOut(new PrintStream(out));
+       SavePrinter.setOut(new PrintStream(out));
     }
 
 }

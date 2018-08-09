@@ -20,7 +20,7 @@ final class RPNOptimizer {
         }};
     }
 
-    static List<String> optimize(final List<String> rpn) {
+    synchronized static List<String> optimize(final List<String> rpn) {
         stack = new Stack<>();
 
         for (final String command : rpn) {
