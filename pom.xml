@@ -54,7 +54,7 @@
 	<modules>
 		<module>SPOLexer</module>
 		<module>SPOParser</module>
-        <module>TranslatorAPI</module>
+        <module>Core</module>
         <module>SPOStackMachine</module>
         <module>JavaTranslator</module>
         <module>Examples</module>

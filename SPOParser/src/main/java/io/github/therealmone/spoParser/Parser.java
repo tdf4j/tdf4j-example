@@ -1,8 +1,8 @@
 package io.github.therealmone.spoParser;
 
-import io.github.therealmone.translatorAPI.Beans.Lexeme;
-import io.github.therealmone.translatorAPI.Interfaces.Visitable;
-import io.github.therealmone.translatorAPI.Interfaces.Visitor;
+import io.github.therealmone.core.beans.Lexeme;
+import io.github.therealmone.core.interfaces.Visitable;
+import io.github.therealmone.core.interfaces.Visitor;
 
 import java.util.List;
 import java.util.Set;

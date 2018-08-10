@@ -1,6 +1,6 @@
 package io.github.therealmone.spoParser;
 
-import io.github.therealmone.translatorAPI.Utils.Caster;
+import io.github.therealmone.core.utils.Caster;
 
 import java.util.ArrayList;
 import java.util.List;

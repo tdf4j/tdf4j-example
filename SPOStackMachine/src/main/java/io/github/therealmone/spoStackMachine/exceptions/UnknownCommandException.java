@@ -1,8 +1,8 @@
 package io.github.therealmone.spoStackMachine.exceptions;
 
-import io.github.therealmone.translatorAPI.Exceptions.StackMachineException;
-import io.github.therealmone.translatorAPI.Interfaces.ExceptionInterface;
-import io.github.therealmone.translatorAPI.Utils.SavePrinter;
+import io.github.therealmone.core.exceptions.StackMachineException;
+import io.github.therealmone.core.interfaces.ExceptionInterface;
+import io.github.therealmone.core.utils.SavePrinter;
 
 public class UnknownCommandException extends StackMachineException implements ExceptionInterface {
     private final String command;

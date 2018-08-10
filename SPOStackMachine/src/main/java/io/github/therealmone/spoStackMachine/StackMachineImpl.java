@@ -1,15 +1,15 @@
 package io.github.therealmone.spoStackMachine;
 
-import io.github.therealmone.spoStackMachine.collections.arraylist.ArrayList;
-import io.github.therealmone.spoStackMachine.collections.Collection;
-import io.github.therealmone.spoStackMachine.collections.hashset.HashSet;
+import io.github.therealmone.core.collections.arraylist.ArrayList;
+import io.github.therealmone.core.collections.Collection;
+import io.github.therealmone.core.collections.hashset.HashSet;
 import io.github.therealmone.spoStackMachine.exceptions.NoVariableException;
 import io.github.therealmone.spoStackMachine.exceptions.UnknownCommandException;
 import io.github.therealmone.spoStackMachine.exceptions.WrongTypeException;
-import io.github.therealmone.translatorAPI.Beans.CommandBean;
-import io.github.therealmone.translatorAPI.Utils.Caster;
-import io.github.therealmone.translatorAPI.Utils.ResourceLoader;
-import io.github.therealmone.translatorAPI.Utils.SavePrinter;
+import io.github.therealmone.core.beans.CommandBean;
+import io.github.therealmone.core.utils.Caster;
+import io.github.therealmone.core.utils.ResourceLoader;
+import io.github.therealmone.core.utils.SavePrinter;
 
 import java.util.*;
 

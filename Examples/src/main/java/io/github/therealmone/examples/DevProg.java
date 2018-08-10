@@ -31,9 +31,35 @@ public class DevProg {
             translator.translate("new i = 0; for(i = 0; i < 10000000; i = i + 1) {print(\"run2 \" ++ i);}");
         };
 
+        Runnable run3 = () -> {
+            Translator translator = Translator.getInstance();
+            translator.setDevMode(true);
+            try {
+                Translator.setOutputStream(new FileOutputStream(new File("out3.txt")));
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            translator.translate("new i = 0; for(i = 0; i < 10000000; i = i + 1) {print(\"run3 \" ++ i);}");
+        };
+
+        Runnable run4 = () -> {
+            Translator translator = Translator.getInstance();
+            translator.setDevMode(true);
+            try {
+                Translator.setOutputStream(new FileOutputStream(new File("out4.txt")));
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            translator.translate("new i = 0; for(i = 0; i < 10000000; i = i + 1) {print(\"run4 \" ++ i);}");
+        };
+
         Thread thread1 = new Thread(run1);
         Thread thread2 = new Thread(run2);
+        Thread thread3 = new Thread(run3);
+        Thread thread4 = new Thread(run4);
         thread1.start();
-        //thread2.start();
+        thread2.start();
+        thread3.start();
+        thread4.start();
     }
 }

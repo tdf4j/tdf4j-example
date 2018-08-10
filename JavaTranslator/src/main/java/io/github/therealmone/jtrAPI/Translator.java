@@ -1,7 +1,7 @@
 package io.github.therealmone.jtrAPI;
 
-import io.github.therealmone.translatorAPI.Exceptions.TranslatorException;
-import io.github.therealmone.translatorAPI.Utils.SavePrinter;
+import io.github.therealmone.core.exceptions.TranslatorException;
+import io.github.therealmone.core.utils.SavePrinter;
 
 import java.io.*;
 

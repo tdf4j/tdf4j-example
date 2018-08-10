@@ -1,7 +1,7 @@
 package io.github.therealmone.spoLexer;
 
-import io.github.therealmone.translatorAPI.Beans.Lexeme;
-import io.github.therealmone.translatorAPI.Beans.Token;
+import io.github.therealmone.core.beans.Lexeme;
+import io.github.therealmone.core.beans.Token;
 
 import java.util.List;
 import java.util.Set;

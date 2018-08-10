@@ -3,11 +3,11 @@ package io.github.therealmone.jtrAPI;
 import io.github.therealmone.spoLexer.Lexer;
 import io.github.therealmone.spoParser.Parser;
 import io.github.therealmone.spoStackMachine.StackMachine;
-import io.github.therealmone.translatorAPI.Exceptions.TranslatorException;
-import io.github.therealmone.translatorAPI.Interfaces.ExceptionInterface;
-import io.github.therealmone.translatorAPI.Utils.ResourceLoader;
-import io.github.therealmone.translatorAPI.Utils.SavePrinter;
-import io.github.therealmone.translatorAPI.Beans.Token;
+import io.github.therealmone.core.exceptions.TranslatorException;
+import io.github.therealmone.core.interfaces.ExceptionInterface;
+import io.github.therealmone.core.utils.ResourceLoader;
+import io.github.therealmone.core.utils.SavePrinter;
+import io.github.therealmone.core.beans.Token;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package io.github.therealmone.spoStackMachine.exceptions;
 
-import io.github.therealmone.translatorAPI.Exceptions.StackMachineException;
+import io.github.therealmone.core.exceptions.StackMachineException;
 
 public class NoVariableException extends StackMachineException {
     public NoVariableException(final String message, final Throwable cause) {

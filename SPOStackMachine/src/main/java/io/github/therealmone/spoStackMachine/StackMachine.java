@@ -1,6 +1,6 @@
 package io.github.therealmone.spoStackMachine;
 
-import io.github.therealmone.translatorAPI.Interfaces.Visitor;
+import io.github.therealmone.core.interfaces.Visitor;
 
 public interface StackMachine extends Visitor {
     void showVariables();

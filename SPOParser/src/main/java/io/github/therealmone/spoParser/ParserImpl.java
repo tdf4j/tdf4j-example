@@ -1,12 +1,12 @@
 package io.github.therealmone.spoParser;
 
-import io.github.therealmone.translatorAPI.Beans.Lexeme;
-import io.github.therealmone.translatorAPI.Utils.ResourceLoader;
-import io.github.therealmone.translatorAPI.Utils.SavePrinter;
-import io.github.therealmone.translatorAPI.Beans.Token;
+import io.github.therealmone.core.beans.Lexeme;
+import io.github.therealmone.core.utils.ResourceLoader;
+import io.github.therealmone.core.utils.SavePrinter;
+import io.github.therealmone.core.beans.Token;
 import io.github.therealmone.spoParser.exceptions.UnexpectedTokenException;
-import io.github.therealmone.translatorAPI.Exceptions.ParserException;
-import io.github.therealmone.translatorAPI.Interfaces.Visitor;
+import io.github.therealmone.core.exceptions.ParserException;
+import io.github.therealmone.core.interfaces.Visitor;
 
 import java.util.*;
 

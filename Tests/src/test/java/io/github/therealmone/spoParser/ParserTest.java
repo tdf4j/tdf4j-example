@@ -1,14 +1,14 @@
 package io.github.therealmone.spoParser;
 
 import io.github.therealmone.spoLexer.Lexer;
-import io.github.therealmone.translatorAPI.Beans.Lexeme;
+import io.github.therealmone.core.beans.Lexeme;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-import io.github.therealmone.translatorAPI.Utils.ResourceLoader;
-import io.github.therealmone.translatorAPI.Beans.Token;
+import io.github.therealmone.core.utils.ResourceLoader;
+import io.github.therealmone.core.beans.Token;
 
 import java.util.List;
 import java.util.Set;

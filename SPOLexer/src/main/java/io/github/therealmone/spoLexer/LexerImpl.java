@@ -1,9 +1,9 @@
 package io.github.therealmone.spoLexer;
 
-import io.github.therealmone.translatorAPI.Beans.Lexeme;
-import io.github.therealmone.translatorAPI.Utils.ResourceLoader;
-import io.github.therealmone.translatorAPI.Utils.SavePrinter;
-import io.github.therealmone.translatorAPI.Beans.Token;
+import io.github.therealmone.core.beans.Lexeme;
+import io.github.therealmone.core.utils.ResourceLoader;
+import io.github.therealmone.core.utils.SavePrinter;
+import io.github.therealmone.core.beans.Token;
 import io.github.therealmone.spoLexer.exceptions.UnexpectedSymbolException;
 
 import java.util.*;
