@@ -1,5 +1,6 @@
 package io.github.therealmone.core.utils;
 
+import io.github.therealmone.core.collections.Collection;
 import io.github.therealmone.core.exceptions.CasterException;
 
 public class Caster {
@@ -33,6 +34,34 @@ public class Caster {
         }
 
         return Boolean.valueOf(parameter);
+    }
+
+    public Object autoCastToObject(final String parameter) {
+        if (!isNotDouble(parameter)) {
+            return Double.valueOf(parameter);
+        } else if(!isNotBoolean(parameter)) {
+            return Boolean.valueOf(parameter);
+        } else if(!isNotString(parameter)) {
+            return parameter;
+        } else {
+            throw new CasterException("Unknown type of: " + parameter);
+        }
+    }
+
+    public String autoCastToString(final Object object) {
+        if(object instanceof Integer) {
+            return ((Integer) object).toString();
+        } else if(object instanceof Double) {
+            return ((Double) object).toString();
+        } else if(object instanceof Boolean) {
+            return ((Boolean) object).toString();
+        } else if(object instanceof String) {
+            return (String) object;
+        } else if (object instanceof Collection) {
+            return "\"" + ((Collection) object).toString() + "\"";
+        } else {
+            throw new CasterException("Unknown type of: " + object);
+        }
     }
 
     public boolean isNotDouble(final String parameter) {
@@ -79,11 +108,8 @@ public class Caster {
     }
 
     public boolean isNotInteger(final String parameter) {
-        if(isNotDouble(parameter)) {
-            throw new CasterException("Wrong type of: " + parameter);
-        }
 
-        return !(Double.parseDouble(parameter) % 1 == 0);
+        return !(!isNotDouble(parameter) && Double.parseDouble(parameter) % 1 == 0);
     }
 
     public boolean isNotInteger(final Double parameter) {
@@ -92,6 +118,10 @@ public class Caster {
 
     public boolean isNotBoolean(final String parameter) {
         return !(parameter.equals("true") || parameter.equals("false"));
+    }
+
+    public boolean isNotString(final String parameter) {
+        return !(parameter.matches("^\"(.*?)\"$"));
     }
 
 }

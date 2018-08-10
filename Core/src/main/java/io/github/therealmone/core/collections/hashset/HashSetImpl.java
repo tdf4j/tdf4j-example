@@ -29,23 +29,24 @@ class HashSetImpl implements HashSet {
     public String toString() {
         StringBuilder out = new StringBuilder();
 
-        out.append("\n\tHashSet@")
+        out.append("HashSet@")
                 .append(this.hashCode())
-                .append(": \n");
+                .append(": ")
+                .append("[ ");
 
         for (int i = 0; i < BUCKET_COUNT; i++) {
             Element current = (Element) buckets[i].getNext();
             while (current != null) {
-                out.append("\t")
+                out.append(" (")
                         .append(current.getName())
                         .append(" -> ")
                         .append(current.getValue())
-                        .append("\n");
+                        .append(")");
                 current = (Element) current.getNext();
             }
         }
 
-        out.replace(out.length() - 1, out.length(), "");
+        out.append(" ]");
         return out.toString();
     }
 

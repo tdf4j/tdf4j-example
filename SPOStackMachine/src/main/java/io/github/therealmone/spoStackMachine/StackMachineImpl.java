@@ -13,6 +13,10 @@ import io.github.therealmone.core.utils.SavePrinter;
 
 import java.util.*;
 
+
+//TODO (important!!!) Данный вариант стек-машины не очень хорош.
+//TODO Один из минусов: стек хранит только строки, что не позволяет реализовать некоторый функционал
+//TODO Оставляю этот вариант без изменений, но делаю новую стек-машину
 class StackMachineImpl implements StackMachine {
     private final Caster caster;
     private final Set<CommandBean> commands;
@@ -90,15 +94,11 @@ class StackMachineImpl implements StackMachine {
 
                 case "TAKE_VALUE": {
                     executions.put(commandBean.getType(), com -> {
-                        String varName = com.substring(1, com.length());
+                        String varName = com.substring(1);
 
                         if (variables.containsKey(varName)) {
-                            if (variables.get(varName) instanceof Double) {
-                                Double tmp = (Double) variables.get(varName);
-                                stack.push("" + tmp);
-                            } else {
-                                throw new WrongTypeException("Wrong type of " + varName);
-                            }
+                            String value = caster.autoCastToString(variables.get(varName));
+                            stack.push(value);
                         } else {
                             throw new NoVariableException("Can't find variable " + varName);
                         }
@@ -331,10 +331,10 @@ class StackMachineImpl implements StackMachine {
 
                 case "ASSIGN": {
                     executions.put(commandBean.getType(), com -> {
-                        Double value = caster.castToDouble(stack.pop());
+                        String parameter = stack.pop();
                         String varName = stack.pop();
                         if (variables.containsKey(varName))
-                            variables.replace(varName, value);
+                            variables.replace(varName, caster.autoCastToObject(parameter));
                         else {
                             throw new NoVariableException("Can't find variable " + varName);
                         }
@@ -475,7 +475,7 @@ class StackMachineImpl implements StackMachine {
         } else if (parameter.matches("^\"(.*?)\"$")) {
             SavePrinter.savePrintln(parameter.replaceAll("\"", ""));
         } else {
-            double value = getValueFromParameter(parameter);
+            double value = caster.castToDouble(getValueFromParameter(parameter));
             SavePrinter.savePrintln("" + value);
         }
     }
@@ -488,7 +488,7 @@ class StackMachineImpl implements StackMachine {
 
             ((HashSet) collection).add(parameter, (double) variables.get(parameter));
         } else if (collection instanceof ArrayList) {
-            double value = getValueFromParameter(parameter);
+            double value = caster.castToDouble(getValueFromParameter(parameter));
 
             ((ArrayList) collection).add(value);
         }
@@ -522,12 +522,12 @@ class StackMachineImpl implements StackMachine {
     private void rewrite(final Collection collection, final String... parameters) {
         if (collection instanceof HashSet) {
             String varName = parameters[0];
-            double value = getValueFromParameter(parameters[1]);
+            double value = caster.castToDouble(getValueFromParameter(parameters[1]));
 
             ((HashSet) collection).rewrite(varName, value);
         } else if (collection instanceof ArrayList) {
             int index = getIndexFromParameter(parameters[0]);
-            double value = getValueFromParameter(parameters[1]);
+            double value = caster.castToDouble(getValueFromParameter(parameters[1]));
 
             ((ArrayList) collection).rewrite(index, value);
         }
@@ -545,15 +545,15 @@ class StackMachineImpl implements StackMachine {
         }
     }
 
-    private double getValueFromParameter(final String parameter) {
+    private String getValueFromParameter(final String parameter) {
         if(variables.containsKey(parameter)) {
             if(!(variables.get(parameter) instanceof Double)) {
                 throw new WrongTypeException("Wrong type of: " + parameter);
             }
 
-            return (Double) variables.get(parameter);
+            return caster.autoCastToString(variables.get(parameter));
         } else {
-            return caster.castToDouble(parameter);
+            return caster.autoCastToString(parameter);
         }
     }
 

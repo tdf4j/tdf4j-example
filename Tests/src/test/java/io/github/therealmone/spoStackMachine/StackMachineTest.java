@@ -139,7 +139,7 @@ public class StackMachineTest {
                 "new a typeof hashset;" +
                         "print(a);"
         );
-        assertEquals("Wrong type of a\r\n", out.toString());
+        assertEquals("HashSet@3447021: [  ]\r\n", out.toString());
     }
 
     @Test
@@ -273,5 +273,48 @@ public class StackMachineTest {
                         "put(a, i);"
         );
         assertEquals("Wrong type of: i\r\n",out.toString());
+    }
+
+    @Test
+    public void typeCastTest() {
+        out.reset();
+        translator.translate(
+                "new a typeof arraylist;" +
+                        "put(a, 1);" +
+                        "put(a, 2);" +
+                        "print(a);" +
+                        "a = \"Test\";" +
+                        "print(a);" +
+                        "a = 100;" +
+                        "print(a);" +
+                        "a = 101.101;" +
+                        "print(a);"
+        );
+        assertEquals(       //      Этот хеш меня убьет D: (Запускать этот тест только в All in Tests)
+                "ArrayList@1595953398: [ (index = 0, value = 1.0)  (index = 1, value = 2.0) ]\r\n" +
+                        "Test\r\n" +
+                        "100.0\r\n" +
+                        "101.101\r\n"
+                ,out.toString()
+        );
+
+
+        out.reset();
+        translator.translate(
+                "new a typeof arraylist;" +
+                        "put(a, 1);" +
+                        "put(a, 2);" +
+                        "print(a);" +
+                        "new b typeof hashset;" +
+                        "a = b;" +
+                        "print(a);" + //При присваивании переменной любого типа отличного от примитивных, сконвертирует все в строку
+                        "put(a, 1);"
+        );
+        assertEquals(       //      Этот хеш меня убьет D: (Запускать этот тест только в All in Tests)
+                "ArrayList@1684106402: [ (index = 0, value = 1.0)  (index = 1, value = 2.0) ]\r\n" +
+                        "HashSet@335471116: [  ]\r\n" +
+                        "Wrong type of: a\r\n"
+                ,out.toString()
+        );
     }
 }

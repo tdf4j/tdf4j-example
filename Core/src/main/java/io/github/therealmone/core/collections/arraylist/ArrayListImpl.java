@@ -74,15 +74,20 @@ class ArrayListImpl implements ArrayList {
     @Override
     public String toString() {
         StringBuilder out = new StringBuilder();
-        out.append("ArrayList@").append(this.hashCode()).append(":\n");
+        out.append("ArrayList@")
+                .append(this.hashCode())
+                .append(": ")
+                .append("[");
+
         for (int i = 0; i < size; i++) {
-            out.append("\tindex = ")
+            out.append(" (index = ")
                     .append(i)
                     .append(", value = ")
                     .append(data[i])
-                    .append("\n");
+                    .append(") ");
         }
 
+        out.append("]");
         return out.toString();
     }
 

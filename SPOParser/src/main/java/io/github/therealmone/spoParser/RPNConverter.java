@@ -697,6 +697,9 @@ final class RPNConverter {
                     out.add(child.getToken().getValue());
                     break;
                 }
+                case "STRING": {
+                    out.add(child.getToken().getValue());
+                }
             }
         }
     }
@@ -775,11 +778,6 @@ final class RPNConverter {
     private static void print_parameters(final TreeNode root) {
         for (TreeNode child : root.getChildes()) {
             switch (child.getName()) {
-                case "STRING": {
-                    String value = child.getToken().getValue();
-                    out.add(value);
-                    break;
-                }
                 case "value_expr": {
                     value_expr(child);
                     break;
