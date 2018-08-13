@@ -290,12 +290,12 @@ public class StackMachineTest {
                         "a = 101.101;" +
                         "print(a);"
         );
-        assertEquals(       //      Этот хеш меня убьет D: (Запускать этот тест только в All in Tests)
-                "ArrayList@1595953398: [ (index = 0, value = 1.0)  (index = 1, value = 2.0) ]\r\n" +
+        assertEquals(
+                "ArrayList@hash: [ (index = 0, value = 1.0)  (index = 1, value = 2.0) ]\r\n" +
                         "Test\r\n" +
                         "100.0\r\n" +
                         "101.101\r\n"
-                ,out.toString()
+                ,out.toString().replaceAll("@\\d+", "@hash")
         );
 
 
@@ -310,11 +310,11 @@ public class StackMachineTest {
                         "print(a);" + //При присваивании переменной любого типа отличного от примитивных, сконвертирует все в строку
                         "put(a, 1);"
         );
-        assertEquals(       //      Этот хеш меня убьет D: (Запускать этот тест только в All in Tests)
-                "ArrayList@1684106402: [ (index = 0, value = 1.0)  (index = 1, value = 2.0) ]\r\n" +
-                        "HashSet@335471116: [  ]\r\n" +
+        assertEquals(
+                "ArrayList@hash: [ (index = 0, value = 1.0)  (index = 1, value = 2.0) ]\r\n" +
+                        "HashSet@hash: [  ]\r\n" +
                         "Wrong type of: a\r\n"
-                ,out.toString()
+                ,out.toString().replaceAll("@\\d+", "@hash")
         );
     }
 }
