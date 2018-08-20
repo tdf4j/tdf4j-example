@@ -2,10 +2,8 @@ package io.github.therealmone.core.utils;
 
 import com.opencsv.CSVReader;
 import io.github.therealmone.core.beans.CommandBean;
-import io.github.therealmone.core.beans.Lexeme;
 import org.apache.commons.digester3.Digester;
 import org.apache.commons.digester3.Rule;
-import org.xml.sax.Attributes;
 
 import java.io.*;
 import java.util.HashMap;
@@ -16,7 +14,6 @@ import java.util.regex.Pattern;
 
 public final class ResourceLoader {
     private static Caster caster;
-    private static Set<Lexeme> lexemes;
     private static Map<Integer, String[]> langRules;
     private static Map<String, Map<String, Integer>> analyzeTable;
     private static Set<CommandBean> commands;
@@ -31,7 +28,6 @@ public final class ResourceLoader {
             Thread current = Thread.currentThread();
 
             try {
-                loadLexemes(current.getContextClassLoader().getResourceAsStream("lexemes.xml"));
                 loadLangRules(current.getContextClassLoader().getResourceAsStream("langRules.csv"));
                 loadAnalyzeTable(current.getContextClassLoader().getResourceAsStream("analyzeTable.csv"));
                 loadCommands(current.getContextClassLoader().getResourceAsStream("commands.xml"));
@@ -41,18 +37,6 @@ public final class ResourceLoader {
 
             loaded = true;
         }
-    }
-
-    private static void loadLexemes(final InputStream is) throws Throwable {
-        lexemes = new HashSet<>();
-
-        Digester digester = new Digester();
-        digester.setValidating(false);
-        digester.addObjectCreate("lexemes_list/lexeme", Lexeme.class);
-        digester.addRule("lexemes_list/lexeme", new LexemeRule());
-        digester.addRule("lexemes_list/lexeme/type", new LexemeTypeRule());
-        digester.addRule("lexemes_list/lexeme/template", new LexemeTemplateRule());
-        digester.parse(is);
     }
 
     private static void loadLangRules(final InputStream is) {
@@ -112,10 +96,6 @@ public final class ResourceLoader {
         digester.parse(is);
     }
 
-    public synchronized static Set<Lexeme> getLexemes() {
-        return new HashSet<>(lexemes);
-    }
-
     public synchronized static Map<Integer, String[]> getLangRules() {
         return new HashMap<>(langRules);
     }
@@ -126,36 +106,6 @@ public final class ResourceLoader {
 
     public synchronized static Set<CommandBean> getCommands() {
         return new HashSet<>(commands);
-    }
-
-    private static class LexemeRule extends Rule {
-        @Override
-        public void begin(String namespace, String name, Attributes attributes) throws Exception {
-            Lexeme lexeme = getDigester().peek();
-            int priority = caster.castToInt(attributes.getValue("priority"));
-            lexeme.setPriority(priority);
-        }
-
-        @Override
-        public void end(String namespace, String name) throws Exception {
-            lexemes.add(getDigester().peek());
-        }
-    }
-
-    private static class LexemeTypeRule extends Rule {
-        @Override
-        public void body(String namespace, String name, String text) throws Exception {
-            Lexeme lexeme = getDigester().peek();
-            lexeme.setType(text);
-        }
-    }
-
-    private static class LexemeTemplateRule extends Rule {
-        @Override
-        public void body(String namespace, String name, String text) throws Exception {
-            Lexeme lexeme = getDigester().peek();
-            lexeme.setPattern(Pattern.compile(text));
-        }
     }
 
     private static class CommandRule extends Rule {

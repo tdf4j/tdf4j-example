@@ -1,13 +1,13 @@
 package io.github.therealmone.spoLexer.exceptions;
 
 import io.github.therealmone.core.exceptions.LexerException;
-import io.github.therealmone.core.interfaces.ExceptionInterface;
+import io.github.therealmone.core.interfaces.IException;
 import io.github.therealmone.core.utils.SavePrinter;
 import io.github.therealmone.core.beans.Token;
 
 import java.util.List;
 
-public class UnexpectedSymbolException extends LexerException implements ExceptionInterface {
+public class UnexpectedSymbolException extends LexerException implements IException {
     private final String input;
     private final List<Token> tokens;
 

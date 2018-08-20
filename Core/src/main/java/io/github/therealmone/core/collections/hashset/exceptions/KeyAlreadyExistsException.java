@@ -1,9 +1,9 @@
 package io.github.therealmone.core.collections.hashset.exceptions;
 
-import io.github.therealmone.core.interfaces.ExceptionInterface;
+import io.github.therealmone.core.interfaces.IException;
 import io.github.therealmone.core.utils.SavePrinter;
 
-public class KeyAlreadyExistsException extends HashSetException implements ExceptionInterface {
+public class KeyAlreadyExistsException extends HashSetException implements IException {
     private final String key;
 
     public KeyAlreadyExistsException(final String key) {

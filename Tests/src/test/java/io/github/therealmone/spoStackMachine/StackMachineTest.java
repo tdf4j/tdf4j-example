@@ -139,7 +139,7 @@ public class StackMachineTest {
                 "new a typeof hashset;" +
                         "print(a);"
         );
-        assertEquals("HashSet@3447021: [  ]\r\n", out.toString());
+        assertEquals("HashSet@hash: [  ]\r\n", out.toString().replaceAll("@\\d+", "@hash"));
     }
 
     @Test

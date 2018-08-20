@@ -3,14 +3,14 @@ package io.github.therealmone.core.beans;
 import java.util.regex.Pattern;
 
 public class Lexeme {
-    private String type;
-    private Pattern pattern;
-    private Integer priority;
+    private final String type;
+    private final Pattern pattern;
+    private final Integer priority;
 
-    public Lexeme() {
-        this.type = null;
-        this.pattern = null;
-        this.priority = null;
+    public Lexeme(final String type, final String template, final int priority) {
+        this.type = type;
+        this.pattern = Pattern.compile(template);
+        this.priority = priority;
     }
 
     public String getType() {
@@ -21,25 +21,7 @@ public class Lexeme {
         return pattern;
     }
 
-    public int getPriority() {
+    public Integer getPriority() {
         return priority;
-    }
-
-    public void setType(String type) {
-        if(this.type == null) {
-            this.type = type;
-        }
-    }
-
-    public void setPattern(Pattern pattern) {
-        if(this.pattern == null) {
-            this.pattern = pattern;
-        }
-    }
-
-    public void setPriority(Integer priority) {
-        if(this.priority == null) {
-            this.priority = priority;
-        }
     }
 }

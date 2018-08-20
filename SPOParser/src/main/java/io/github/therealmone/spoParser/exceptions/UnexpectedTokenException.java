@@ -1,11 +1,11 @@
 package io.github.therealmone.spoParser.exceptions;
 
 import io.github.therealmone.core.exceptions.ParserException;
-import io.github.therealmone.core.interfaces.ExceptionInterface;
+import io.github.therealmone.core.interfaces.IException;
 import io.github.therealmone.core.utils.SavePrinter;
 import io.github.therealmone.core.beans.Token;
 
-public class UnexpectedTokenException extends ParserException implements ExceptionInterface {
+public class UnexpectedTokenException extends ParserException implements IException {
     private final String expected;
     private final Token token;
     private final String history;

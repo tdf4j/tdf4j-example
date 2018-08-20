@@ -22,7 +22,7 @@ public class ParserTest {
 
     @Test
     public void parserTests() {
-        Lexer lexer = Lexer.getInstance();
+        Lexer lexer = Lexer.getDefault();
         Set<Lexeme> terminals = lexer.getTerminals();
 
         //while tests
@@ -139,7 +139,7 @@ public class ParserTest {
 
     @Test
     public void converterTests() {
-        Lexer lexer = Lexer.getInstance();
+        Lexer lexer = Lexer.getDefault();
         Set<Lexeme> terminals = lexer.getTerminals();
 
         lexer.generateTokens(""); //main program
@@ -191,7 +191,7 @@ public class ParserTest {
 
     @Test
     public void testOptimizer() {
-        Lexer lexer = Lexer.getInstance();
+        Lexer lexer = Lexer.getDefault();
         Set<Lexeme> terminals = lexer.getTerminals();
 
         lexer.generateTokens("print(100 / (25 + 25));");

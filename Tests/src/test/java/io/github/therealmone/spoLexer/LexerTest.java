@@ -15,7 +15,7 @@ public class LexerTest {
 
     @Test
     public void testGenerate() {
-        Lexer lexer = Lexer.getInstance();
+        Lexer lexer = Lexer.getDefault();
 
         //Success tests
         lexer.generateTokens("value");

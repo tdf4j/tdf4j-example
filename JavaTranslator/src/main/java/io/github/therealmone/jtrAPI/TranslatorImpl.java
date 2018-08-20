@@ -4,7 +4,7 @@ import io.github.therealmone.spoLexer.Lexer;
 import io.github.therealmone.spoParser.Parser;
 import io.github.therealmone.spoStackMachine.StackMachine;
 import io.github.therealmone.core.exceptions.TranslatorException;
-import io.github.therealmone.core.interfaces.ExceptionInterface;
+import io.github.therealmone.core.interfaces.IException;
 import io.github.therealmone.core.utils.ResourceLoader;
 import io.github.therealmone.core.utils.SavePrinter;
 import io.github.therealmone.core.beans.Token;
@@ -32,7 +32,7 @@ class TranslatorImpl implements Translator {
 
     private void defaultTranslate(String program) {
         try {
-            lexer = Lexer.getInstance();
+            lexer = Lexer.getDefault();
             lexer.generateTokens(program);
 
             parser = Parser.getInstance(lexer.getTerminals());
@@ -52,7 +52,7 @@ class TranslatorImpl implements Translator {
             SavePrinter.savePrintln("\u001B[31mMAIN PROGRAM\u001B[0m");
             SavePrinter.savePrintln("-----------------------------------------------------------------------------------------");
 
-            lexer = Lexer.getInstance();
+            lexer = Lexer.getDefault();
             lexer.showLexemes();
 
             lexer.generateTokens(program);
@@ -91,8 +91,8 @@ class TranslatorImpl implements Translator {
     }
 
     private void printError(TranslatorException e) {
-        if (e instanceof ExceptionInterface) {
-            ((ExceptionInterface) e).message();
+        if (e instanceof IException) {
+            ((IException) e).message();
         } else {
             SavePrinter.savePrintln(e.getMessage());
         }

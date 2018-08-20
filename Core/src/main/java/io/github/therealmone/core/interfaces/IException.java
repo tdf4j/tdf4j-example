@@ -1,5 +1,5 @@
 package io.github.therealmone.core.interfaces;
 
-public interface ExceptionInterface {
+public interface IException {
     void message();
 }

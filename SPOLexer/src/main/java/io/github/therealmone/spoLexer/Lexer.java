@@ -17,7 +17,11 @@ public interface Lexer {
 
     void showLexemes();
 
-    static Lexer getInstance() {
+    static Lexer getDefault() {
         return new LexerImpl();
+    }
+
+    static Lexer getConfigurable(AbstractLexerConfig config) {
+        return new LexerImpl(config);
     }
 }
