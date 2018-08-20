@@ -16,11 +16,11 @@ public abstract class AbstractLexerConfig {
 
     public abstract void configure();
 
-    void addLexeme(String type, String template, int priority) {
+    public void addLexeme(String type, String template, int priority) {
         this.lexemes.add(new Lexeme(type, template, priority));
     }
 
-    Set<Lexeme> getLexemes() {
+    public Set<Lexeme> getLexemes() {
         return Collections.unmodifiableSet(lexemes);
     }
 }

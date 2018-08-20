@@ -35,7 +35,7 @@ class TranslatorImpl implements Translator {
             lexer = Lexer.getDefault();
             lexer.generateTokens(program);
 
-            parser = Parser.getInstance(lexer.getTerminals());
+            parser = Parser.getDefault(lexer.getTerminals());
             for (Token token : lexer.getTokens()) {
                 token.accept(parser);
             }
@@ -58,7 +58,7 @@ class TranslatorImpl implements Translator {
             lexer.generateTokens(program);
             lexer.showTokens();
 
-            parser = Parser.getInstance(lexer.getTerminals());
+            parser = Parser.getDefault(lexer.getTerminals());
             parser.showLangRules();
 
             for (Token token : lexer.getTokens()) {

@@ -12,7 +12,11 @@ public interface Parser extends Visitor, Visitable {
 
     List<String> getRPN();
 
-    static Parser getInstance(Set<Lexeme> terminals) {
+    static Parser getDefault(Set<Lexeme> terminals) {
         return new ParserImpl(terminals);
+    }
+
+    static Parser getConfigurable(Set<Lexeme> terminals, AbstractParserConfig config) {
+        return new ParserImpl(terminals, config);
     }
 }

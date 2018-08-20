@@ -1,37 +1,38 @@
-package io.github.therealmone.spoParser;
+package io.github.therealmone.spoParser.beans;
 
 import io.github.therealmone.core.beans.Node;
 import io.github.therealmone.core.beans.Token;
 
 import java.util.ArrayList;
+import java.util.List;
 
-class TreeNode extends Node {
-    private ArrayList<TreeNode> childes;
+public class ASLTreeNode extends Node {
+    private List<ASLTreeNode> childes;
     private Token token;
 
-    TreeNode(final String value) {
+    public ASLTreeNode(final String value) {
         super(value);
         this.childes = new ArrayList<>();
     }
 
-    TreeNode(final String value, final TreeNode parent) {
+    public ASLTreeNode(final String value, final ASLTreeNode parent) {
         super(value, parent);
         this.childes = new ArrayList<>();
     }
 
-    void addChild(final TreeNode child) {
+    public void addChild(final ASLTreeNode child) {
         this.childes.add(child);
     }
 
-    Token getToken() {
+    public Token getToken() {
         return this.token;
     }
 
-    void setToken(final Token token) {
+    public void setToken(final Token token) {
         this.token = token;
     }
 
-    ArrayList<TreeNode> getChildes() {
+    public List<ASLTreeNode> getChildes() {
         return this.childes;
     }
 }

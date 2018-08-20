@@ -1,4 +1,4 @@
-package io.github.therealmone.spoParser;
+package io.github.therealmone.spoParser.utils;
 
 import io.github.therealmone.core.utils.Caster;
 
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Stack;
 
 //Есть смысл оптимизировать только математические операции, так как все остальные всегда требуют ссылку на переменную
-final class RPNOptimizer {
+public final class RPNOptimizer {
     private static Stack<String> stack;
     private static final List<String> operatorsToOptimize;
     private static final Caster caster;
@@ -24,7 +24,7 @@ final class RPNOptimizer {
         }};
     }
 
-    synchronized static List<String> optimize(final List<String> rpn) {
+    public synchronized static List<String> optimize(final List<String> rpn) {
         stack = new Stack<>();
 
         for (final String command : rpn) {

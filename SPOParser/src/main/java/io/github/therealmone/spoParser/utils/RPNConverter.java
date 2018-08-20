@@ -1,6 +1,8 @@
-package io.github.therealmone.spoParser;
+package io.github.therealmone.spoParser.utils;
 
 import io.github.therealmone.core.beans.Token;
+import io.github.therealmone.spoParser.beans.ASLTreeNode;
+
 
 import java.util.*;
 
@@ -19,7 +21,7 @@ import java.util.*;
  * 1 - =. typeof, put, get, remove, rewrite, print
  **/
 
-final class RPNConverter {
+public final class RPNConverter {
     private static final Map<String, Integer> priority;
     private static Stack<String> stack;
     private static List<String> out;
@@ -56,7 +58,7 @@ final class RPNConverter {
         }};
     }
 
-    static synchronized List<String> convertToRPN(final TreeNode root) {
+    public static synchronized List<String> convertToRPN(final ASLTreeNode root) {
         stack = new Stack<>();
         out = new ArrayList<>();
 
@@ -64,8 +66,8 @@ final class RPNConverter {
         return out;
     }
 
-    private static void lang(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void lang(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "expr": {
                     expr(child);
@@ -83,8 +85,8 @@ final class RPNConverter {
         }
     }
 
-    private static void expr(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void expr(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "while_loop": {
                     while_loop(child);
@@ -135,8 +137,8 @@ final class RPNConverter {
         }
     }
 
-    private static void expr_continue(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void expr_continue(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "expr": {
                     expr(child);
@@ -150,13 +152,13 @@ final class RPNConverter {
         }
     }
 
-    private static void while_loop(final TreeNode root) {
+    private static void while_loop(final ASLTreeNode root) {
         //while(a < b) {a + b} -> (index1)ab<!F@pab+!@p(index2) ; !@Fp - to index2 , !@p - to index1
         int index1 = 0; //at a
         int index2 = 0; //after !@p
         int iteration = Thread.getAllStackTraces().hashCode();
 
-        for (TreeNode child : root.getChildes()) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "WHILE":
                     break;
@@ -197,13 +199,13 @@ final class RPNConverter {
 
     }
 
-    private static void if_statement(final TreeNode root) {
+    private static void if_statement(final ASLTreeNode root) {
         //if (a < b) {a + b} -> ab<!F@pab+!@p (index1) ' else ' (index2) ; !F@p - to index1 , !@p - to index2 // if no else, then index2 = index1
         int index1 = 0;
         int index2 = 0;
         int iteration = Thread.getAllStackTraces().hashCode();
 
-        for (TreeNode child : root.getChildes()) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "IF":
                     break;
@@ -243,8 +245,8 @@ final class RPNConverter {
         out.set(out.indexOf("!@p" + iteration), "!@" + index2);
     }
 
-    private static void else_(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void else_(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "ELSE":
                     break;
@@ -260,8 +262,8 @@ final class RPNConverter {
         }
     }
 
-    private static void assign_expr(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void assign_expr(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "VAR": {
                     out.add("#" + child.getToken().getValue());
@@ -279,12 +281,12 @@ final class RPNConverter {
         }
     }
 
-    private static void do_while_loop(final TreeNode root) {
+    private static void do_while_loop(final ASLTreeNode root) {
         //do {a + b} while (a < b) -> (index1)ab+ab<!@T ; !@T - to index1
         int iteration = Thread.getAllStackTraces().hashCode();
         int index1 = 0;
 
-        for (TreeNode child : root.getChildes()) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "DO":
                     break;
@@ -317,18 +319,18 @@ final class RPNConverter {
         out.set(out.indexOf("!T@p" + iteration), "!T@" + index1);
     }
 
-    private static void for_loop(final TreeNode root) {
+    private static void for_loop(final ASLTreeNode root) {
         //for(i = 1; i < 1; i = i + 1) {a = 0;} -> i1= (index1) i1<!F@pa0=ii1+=!@p (index2) ; !@Fp - to index2, !@p - to index1
         int iteration = Thread.getAllStackTraces().hashCode();
         int index1; //at i
         int index2; //after !@p
 
-        TreeNode condition = new TreeNode("");
-        TreeNode assign = new TreeNode("");
-        TreeNode increment = new TreeNode("");
-        TreeNode expr_continue = new TreeNode("");
+        ASLTreeNode condition = new ASLTreeNode("");
+        ASLTreeNode assign = new ASLTreeNode("");
+        ASLTreeNode increment = new ASLTreeNode("");
+        ASLTreeNode expr_continue = new ASLTreeNode("");
 
-        for (TreeNode child : root.getChildes()) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "FOR":
                     break;
@@ -386,8 +388,8 @@ final class RPNConverter {
         out.set(out.indexOf("!@p" + iteration), "!@" + index1);
     }
 
-    private static void init_expr(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void init_expr(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "NEW": {
                     pushOP(child.getToken());
@@ -405,8 +407,8 @@ final class RPNConverter {
         }
     }
 
-    private static void init_expr_continue(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void init_expr_continue(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "TYPEOF": {
                     pushOP(child.getToken());
@@ -428,8 +430,8 @@ final class RPNConverter {
         }
     }
 
-    private static void print_expr(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void print_expr(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "PRINT": {
                     pushOP(child.getToken());
@@ -447,8 +449,8 @@ final class RPNConverter {
         }
     }
 
-    private static void type(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void type(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "HASHSET": {
                     out.add("#" + child.getToken().getValue());
@@ -462,8 +464,8 @@ final class RPNConverter {
         }
     }
 
-    private static void put_expr(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void put_expr(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "PUT": {
                     pushOP(child.getToken());
@@ -487,8 +489,8 @@ final class RPNConverter {
         }
     }
 
-    private static void remove_expr(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void remove_expr(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "REMOVE": {
                     pushOP(child.getToken());
@@ -512,8 +514,8 @@ final class RPNConverter {
         }
     }
 
-    private static void rewrite_expr(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void rewrite_expr(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "REWRITE": {
                     pushOP(child.getToken());
@@ -542,8 +544,8 @@ final class RPNConverter {
     }
 
 
-    private static void condition(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void condition(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "condition_with_br": {
                     condition_with_br(child);
@@ -561,8 +563,8 @@ final class RPNConverter {
         }
     }
 
-    private static void condition_with_br(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void condition_with_br(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "LB": {
                     pushOP(child.getToken());
@@ -580,8 +582,8 @@ final class RPNConverter {
         }
     }
 
-    private static void condition_without_br(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void condition_without_br(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "compare_expr": {
                     compare_expr(child);
@@ -591,8 +593,8 @@ final class RPNConverter {
         }
     }
 
-    private static void condition_continue(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void condition_continue(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "LOP": {
                     pushOP(child.getToken());
@@ -606,8 +608,8 @@ final class RPNConverter {
         }
     }
 
-    private static void compare_expr(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void compare_expr(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "value_expr": {
                     value_expr(child);
@@ -621,8 +623,8 @@ final class RPNConverter {
         }
     }
 
-    private static void value_expr(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void value_expr(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "value_expr_with_br": {
                     value_expr_with_br(child);
@@ -640,8 +642,8 @@ final class RPNConverter {
         }
     }
 
-    private static void value_expr_with_br(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void value_expr_with_br(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "LB": {
                     pushOP(child.getToken());
@@ -659,8 +661,8 @@ final class RPNConverter {
         }
     }
 
-    private static void value_without_br(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void value_without_br(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "value": {
                     value(child);
@@ -682,8 +684,8 @@ final class RPNConverter {
         }
     }
 
-    private static void value(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void value(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "VAR": {
                     out.add(checkTrace() + child.getToken().getValue());
@@ -715,8 +717,8 @@ final class RPNConverter {
                 : "%";
     }
 
-    private static void value_expr_continue(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void value_expr_continue(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "OP": {
                     pushOP(child.getToken());
@@ -730,8 +732,8 @@ final class RPNConverter {
         }
     }
 
-    private static void get_expr(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void get_expr(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "GET": {
                     pushOP(child.getToken());
@@ -756,8 +758,8 @@ final class RPNConverter {
     }
 
 
-    private static void size_expr(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void size_expr(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "SIZE": {
                     pushOP(child.getToken());
@@ -775,8 +777,8 @@ final class RPNConverter {
         }
     }
 
-    private static void print_parameters(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void print_parameters(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "value_expr": {
                     value_expr(child);
@@ -790,8 +792,8 @@ final class RPNConverter {
         }
     }
 
-    private static void print_parameters_continue(final TreeNode root) {
-        for (TreeNode child : root.getChildes()) {
+    private static void print_parameters_continue(final ASLTreeNode root) {
+        for (ASLTreeNode child : root.getChildes()) {
             switch (child.getName()) {
                 case "CONCAT": {
                     pushOP(child.getToken());
