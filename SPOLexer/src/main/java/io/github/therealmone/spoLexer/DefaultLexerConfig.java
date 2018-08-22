@@ -1,6 +1,6 @@
 package io.github.therealmone.spoLexer;
 
-class DefaultLexerConfig extends AbstractLexerConfig {
+public class DefaultLexerConfig extends AbstractLexerConfig {
     @Override
     public void configure() {
         addLexeme("VAR", "^[a-z]+$", 1);
