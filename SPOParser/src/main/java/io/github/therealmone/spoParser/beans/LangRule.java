@@ -20,6 +20,10 @@ public class LangRule {
         return this;
     }
 
+    public void openByDefaultAsError() {
+        openByDefaultAsError = true;
+    }
+
     public LangRule openWith(final String terminal, final String... value) {
         opening.put(terminal, value);
         return this;
