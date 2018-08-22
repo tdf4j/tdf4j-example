@@ -45,8 +45,8 @@ class ParserImpl implements Parser {
         this.history = new StringBuilder();
         this.config = new DefaultParserConfig();
 
-        stack.push("lang");
-        root = new ASLTreeNode("lang");
+        stack.push(config.getInitProduction());
+        root = new ASLTreeNode(config.getInitProduction());
         currentTreeNode = root;
     }
 
@@ -57,8 +57,8 @@ class ParserImpl implements Parser {
         this.history = new StringBuilder();
         this.config = config;
 
-        stack.push("lang");
-        root = new ASLTreeNode("lang");
+        stack.push(config.getInitProduction());
+        root = new ASLTreeNode(config.getInitProduction());
         currentTreeNode = root;
     }
 

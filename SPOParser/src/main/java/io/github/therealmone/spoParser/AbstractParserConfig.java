@@ -7,6 +7,7 @@ import java.util.*;
 
 public abstract class AbstractParserConfig {
     private Map<String, LangRule> langRules;
+    private String initProduction = "lang";
 
     public AbstractParserConfig() {
         langRules = new HashMap<>();
@@ -38,6 +39,14 @@ public abstract class AbstractParserConfig {
             langRules.put(productionName, newRule);
             return newRule;
         }
+    }
+
+    public void setInitProduction(final String production) {
+        this.initProduction = production;
+    }
+
+    public String getInitProduction() {
+        return initProduction;
     }
 
     public Map<String, LangRule> getLangRules() {

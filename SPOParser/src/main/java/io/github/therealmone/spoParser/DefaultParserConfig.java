@@ -3,7 +3,8 @@ package io.github.therealmone.spoParser;
 public class DefaultParserConfig extends AbstractParserConfig {
     @Override
     public void configure() {
-        addLangRule("lang")
+        setInitProduction("begin");
+        addLangRule("begin")
                 .openByDefault("expr", "expr_continue", "$")
                 .openWith("$", "$");
 
