@@ -9,20 +9,25 @@ public abstract class AbstractParserConfig {
     private Map<String, LangRule> langRules;
     private String initProduction = "lang";
 
-    public AbstractParserConfig() {
+    protected AbstractParserConfig() {
         langRules = new HashMap<>();
         configure();
+        editConfig();
     }
 
     public abstract void configure();
 
-    public LangRule addLangRule(String productionName) {
+    public void editConfig() {
+        /*Override it*/
+    }
+
+    protected LangRule addLangRule(String productionName) {
         LangRule rule = new LangRule();
         langRules.put(productionName, rule);
         return rule;
     }
 
-    public void removeLangRule(final String productionName) {
+    protected void removeLangRule(final String productionName) {
         if(langRules.containsKey(productionName)) {
             langRules.remove(productionName);
         } else {
@@ -30,7 +35,7 @@ public abstract class AbstractParserConfig {
         }
     }
 
-    public LangRule editLangRule(final String productionName) {
+    protected LangRule editLangRule(final String productionName) {
         if(langRules.containsKey(productionName)) {
             return langRules.get(productionName);
         } else {
@@ -41,15 +46,15 @@ public abstract class AbstractParserConfig {
         }
     }
 
-    public void setInitProduction(final String production) {
+    protected void setInitProduction(final String production) {
         this.initProduction = production;
     }
 
-    public String getInitProduction() {
+    protected String getInitProduction() {
         return initProduction;
     }
 
-    public Map<String, LangRule> getLangRules() {
+    protected Map<String, LangRule> getLangRules() {
         return Collections.unmodifiableMap(langRules);
     }
 }

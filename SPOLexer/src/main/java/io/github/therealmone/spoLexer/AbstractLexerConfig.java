@@ -10,7 +10,7 @@ import java.util.Set;
 public abstract class AbstractLexerConfig {
     private Set<Lexeme> lexemes;
 
-    public AbstractLexerConfig() {
+    protected AbstractLexerConfig() {
         lexemes = new HashSet<>();
         configure();
         editConfig();
@@ -22,7 +22,7 @@ public abstract class AbstractLexerConfig {
         /*Override it*/
     }
 
-    public void addLexeme(final String type, final String template, final int priority) {
+    protected void addLexeme(final String type, final String template, final int priority) {
         if(!containsLexeme(type)) {
             this.lexemes.add(new Lexeme(type, template, priority));
         } else {
@@ -30,7 +30,7 @@ public abstract class AbstractLexerConfig {
         }
     }
 
-    public void removeLexeme(final String type) {
+    protected void removeLexeme(final String type) {
         for(Lexeme lexeme : lexemes) {
             if(lexeme.getType().equals(type)) {
                 lexemes.remove(lexeme);
@@ -41,7 +41,7 @@ public abstract class AbstractLexerConfig {
         SavePrinter.savePrintln("[removeLexeme] Lexeme " + type + " wasn't found");
     }
 
-    public void editLexeme(final String type, final String template, final int priority) {
+    protected void editLexeme(final String type, final String template, final int priority) {
         for(Lexeme lexeme: lexemes) {
             if(lexeme.getType().equals(type)) {
                 lexeme = new Lexeme(type, template, priority);
@@ -62,7 +62,7 @@ public abstract class AbstractLexerConfig {
         return false;
     }
 
-    public Set<Lexeme> getLexemes() {
+    protected Set<Lexeme> getLexemes() {
         return Collections.unmodifiableSet(lexemes);
     }
 }
