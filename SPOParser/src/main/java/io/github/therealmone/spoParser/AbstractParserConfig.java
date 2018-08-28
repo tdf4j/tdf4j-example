@@ -1,11 +1,12 @@
 package io.github.therealmone.spoParser;
 
+import io.github.therealmone.core.interfaces.IConfig;
 import io.github.therealmone.core.utils.SavePrinter;
 import io.github.therealmone.spoParser.beans.LangRule;
 
 import java.util.*;
 
-public abstract class AbstractParserConfig {
+public abstract class AbstractParserConfig implements IConfig {
     private Map<String, LangRule> langRules;
     private String initProduction = "lang";
 
@@ -15,13 +16,12 @@ public abstract class AbstractParserConfig {
         editConfig();
     }
 
-    public abstract void configure();
-
+    @Override
     public void editConfig() {
         /*Override it*/
     }
 
-    protected LangRule addLangRule(String productionName) {
+    protected LangRule addLangRule(final String productionName) {
         LangRule rule = new LangRule();
         langRules.put(productionName, rule);
         return rule;

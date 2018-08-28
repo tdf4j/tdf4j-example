@@ -1,11 +1,13 @@
 package io.github.therealmone.spoStackMachine;
 
+import io.github.therealmone.core.interfaces.IConfig;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 import java.util.regex.Pattern;
 
-public abstract class AbstractStackMachineConfig {
+public abstract class AbstractStackMachineConfig implements IConfig {
     private Stack<Object> stack;
     private Map<Pattern, Command> commands;
 
@@ -16,22 +18,23 @@ public abstract class AbstractStackMachineConfig {
         editConfig();
     }
 
-    public abstract void configure();
-
+    @Override
     public void editConfig() {
         /*Override it*/
     }
 
     protected void addCommand(final String template, final Command command) {
-        for(Pattern pattern: commands.keySet()) {
-            if(pattern.pattern().equals(template)) {
-                return;
-            }
+        if(containsPattern(template)) {
+            return;
         }
+
+        commands.put(Pattern.compile(template), command);
     }
 
     protected void removeCommand(final String template) {
-
+        for(Pattern pattern : commands.keySet()) {
+            if(pattern.pattern().equals(template)) {}
+        }
     }
 
     protected void editCommand(final String template, final Command command) {
@@ -56,5 +59,15 @@ public abstract class AbstractStackMachineConfig {
         }
 
         return null;
+    }
+
+    private boolean containsPattern(final String template) {
+        for(Pattern pattern: commands.keySet()) {
+            if(pattern.pattern().equals(template)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

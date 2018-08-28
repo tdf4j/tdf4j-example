@@ -1,13 +1,14 @@
 package io.github.therealmone.spoLexer;
 
 import io.github.therealmone.core.beans.Lexeme;
+import io.github.therealmone.core.interfaces.IConfig;
 import io.github.therealmone.core.utils.SavePrinter;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class AbstractLexerConfig {
+public abstract class AbstractLexerConfig implements IConfig {
     private Set<Lexeme> lexemes;
 
     protected AbstractLexerConfig() {
@@ -16,8 +17,7 @@ public abstract class AbstractLexerConfig {
         editConfig();
     }
 
-    public abstract void configure();
-
+    @Override
     public void editConfig() {
         /*Override it*/
     }
