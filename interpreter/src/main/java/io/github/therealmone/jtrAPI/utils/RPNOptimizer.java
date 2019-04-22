@@ -1,4 +1,4 @@
-package io.github.therealmone.jtrAPI.Utils;
+package io.github.therealmone.jtrAPI.utils;
 
 import io.github.therealmone.core.utils.Caster;
 

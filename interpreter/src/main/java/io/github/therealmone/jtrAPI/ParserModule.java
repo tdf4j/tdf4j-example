@@ -1,13 +1,39 @@
 package io.github.therealmone.jtrAPI;
 
+import io.github.therealmone.jtrAPI.converter.*;
 import io.github.therealmone.tdf4j.parser.config.AbstractParserModule;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ParserModule extends AbstractParserModule {
+    private final List<String> rpn = new ArrayList<>();
+
     @Override
     public void configure() {
+
+        environment()
+                .packages("io.github.therealmone.jtrAPI.converter.*")
+                .dependencies(
+                        dependency(List.class, "rpn", rpn),
+                        dependency(Converter.class, "assignConverter", new AssignConverter()),
+                        dependency(Converter.class, "doWhileLoopConverter", new DoWhileLoopConverter()),
+                        dependency(Converter.class, "forLoopConverter", new ForLoopConverter()),
+                        dependency(Converter.class, "ifConverter", new IfConverter()),
+                        dependency(Converter.class, "initConverter", new InitConverter()),
+                        dependency(Converter.class, "printConverter", new PrintConverter()),
+                        dependency(Converter.class, "putConverter", new PutConverter()),
+                        dependency(Converter.class, "removeConverter", new RemoveConverter()),
+                        dependency(Converter.class, "rewriteConverter", new RewriteConverter()),
+                        dependency(Converter.class, "whileLoopConverter", new WhileLoopConverter())
+                );
+
         prod("lang")
-                .then(repeat(nt("expr")))
-                .then(t("$"));
+                .is(
+                        inline("rpn.clear();"),
+                        repeat(nt("expr")),
+                        t("$")
+                );
 
         prod("expr")
                 .then(oneOf(
@@ -31,7 +57,8 @@ public class ParserModule extends AbstractParserModule {
                         t("RB"),
                         t("FLB"),
                         repeat(nt("expr")),
-                        t("FRB")
+                        t("FRB"),
+                        inline("rpn.addAll(whileLoopConverter.convert(ast.onCursor()));")
                 );
 
         prod("for_loop")
@@ -46,7 +73,8 @@ public class ParserModule extends AbstractParserModule {
                         t("RB"),
                         t("FLB"),
                         repeat(nt("expr")),
-                        t("FRB")
+                        t("FRB"),
+                        inline("rpn.addAll(forLoopConverter.convert(ast.onCursor()));")
                 );
 
         prod("if_statement")
@@ -58,7 +86,8 @@ public class ParserModule extends AbstractParserModule {
                         t("FLB"),
                         repeat(nt("expr")),
                         t("FRB"),
-                        optional(nt("else_stmt"))
+                        optional(nt("else_stmt")),
+                        inline("rpn.addAll(ifConverter.convert(ast.onCursor()));")
                 );
 
         prod("else_stmt")
@@ -74,7 +103,8 @@ public class ParserModule extends AbstractParserModule {
                         t("VAR"),
                         t("ASSIGN_OP"),
                         nt("value_expr"),
-                        t("DEL")
+                        t("DEL"),
+                        inline("rpn.addAll(assignConverter.convert(ast.onCursor()));")
                 );
 
         prod("assign_expr_without_del")
@@ -93,7 +123,8 @@ public class ParserModule extends AbstractParserModule {
                         t("WHILE"),
                         t("LB"),
                         nt("condition"),
-                        t("RB")
+                        t("RB"),
+                        inline("rpn.addAll(doWhileLoopConverter.convert(ast.onCursor()));")
                 );
 
         prod("print_expr")
@@ -102,7 +133,8 @@ public class ParserModule extends AbstractParserModule {
                         t("LB"),
                         nt("print_parameters"),
                         t("RB"),
-                        t("DEL")
+                        t("DEL"),
+                        inline("rpn.addAll(printConverter.convert(ast.onCursor()));")
                 );
 
         prod("print_parameters")
@@ -122,7 +154,8 @@ public class ParserModule extends AbstractParserModule {
                         t("COMMA"),
                         nt("value"),
                         t("RB"),
-                        t("DEL")
+                        t("DEL"),
+                        inline("rpn.addAll(putConverter.convert(ast.onCursor()));")
                 );
 
         prod("remove_expr")
@@ -133,7 +166,8 @@ public class ParserModule extends AbstractParserModule {
                         t("COMMA"),
                         nt("value"),
                         t("RB"),
-                        t("DEL")
+                        t("DEL"),
+                        inline("rpn.addAll(removeConverter.convert(ast.onCursor()));")
                 );
 
         prod("rewrite_expr")
@@ -146,7 +180,8 @@ public class ParserModule extends AbstractParserModule {
                         t("COMMA"),
                         nt("value_expr"),
                         t("RB"),
-                        t("DEL")
+                        t("DEL"),
+                        inline("rpn.addAll(rewriteConverter.convert(ast.onCursor()));")
                 );
 
         prod("init_expr")
@@ -154,7 +189,8 @@ public class ParserModule extends AbstractParserModule {
                         t("NEW"),
                         t("VAR"),
                         optional(nt("inst_expr")),
-                        t("DEL")
+                        t("DEL"),
+                        inline("rpn.addAll(initConverter.convert(ast.onCursor()));")
                 );
 
         prod("inst_expr")
