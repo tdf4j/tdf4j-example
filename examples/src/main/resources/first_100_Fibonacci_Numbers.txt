@@ -1,0 +1,16 @@
+new nzero = 0;
+new nfirst = 1;
+new ni = 0;
+new i = 0;
+
+print("First 100 Fibonacci numbers: ");
+
+print(nzero);
+print(nfirst);
+for(i = 0; i < 98; i = i + 1) {
+    ni = nzero + nfirst;
+    print(ni);
+    nzero = nfirst;
+    nfirst = ni;
+}
+$

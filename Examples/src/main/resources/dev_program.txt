@@ -1,7 +1,0 @@
-new a typeof arraylist;
-put(a, 1);
-put(a, 2);
-print(a);
-new b typeof hashset;
-a = b;
-print(a);

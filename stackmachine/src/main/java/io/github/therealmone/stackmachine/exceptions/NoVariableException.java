@@ -1,0 +1,17 @@
+package io.github.therealmone.stackmachine.exceptions;
+
+import io.github.therealmone.core.exceptions.StackMachineException;
+
+public class NoVariableException extends StackMachineException {
+    public NoVariableException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
+
+    public NoVariableException(final String message) {
+        super(message);
+    }
+
+    public NoVariableException(final Throwable cause) {
+        super(cause);
+    }
+}
