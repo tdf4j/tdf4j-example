@@ -12,7 +12,7 @@
     <artifactId>interpreter</artifactId>
     <version>1.1.0</version>
 
-    <name>Java translator API</name>
+    <name>Interpreter</name>
     <description>API for using java translator</description>
     <url>https://github.com/therealmonE/SPOTranslator/tree/master/JavaTranslator</url>
 

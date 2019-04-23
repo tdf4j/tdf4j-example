@@ -8,13 +8,13 @@ import java.util.Stack;
 
 //Есть смысл оптимизировать только математические операции, так как все остальные всегда требуют ссылку на переменную
 public final class RPNOptimizer {
-    private static Stack<String> stack;
-    private static final List<String> operatorsToOptimize;
-    private static final Caster caster;
+    private Stack<String> stack;
+    private final List<String> operatorsToOptimize;
+    private final Caster caster;
 
-    static {
+    public RPNOptimizer() {
         caster = new Caster();
-        operatorsToOptimize = new ArrayList<String>() {{
+        operatorsToOptimize = new ArrayList<>() {{
             add("*");
             add("/");
             add("-");
@@ -24,7 +24,7 @@ public final class RPNOptimizer {
         }};
     }
 
-    public synchronized static List<String> optimize(final List<String> rpn) {
+    public List<String> optimize(final List<String> rpn) {
         stack = new Stack<>();
 
         for (final String command : rpn) {
@@ -38,7 +38,7 @@ public final class RPNOptimizer {
         return new ArrayList<>(stack);
     }
 
-    private static void optimizeOperand(final String command) {
+    private void optimizeOperand(final String command) {
         switch (command) {
 
             case "*": {

@@ -1,9 +1,7 @@
 package io.github.therealmone.jtrAPI;
 
 import io.github.therealmone.tdf4j.commons.Token;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import io.github.therealmone.core.utils.ResourceLoader;
 import io.github.therealmone.tdf4j.lexer.*;
 
 import java.util.List;
@@ -11,11 +9,6 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class LexerTest {
-
-    @BeforeClass
-    public static void before() {
-        ResourceLoader.initialize();
-    }
 
     @Test
     public void testGenerate() {

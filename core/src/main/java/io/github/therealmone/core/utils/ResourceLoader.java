@@ -11,19 +11,12 @@ import java.util.regex.Pattern;
 
 public final class ResourceLoader {
     private static Set<CommandBean> commands;
-    private static boolean loaded = false;
 
-    public synchronized static void initialize() {
-        if(!loaded) {
-            Thread current = Thread.currentThread();
-
-            try {
-                loadCommands(current.getContextClassLoader().getResourceAsStream("commands.xml"));
-            } catch (Throwable e) {
-                throw new RuntimeException(e);
-            }
-
-            loaded = true;
+    static {
+        try {
+            loadCommands(Thread.currentThread().getContextClassLoader().getResourceAsStream("commands.xml"));
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
         }
     }
 

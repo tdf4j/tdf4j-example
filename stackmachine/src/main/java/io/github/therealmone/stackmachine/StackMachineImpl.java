@@ -13,11 +13,6 @@ import io.github.therealmone.core.utils.SavePrinter;
 
 import java.util.*;
 
-
-//TODO (important!!!) Данный вариант стек-машины не очень хорош.
-/*Один из минусов: стек хранит только строки, что не позволяет реализовать некоторый функционал
-Оставляю этот вариант без изменений, но делаю новую стек-машину*/
-
 class StackMachineImpl implements StackMachine {
     private final Caster caster;
     private final Set<CommandBean> commands;
@@ -28,11 +23,12 @@ class StackMachineImpl implements StackMachine {
 
 
     @Override
-    public void visit(Object object) {
-        if (object instanceof List) {
-            calculate((List<String>) object);
-        } else {
-            throw new IllegalArgumentException("Illegal argument: " + object);
+    public void visit(final List<String> rpn) {
+        cursor = 0;
+        stack.clear();
+        variables.clear();
+        while (!rpn.get(cursor).equals("$")) {
+            executions.get(match(rpn.get(cursor))).execute(rpn.get(cursor));
         }
     }
 
@@ -45,12 +41,6 @@ class StackMachineImpl implements StackMachine {
         cursor = 0;
 
         initExecutions();
-    }
-
-    private void calculate(final List<String> rpn) {
-        while (!rpn.get(cursor).equals("$")) {
-            executions.get(match(rpn.get(cursor))).execute(rpn.get(cursor));
-        }
     }
 
     private String match(final String com) {

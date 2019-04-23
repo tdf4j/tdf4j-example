@@ -1,5 +1,5 @@
 package io.github.therealmone.core.interfaces;
 
-public interface Visitor {
-    void visit(Object object);
+public interface Visitor<T> {
+    void visit(T object);
 }
