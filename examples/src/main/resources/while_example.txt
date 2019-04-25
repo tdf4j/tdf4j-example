@@ -1,0 +1,8 @@
+new a = 100;
+new b = 1;
+
+while(b < a) {
+    print(b);
+    b = b + 1;
+}
+$
