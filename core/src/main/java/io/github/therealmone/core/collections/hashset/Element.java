@@ -1,7 +1,5 @@
 package io.github.therealmone.core.collections.hashset;
 
-import io.github.therealmone.core.beans.Node;
-
 class Element extends Node {
     private double value;
     private final int hashCode;

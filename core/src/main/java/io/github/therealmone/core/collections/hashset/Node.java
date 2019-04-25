@@ -1,4 +1,4 @@
-package io.github.therealmone.core.beans;
+package io.github.therealmone.core.collections.hashset;
 
 public class Node {
     private final String name;

@@ -1,6 +1,13 @@
 package io.github.therealmone.jtrAPI;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import io.github.therealmone.jtrAPI.impl.InterpreterImpl;
+import io.github.therealmone.jtrAPI.impl.LexerModuleImpl;
+import io.github.therealmone.jtrAPI.impl.ParserModuleImpl;
+import io.github.therealmone.jtrAPI.impl.StackMachineModuleImpl;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import static org.junit.Assert.*;
@@ -9,9 +16,22 @@ public class InterpreterTest {
     private static Interpreter interpreter;
     private static ByteArrayOutputStream out;
 
+    @BeforeClass
+    public static void beforeClass() {
+        interpreter = Guice.createInjector(new AbstractModule() {
+            @Override
+            protected void configure() {
+                bind(Interpreter.class).to(InterpreterImpl.class);
+                bind(LexerModule.class).to(LexerModuleImpl.class);
+                bind(ParserModule.class).to(ParserModuleImpl.class);
+                bind(StackMachineModule.class).to(StackMachineModuleImpl.class);
+            }
+        }).getInstance(Interpreter.class);
+        out = new ByteArrayOutputStream();
+    }
+
     @Before
-    public void Before() {
-        interpreter = new InterpreterFactory().create();
+    public void before() {
         out = new ByteArrayOutputStream();
     }
 

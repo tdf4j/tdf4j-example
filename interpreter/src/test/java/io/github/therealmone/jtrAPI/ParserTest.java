@@ -1,5 +1,7 @@
 package io.github.therealmone.jtrAPI;
 
+import io.github.therealmone.jtrAPI.impl.LexerModuleImpl;
+import io.github.therealmone.jtrAPI.impl.ParserModuleImpl;
 import io.github.therealmone.jtrAPI.utils.RPNOptimizer;
 import io.github.therealmone.tdf4j.commons.Stream;
 import io.github.therealmone.tdf4j.commons.Token;
@@ -18,8 +20,8 @@ public class ParserTest {
 
     @Test
     public void parserTests() {
-        final Lexer lexer = new LexerFactory().withModule(new LexerModule());
-        final ParserModule parserModule = new ParserModule();
+        final Lexer lexer = new LexerFactory().withModule(new LexerModuleImpl());
+        final ParserModuleImpl parserModule = new ParserModuleImpl();
         final Parser parser = new ParserGenerator().generate(parserModule);
 
         //while tests
@@ -204,38 +206,38 @@ public class ParserTest {
 
     @Test
     public void converterTests() {
-        final Lexer lexer = new LexerFactory().withModule(new LexerModule());
-        final ParserModule parserModule = new ParserModule();
+        final Lexer lexer = new LexerFactory().withModule(new LexerModuleImpl());
+        final ParserModuleImpl parserModule = new ParserModuleImpl();
         final Parser parser = new ParserGenerator().generate(parserModule);
 
         //while tests
         parser.parse(lexer.stream("while(a < b) {a = a + 1;}$"));
-        assertRPN(parserModule.getRpn(), "%a", "%b", "<", "!F@10", "#a", "%a", "1", "+", "=", "!@0", "$");
+        assertRPN(parserModule.getRPN(), "%a", "%b", "<", "!F@10", "#a", "%a", "1", "+", "=", "!@0", "$");
 
         parser.parse(lexer.stream("while(a < b & c > d) {}$"));
-        assertRPN(parserModule.getRpn(), "%a", "%b", "<", "%c", "%d", ">", "&", "!F@9", "!@0", "$");
+        assertRPN(parserModule.getRPN(), "%a", "%b", "<", "%c", "%d", ">", "&", "!F@9", "!@0", "$");
 
         parser.parse(lexer.stream("while(((a < b) & (c > d)) | ((a > c) & (b < d))) {}$"));
-        assertRPN(parserModule.getRpn(), "%a", "%b", "<", "%c", "%d", ">", "&", "%a", "%c", ">", "%b", "%d", "<", "&", "|", "!F@17", "!@0", "$");
+        assertRPN(parserModule.getRPN(), "%a", "%b", "<", "%c", "%d", ">", "&", "%a", "%c", ">", "%b", "%d", "<", "&", "|", "!F@17", "!@0", "$");
 
         parser.parse(lexer.stream("while((a < b) & (c > d) | (a > c) & (b < d)) {}$"));
-        assertRPN(parserModule.getRpn(), "%a", "%b", "<", "%c", "%d", ">", "&", "%a", "%c", ">", "%b", "%d", "<", "&", "|", "!F@17", "!@0", "$");
+        assertRPN(parserModule.getRPN(), "%a", "%b", "<", "%c", "%d", ">", "&", "%a", "%c", ">", "%b", "%d", "<", "&", "|", "!F@17", "!@0", "$");
 
         parser.parse(lexer.stream("while(a < b) {if (a < b) {}}$"));
-        assertRPN(parserModule.getRpn(), "%a", "%b", "<", "!F@10", "%a", "%b", "<", "!F@9", "!@9", "!@0", "$");
+        assertRPN(parserModule.getRPN(), "%a", "%b", "<", "!F@10", "%a", "%b", "<", "!F@9", "!@9", "!@0", "$");
 
         parser.parse(lexer.stream("while(a < b) {do{} while(a < b)}$"));
-        assertRPN(parserModule.getRpn(), "%a", "%b", "<", "!F@9", "%a", "%b", "<", "!T@4", "!@0", "$");
+        assertRPN(parserModule.getRPN(), "%a", "%b", "<", "!F@9", "%a", "%b", "<", "!T@4", "!@0", "$");
 
         parser.parse(lexer.stream("while(a < b) {for(i = 1; i < 100; i = i + 1) {}}$"));
-        assertRPN(parserModule.getRpn(), "%a", "%b", "<", "!F@18", "#i", "1", "=", "%i", "100", "<", "!F@17", "#i", "%i", "1", "+", "=", "!@7", "!@0", "$");
+        assertRPN(parserModule.getRPN(), "%a", "%b", "<", "!F@18", "#i", "1", "=", "%i", "100", "<", "!F@17", "#i", "%i", "1", "+", "=", "!@7", "!@0", "$");
 
         parser.parse(lexer.stream("while(a < b) {new a typeof hashset; new i = 1; put(a, i);}$"));
-        assertRPN(parserModule.getRpn(), "%a", "%b", "<", "!F@16", "#a", "new", "#hashset", "typeof", "#i", "new", "1", "=", "#a", "#i", "put", "!@0", "$");
+        assertRPN(parserModule.getRPN(), "%a", "%b", "<", "!F@16", "#a", "new", "#hashset", "typeof", "#i", "new", "1", "=", "#a", "#i", "put", "!@0", "$");
 
         //for tests
         parser.parse(lexer.stream("for(i = 1; (i < n) & (n > i); i = i + 1) {}$"));
-        assertRPN(parserModule.getRpn(), "#i", "1", "=", "%i", "%n", "<", "%n", "%i", ">", "&", "!F@17", "#i", "%i", "1", "+", "=", "!@3", "$");
+        assertRPN(parserModule.getRPN(), "#i", "1", "=", "%i", "%n", "<", "%n", "%i", ">", "&", "!F@17", "#i", "%i", "1", "+", "=", "!@3", "$");
 
     }
 
@@ -248,22 +250,22 @@ public class ParserTest {
 
     @Test
     public void testOptimizer() {
-        final Lexer lexer = new LexerFactory().withModule(new LexerModule());
-        final ParserModule parserModule = new ParserModule();
+        final Lexer lexer = new LexerFactory().withModule(new LexerModuleImpl());
+        final ParserModuleImpl parserModule = new ParserModuleImpl();
         final Parser parser = new ParserGenerator().generate(parserModule);
         final RPNOptimizer optimizer = new RPNOptimizer();
 
         parser.parse(lexer.stream("print(100 / (25 + 25));$"));
-        assertRPN(optimizer.optimize(parserModule.getRpn()), "2.0", "print", "$");
+        assertRPN(optimizer.optimize(parserModule.getRPN()), "2.0", "print", "$");
 
         parser.parse(lexer.stream("print(1 / (100 * (50 - (1 / 0.16))));$"));
-        assertRPN(optimizer.optimize(parserModule.getRpn()),"2.2857142857142857E-4", "print", "$");
+        assertRPN(optimizer.optimize(parserModule.getRPN()),"2.2857142857142857E-4", "print", "$");
 
         parser.parse(lexer.stream("print(100 / (25 + 25 - a));$"));
-        assertRPN(optimizer.optimize(parserModule.getRpn()), "100", "50.0", "%a", "-", "/", "print", "$");
+        assertRPN(optimizer.optimize(parserModule.getRPN()), "100", "50.0", "%a", "-", "/", "print", "$");
 
         parser.parse(lexer.stream("print(1 / (100 * (50 - (1 / 0.16 - a))));$"));
-        assertRPN(optimizer.optimize(parserModule.getRpn()), "1", "100", "50", "6.25", "%a", "-", "-", "*", "/", "print", "$");
+        assertRPN(optimizer.optimize(parserModule.getRPN()), "1", "100", "50", "6.25", "%a", "-", "-", "*", "/", "print", "$");
     }
 
 

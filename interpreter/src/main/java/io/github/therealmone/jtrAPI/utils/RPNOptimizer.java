@@ -2,9 +2,7 @@ package io.github.therealmone.jtrAPI.utils;
 
 import io.github.therealmone.core.utils.Caster;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 //Есть смысл оптимизировать только математические операции, так как все остальные всегда требуют ссылку на переменную
 public final class RPNOptimizer {
@@ -14,14 +12,7 @@ public final class RPNOptimizer {
 
     public RPNOptimizer() {
         caster = new Caster();
-        operatorsToOptimize = new ArrayList<>() {{
-            add("*");
-            add("/");
-            add("-");
-            add("+");
-            add("div");
-            add("mod");
-        }};
+        operatorsToOptimize = List.of("*", "/", "-", "+", "div", "mod");
     }
 
     public List<String> optimize(final List<String> rpn) {

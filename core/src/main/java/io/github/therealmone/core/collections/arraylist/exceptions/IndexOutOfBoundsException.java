@@ -1,6 +1,6 @@
 package io.github.therealmone.core.collections.arraylist.exceptions;
 
-import io.github.therealmone.core.interfaces.IException;
+import io.github.therealmone.core.IException;
 import io.github.therealmone.core.utils.SavePrinter;
 
 public class IndexOutOfBoundsException extends ArrayListException implements IException {

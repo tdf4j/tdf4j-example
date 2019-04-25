@@ -1,11 +1,12 @@
 package io.github.therealmone.jtrAPI.impl;
 
 import io.github.therealmone.core.exceptions.TranslatorException;
-import io.github.therealmone.core.interfaces.IException;
+import io.github.therealmone.core.IException;
 import io.github.therealmone.core.utils.SavePrinter;
 import io.github.therealmone.jtrAPI.Interpreter;
 import io.github.therealmone.jtrAPI.LexerModule;
 import io.github.therealmone.jtrAPI.ParserModule;
+import io.github.therealmone.jtrAPI.StackMachineModule;
 import io.github.therealmone.jtrAPI.utils.RPNOptimizer;
 import io.github.therealmone.stackmachine.StackMachine;
 import io.github.therealmone.tdf4j.commons.Stream;
@@ -21,6 +22,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 import java.io.OutputStream;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -33,11 +35,16 @@ public class InterpreterImpl implements Interpreter {
     private final StackMachine stackMachine;
     private final RPNOptimizer optimizer;
 
-    public InterpreterImpl(final LexerModule lexer, final ParserModule parser) {
+    @Inject
+    public InterpreterImpl(
+            final LexerModule lexer,
+            final ParserModule parser,
+            final StackMachineModule stackMachine
+    ) {
         this.lexer = new LexerFactory().withModule(lexer);
         this.parser = new ParserGenerator().generate(parser);
         this.module = parser;
-        this.stackMachine = StackMachine.getInstance();
+        this.stackMachine = StackMachine.newInstance(stackMachine);
         this.optimizer = new RPNOptimizer();
         log.debug("Parser : \n{}", this.parser.meta().sourceCode());
     }
@@ -50,8 +57,8 @@ public class InterpreterImpl implements Interpreter {
             final StreamDecorator<Token> stream = new StreamDecorator<>(lexer.stream(program));
             final AST ast = parser.parse(stream);
             log.debug("AST : \n{}", ast);
-            log.debug("RPN : \n{}", module.getRpn());
-            stackMachine.visit(optimizer.optimize(module.getRpn()));
+            log.debug("RPN : \n{}", module.getRPN());
+            stackMachine.process(optimizer.optimize(module.getRPN()));
         } catch (TranslatorException | UnexpectedTokenException | UnexpectedSymbolException e) {
             if (e instanceof IException) {
                 ((IException) e).message();
