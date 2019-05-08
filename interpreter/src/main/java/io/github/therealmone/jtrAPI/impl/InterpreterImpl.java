@@ -11,9 +11,9 @@ import io.github.therealmone.jtrAPI.utils.RPNOptimizer;
 import io.github.therealmone.stackmachine.StackMachine;
 import io.github.therealmone.tdf4j.commons.Stream;
 import io.github.therealmone.tdf4j.commons.Token;
-import io.github.therealmone.tdf4j.generator.impl.ParserGenerator;
+import io.github.therealmone.tdf4j.generator.impl.LexerGeneratorImpl;
+import io.github.therealmone.tdf4j.generator.impl.ParserGeneratorImpl;
 import io.github.therealmone.tdf4j.lexer.Lexer;
-import io.github.therealmone.tdf4j.lexer.LexerFactory;
 import io.github.therealmone.tdf4j.lexer.UnexpectedSymbolException;
 import io.github.therealmone.tdf4j.parser.Parser;
 import io.github.therealmone.tdf4j.parser.UnexpectedTokenException;
@@ -41,8 +41,8 @@ public class InterpreterImpl implements Interpreter {
             final ParserModule parser,
             final StackMachineModule stackMachine
     ) {
-        this.lexer = new LexerFactory().withModule(lexer);
-        this.parser = new ParserGenerator().generate(parser);
+        this.lexer = new LexerGeneratorImpl().generate(lexer);
+        this.parser = new ParserGeneratorImpl().generate(parser);
         this.module = parser;
         this.stackMachine = StackMachine.newInstance(stackMachine);
         this.optimizer = new RPNOptimizer();
