@@ -2,7 +2,7 @@ package io.github.therealmone.jtrAPI;
 
 import io.github.therealmone.jtrAPI.impl.LexerModuleImpl;
 import io.github.therealmone.tdf4j.commons.Token;
-import io.github.therealmone.tdf4j.generator.impl.LexerGeneratorImpl;
+import io.github.therealmone.tdf4j.generator.LexerGenerator;
 import org.junit.Test;
 
 import java.util.List;
@@ -13,7 +13,7 @@ public class LexerTest {
 
     @Test
     public void testGenerate() {
-        io.github.therealmone.tdf4j.lexer.Lexer lexer = new LexerGeneratorImpl().generate(new LexerModuleImpl());
+        io.github.therealmone.tdf4j.lexer.Lexer lexer = LexerGenerator.newInstance().generate(new LexerModuleImpl());
 
         //Success tests
         {

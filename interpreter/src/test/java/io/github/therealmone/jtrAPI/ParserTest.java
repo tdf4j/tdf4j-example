@@ -5,8 +5,8 @@ import io.github.therealmone.jtrAPI.impl.ParserModuleImpl;
 import io.github.therealmone.jtrAPI.utils.RPNOptimizer;
 import io.github.therealmone.tdf4j.commons.Stream;
 import io.github.therealmone.tdf4j.commons.Token;
-import io.github.therealmone.tdf4j.generator.impl.LexerGeneratorImpl;
-import io.github.therealmone.tdf4j.generator.impl.ParserGeneratorImpl;
+import io.github.therealmone.tdf4j.generator.LexerGenerator;
+import io.github.therealmone.tdf4j.generator.ParserGenerator;
 import io.github.therealmone.tdf4j.lexer.Lexer;
 import io.github.therealmone.tdf4j.parser.Parser;
 import org.junit.Test;
@@ -20,9 +20,9 @@ public class ParserTest {
 
     @Test
     public void parserTests() {
-        final Lexer lexer = new LexerGeneratorImpl().generate(new LexerModuleImpl());
+        final Lexer lexer = LexerGenerator.newInstance().generate(new LexerModuleImpl());
         final ParserModuleImpl parserModule = new ParserModuleImpl();
-        final Parser parser = new ParserGeneratorImpl().generate(parserModule);
+        final Parser parser = ParserGenerator.newInstance().generate(parserModule);
 
         //while tests
         {
@@ -206,9 +206,9 @@ public class ParserTest {
 
     @Test
     public void converterTests() {
-        final Lexer lexer = new LexerGeneratorImpl().generate(new LexerModuleImpl());
+        final Lexer lexer = LexerGenerator.newInstance().generate(new LexerModuleImpl());
         final ParserModuleImpl parserModule = new ParserModuleImpl();
-        final Parser parser = new ParserGeneratorImpl().generate(parserModule);
+        final Parser parser = ParserGenerator.newInstance().generate(parserModule);
 
         //while tests
         parser.parse(lexer.stream("while(a < b) {a = a + 1;}$"));
@@ -250,9 +250,9 @@ public class ParserTest {
 
     @Test
     public void testOptimizer() {
-        final Lexer lexer = new LexerGeneratorImpl().generate(new LexerModuleImpl());
+        final Lexer lexer = LexerGenerator.newInstance().generate(new LexerModuleImpl());
         final ParserModuleImpl parserModule = new ParserModuleImpl();
-        final Parser parser = new ParserGeneratorImpl().generate(parserModule);
+        final Parser parser = ParserGenerator.newInstance().generate(parserModule);
         final RPNOptimizer optimizer = new RPNOptimizer();
 
         parser.parse(lexer.stream("print(100 / (25 + 25));$"));
