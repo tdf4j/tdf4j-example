@@ -3,9 +3,6 @@ package io.github.therealmone.jtrAPI;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import io.github.therealmone.jtrAPI.impl.InterpreterImpl;
-import io.github.therealmone.jtrAPI.impl.LexerModuleImpl;
-import io.github.therealmone.jtrAPI.impl.ParserModuleImpl;
-import io.github.therealmone.jtrAPI.impl.StackMachineModuleImpl;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -22,9 +19,6 @@ public class InterpreterTest {
             @Override
             protected void configure() {
                 bind(Interpreter.class).to(InterpreterImpl.class);
-                bind(LexerModule.class).to(LexerModuleImpl.class);
-                bind(ParserModule.class).to(ParserModuleImpl.class);
-                bind(StackMachineModule.class).to(StackMachineModuleImpl.class);
             }
         }).getInstance(Interpreter.class);
         out = new ByteArrayOutputStream();

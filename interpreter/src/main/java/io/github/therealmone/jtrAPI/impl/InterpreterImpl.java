@@ -3,19 +3,15 @@ package io.github.therealmone.jtrAPI.impl;
 import io.github.therealmone.core.exceptions.TranslatorException;
 import io.github.therealmone.core.IException;
 import io.github.therealmone.core.utils.SavePrinter;
-import io.github.therealmone.jtrAPI.Interpreter;
-import io.github.therealmone.jtrAPI.LexerModule;
-import io.github.therealmone.jtrAPI.ParserModule;
-import io.github.therealmone.jtrAPI.StackMachineModule;
+import io.github.therealmone.jtrAPI.*;
 import io.github.therealmone.jtrAPI.utils.RPNOptimizer;
 import io.github.therealmone.stackmachine.StackMachine;
 import io.github.therealmone.tdf4j.commons.Stream;
 import io.github.therealmone.tdf4j.commons.Token;
-import io.github.therealmone.tdf4j.generator.impl.ParserGenerator;
+import io.github.therealmone.tdf4j.generator.LexerGenerator;
+import io.github.therealmone.tdf4j.generator.ParserGenerator;
 import io.github.therealmone.tdf4j.lexer.Lexer;
-import io.github.therealmone.tdf4j.lexer.LexerFactory;
 import io.github.therealmone.tdf4j.lexer.UnexpectedSymbolException;
-import io.github.therealmone.tdf4j.parser.Parser;
 import io.github.therealmone.tdf4j.parser.UnexpectedTokenException;
 import io.github.therealmone.tdf4j.parser.model.ast.AST;
 import org.apache.logging.log4j.LogManager;
@@ -31,7 +27,6 @@ public class InterpreterImpl implements Interpreter {
     private final static Logger log = LogManager.getLogger(InterpreterImpl.class);
     private final Lexer lexer;
     private final Parser parser;
-    private final ParserModule module;
     private final StackMachine stackMachine;
     private final RPNOptimizer optimizer;
 
@@ -41,9 +36,8 @@ public class InterpreterImpl implements Interpreter {
             final ParserModule parser,
             final StackMachineModule stackMachine
     ) {
-        this.lexer = new LexerFactory().withModule(lexer);
-        this.parser = new ParserGenerator().generate(parser);
-        this.module = parser;
+        this.lexer = LexerGenerator.newInstance().generate(lexer);
+        this.parser = ParserGenerator.newInstance().generate(parser, Parser.class);
         this.stackMachine = StackMachine.newInstance(stackMachine);
         this.optimizer = new RPNOptimizer();
         log.debug("Parser : \n{}", this.parser.meta().sourceCode());
@@ -57,8 +51,8 @@ public class InterpreterImpl implements Interpreter {
             final StreamDecorator<Token> stream = new StreamDecorator<>(lexer.stream(program));
             final AST ast = parser.parse(stream);
             log.debug("AST : \n{}", ast);
-            log.debug("RPN : \n{}", module.getRPN());
-            stackMachine.process(optimizer.optimize(module.getRPN()));
+            log.debug("RPN : \n{}", parser.getRPN());
+            stackMachine.process(optimizer.optimize(parser.getRPN()));
         } catch (TranslatorException | UnexpectedTokenException | UnexpectedSymbolException e) {
             if (e instanceof IException) {
                 ((IException) e).message();
