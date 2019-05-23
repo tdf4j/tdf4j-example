@@ -1,6 +1,6 @@
 package io.github.therealmone.jtrAPI;
 
-import io.github.therealmone.tdf4j.lexer.config.AbstractLexerModule;
+import io.github.therealmone.tdf4j.module.lexer.AbstractLexerModule;
 
 public class LexerModule extends AbstractLexerModule {
     @Override

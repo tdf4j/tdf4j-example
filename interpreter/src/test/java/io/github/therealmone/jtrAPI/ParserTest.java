@@ -2,7 +2,7 @@ package io.github.therealmone.jtrAPI;
 
 import io.github.therealmone.jtrAPI.utils.RPNOptimizer;
 import io.github.therealmone.tdf4j.commons.Stream;
-import io.github.therealmone.tdf4j.commons.Token;
+import io.github.therealmone.tdf4j.model.Token;
 import io.github.therealmone.tdf4j.generator.LexerGenerator;
 import io.github.therealmone.tdf4j.generator.ParserGenerator;
 import io.github.therealmone.tdf4j.lexer.Lexer;

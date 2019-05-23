@@ -1,6 +1,6 @@
 package io.github.therealmone.jtrAPI;
 
-import io.github.therealmone.tdf4j.commons.Token;
+import io.github.therealmone.tdf4j.model.Token;
 import io.github.therealmone.tdf4j.generator.LexerGenerator;
 import org.junit.Test;
 

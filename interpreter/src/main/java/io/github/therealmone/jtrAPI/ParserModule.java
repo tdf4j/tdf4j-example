@@ -1,6 +1,6 @@
 package io.github.therealmone.jtrAPI;
 
-import io.github.therealmone.tdf4j.parser.config.AbstractParserModule;
+import io.github.therealmone.tdf4j.module.parser.AbstractParserModule;
 
 import java.util.*;
 
@@ -213,9 +213,9 @@ public class ParserModule extends AbstractParserModule {
                         ),
                         optional(nt("else_stmt")),
                         inline(
-                                "if(ast.moveCursor(AST.Movement.TO_LAST_ADDED_NODE).onCursor().asNode().tag().equals(\"else_stmt\")) {\n" +
+                                "if(ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_NODE).onCursor().asNode().tag().equals(\"else_stmt\")) {\n" +
                                         "   index2 = rpn.size();\n" +
-                                        "   ast.moveCursor(AST.Movement.TO_PARENT);\n" +
+                                        "   ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n" +
                                         "}\n" +
                                         "rpn.set(rpn.indexOf(\"!F@p\" + iteration), \"!F@\" + index1);\n" +
                                         "rpn.set(rpn.indexOf(\"!@p\" + iteration), \"!@\" + index2);\n"
@@ -234,13 +234,13 @@ public class ParserModule extends AbstractParserModule {
                 .is(
                         t("VAR"),
                         inline(
-                                "rpn.add(\"#\" + ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                "rpn.add(\"#\" + ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                         ),
                         t("ASSIGN_OP"),
                         inline(
-                                "stack.push(ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                "stack.push(ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                         ),
                         nt("value_expr"),
                         nt("del")
@@ -250,13 +250,13 @@ public class ParserModule extends AbstractParserModule {
                 .is(
                         t("VAR"),
                         inline(
-                                "rpn.add(\"#\" + ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                "rpn.add(\"#\" + ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                         ),
                         t("ASSIGN_OP"),
                         inline(
-                                "stack.push(ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                "stack.push(ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                         ),
                         nt("value_expr")
                 );
@@ -292,8 +292,8 @@ public class ParserModule extends AbstractParserModule {
                 .is(
                         t("PRINT"),
                         inline(
-                                "pushOP(ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                "pushOP(ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                         ),
                         t("LB"),
                         nt("print_parameters"),
@@ -307,8 +307,8 @@ public class ParserModule extends AbstractParserModule {
                         repeat(
                                 t("CONCAT"),
                                 inline(
-                                        "pushOP(ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                                "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                        "pushOP(ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                                "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                                 ),
                                 nt("print_parameters")
                         )
@@ -318,22 +318,22 @@ public class ParserModule extends AbstractParserModule {
                 .is(
                         t("PUT"),
                         inline(
-                                "pushOP(ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                "pushOP(ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                         ),
                         t("LB"),
                         t("VAR"),
                         inline(
-                                "rpn.add(\"#\" + ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                "rpn.add(\"#\" + ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                         ),
                         t("COMMA"),
                         or(
                                 group(
                                         t("VAR"),
                                         inline(
-                                                "rpn.add(\"#\" + ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                                "rpn.add(\"#\" + ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                                         )
                                 ),
                                 nt("value")
@@ -346,22 +346,22 @@ public class ParserModule extends AbstractParserModule {
                 .is(
                         t("REMOVE"),
                         inline(
-                                "pushOP(ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                "pushOP(ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                         ),
                         t("LB"),
                         t("VAR"),
                         inline(
-                                "rpn.add(\"#\" + ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                "rpn.add(\"#\" + ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                         ),
                         t("COMMA"),
                         or(
                                 group(
                                         t("VAR"),
                                         inline(
-                                                "rpn.add(\"#\" + ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                                "rpn.add(\"#\" + ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                                         )
                                 ),
                                 nt("value")
@@ -374,22 +374,22 @@ public class ParserModule extends AbstractParserModule {
                 .is(
                         t("REWRITE"),
                         inline(
-                                "pushOP(ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                "pushOP(ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                         ),
                         t("LB"),
                         t("VAR"),
                         inline(
-                                "rpn.add(\"#\" + ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                "rpn.add(\"#\" + ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                         ),
                         t("COMMA"),
                         or(
                                 group(
                                         t("VAR"),
                                         inline(
-                                                "rpn.add(\"#\" + ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                                "rpn.add(\"#\" + ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                                         )
                                 ),
                                 nt("value")
@@ -404,13 +404,13 @@ public class ParserModule extends AbstractParserModule {
                 .is(
                         t("NEW"),
                         inline(
-                                "pushOP(ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                "pushOP(ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                         ),
                         t("VAR"),
                         inline(
-                                "rpn.add(\"#\" + ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                "rpn.add(\"#\" + ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                         ),
                         optional(nt("inst_expr")),
                         nt("del")
@@ -422,16 +422,16 @@ public class ParserModule extends AbstractParserModule {
                                 group(
                                         t("ASSIGN_OP"),
                                         inline(
-                                                "pushOP(ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                                "pushOP(ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                                         ),
                                         nt("value_expr")
                                 ),
                                 group(
                                         t("TYPEOF"),
                                         inline(
-                                                "pushOP(ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                                "pushOP(ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                                         ),
                                         nt("type")
                                 )
@@ -445,8 +445,8 @@ public class ParserModule extends AbstractParserModule {
                                 t("HASHSET")
                         )
                         ,inline(
-                                "rpn.add(\"#\" + ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                "rpn.add(\"#\" + ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                         )
                 );
 
@@ -456,14 +456,14 @@ public class ParserModule extends AbstractParserModule {
                                 group(
                                         t("LB"),
                                         inline(
-                                                "pushOP(ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                                "pushOP(ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                                         ),
                                         nt("condition"),
                                         t("RB"),
                                         inline(
-                                                "pushOP(ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                                "pushOP(ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                                         )
                                 ),
                                 nt("compare_expr")
@@ -471,8 +471,8 @@ public class ParserModule extends AbstractParserModule {
                         repeat(
                                 t("LOP"),
                                 inline(
-                                        "pushOP(ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                                "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                        "pushOP(ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                                "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                                 ),
                                 nt("condition")
                         )
@@ -483,8 +483,8 @@ public class ParserModule extends AbstractParserModule {
                         nt("value_expr"),
                         t("COP"),
                         inline(
-                                "pushOP(ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                "pushOP(ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                         ),
                         nt("value_expr")
                 );
@@ -495,14 +495,14 @@ public class ParserModule extends AbstractParserModule {
                                 group(
                                         t("LB"),
                                         inline(
-                                                "pushOP(ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                                "pushOP(ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                                         ),
                                         nt("value_expr"),
                                         t("RB"),
                                         inline(
-                                                "pushOP(ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                                "pushOP(ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                                         )
                                 ),
                                 nt("value_expr_1")
@@ -510,8 +510,8 @@ public class ParserModule extends AbstractParserModule {
                         repeat(
                                 t("OP"),
                                 inline(
-                                        "pushOP(ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                                "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                        "pushOP(ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                                "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                                 ),
                                 nt("value_expr")
                         )
@@ -523,8 +523,8 @@ public class ParserModule extends AbstractParserModule {
                                 group(
                                         t("VAR"),
                                         inline(
-                                                "rpn.add(\"%\" + ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                                "rpn.add(\"%\" + ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                                         )
                                 ),
                                 nt("value"),
@@ -534,8 +534,8 @@ public class ParserModule extends AbstractParserModule {
                         repeat(
                                 t("OP"),
                                 inline(
-                                        "pushOP(ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                                "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                        "pushOP(ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                                "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                                 ),
                                 nt("value_expr")
                         )
@@ -549,8 +549,8 @@ public class ParserModule extends AbstractParserModule {
                                 t("STRING")
                         ),
                         inline(
-                                "rpn.add(ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                "rpn.add(ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                         )
                 );
 
@@ -558,22 +558,22 @@ public class ParserModule extends AbstractParserModule {
                 .is(
                         t("GET"),
                         inline(
-                                "pushOP(ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                "pushOP(ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                         ),
                         t("LB"),
                         t("VAR"),
                         inline(
-                                "rpn.add(\"#\" + ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                "rpn.add(\"#\" + ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                         ),
                         t("COMMA"),
                         or(
                                 group(
                                         t("VAR"),
                                         inline(
-                                                "rpn.add(\"#\" + ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                                "rpn.add(\"#\" + ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                                         )
                                 ),
                                 nt("value")
@@ -585,14 +585,14 @@ public class ParserModule extends AbstractParserModule {
                 .is(
                         t("SIZE"),
                         inline(
-                                "pushOP(ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                "pushOP(ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                         ),
                         t("LB"),
                         t("VAR"),
                         inline(
-                                "rpn.add(\"#\" + ast.moveCursor(AST.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
-                                        "ast.moveCursor(AST.Movement.TO_PARENT);\n"
+                                "rpn.add(\"#\" + ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value());\n" +
+                                        "ast.moveCursor(ASTCursor.Movement.TO_PARENT);\n"
                         ),
                         t("RB")
                 );

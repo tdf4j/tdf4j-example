@@ -7,13 +7,13 @@ import io.github.therealmone.jtrAPI.*;
 import io.github.therealmone.jtrAPI.utils.RPNOptimizer;
 import io.github.therealmone.stackmachine.StackMachine;
 import io.github.therealmone.tdf4j.commons.Stream;
-import io.github.therealmone.tdf4j.commons.Token;
+import io.github.therealmone.tdf4j.model.Token;
 import io.github.therealmone.tdf4j.generator.LexerGenerator;
 import io.github.therealmone.tdf4j.generator.ParserGenerator;
 import io.github.therealmone.tdf4j.lexer.Lexer;
 import io.github.therealmone.tdf4j.lexer.UnexpectedSymbolException;
 import io.github.therealmone.tdf4j.parser.UnexpectedTokenException;
-import io.github.therealmone.tdf4j.parser.model.ast.AST;
+import io.github.therealmone.tdf4j.model.ast.AST;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
