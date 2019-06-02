@@ -7,18 +7,22 @@ import io.github.therealmone.jtrAPI.*;
 import io.github.therealmone.jtrAPI.utils.RPNOptimizer;
 import io.github.therealmone.stackmachine.StackMachine;
 import io.github.therealmone.tdf4j.commons.Stream;
-import io.github.therealmone.tdf4j.commons.Token;
-import io.github.therealmone.tdf4j.generator.LexerGenerator;
-import io.github.therealmone.tdf4j.generator.ParserGenerator;
+import io.github.therealmone.tdf4j.generator.impl.LexerGenerator;
+import io.github.therealmone.tdf4j.generator.impl.ParserGenerator;
 import io.github.therealmone.tdf4j.lexer.Lexer;
 import io.github.therealmone.tdf4j.lexer.UnexpectedSymbolException;
+import io.github.therealmone.tdf4j.model.Token;
+import io.github.therealmone.tdf4j.model.ast.AST;
 import io.github.therealmone.tdf4j.parser.UnexpectedTokenException;
-import io.github.therealmone.tdf4j.parser.model.ast.AST;
+import io.github.therealmone.tdf4j.tdfparser.TdfParser;
+import io.github.therealmone.tdf4j.tdfparser.TdfParserGenerator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -32,14 +36,14 @@ public class InterpreterImpl implements Interpreter {
 
     @Inject
     public InterpreterImpl(
-            final LexerModule lexer,
-            final ParserModule parser,
+            final InputStream grammar,
             final StackMachineModule stackMachine
-    ) {
-        this.lexer = LexerGenerator.newInstance().generate(lexer);
-        this.parser = ParserGenerator.newInstance().generate(parser, Parser.class);
+    ) throws IOException {
         this.stackMachine = StackMachine.newInstance(stackMachine);
         this.optimizer = new RPNOptimizer();
+        final TdfParser tdfParser = new TdfParserGenerator(grammar).generate();
+        this.lexer = new LexerGenerator(tdfParser.getLexerModule()).generate();
+        this.parser = new ParserGenerator(tdfParser.getParserModule()).generate(Parser.class);
         log.debug("Parser : \n{}", this.parser.meta().sourceCode());
     }
 

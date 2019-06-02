@@ -1,18 +1,34 @@
 package io.github.therealmone.jtrAPI;
 
-import io.github.therealmone.tdf4j.commons.Token;
-import io.github.therealmone.tdf4j.generator.LexerGenerator;
+import io.github.therealmone.tdf4j.generator.impl.LexerGenerator;
+import io.github.therealmone.tdf4j.lexer.Lexer;
+import io.github.therealmone.tdf4j.model.Token;
+import io.github.therealmone.tdf4j.tdfparser.TdfParser;
+import io.github.therealmone.tdf4j.tdfparser.TdfParserGenerator;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
 public class LexerTest {
+    private static TdfParser tdfParser;
+
+    @BeforeClass
+    public static void beforeClass() {
+        try {
+            tdfParser = new TdfParserGenerator(Thread.currentThread().getContextClassLoader().getResourceAsStream("grammar.tdf")).generate();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Test
-    public void testGenerate() {
-        io.github.therealmone.tdf4j.lexer.Lexer lexer = LexerGenerator.newInstance().generate(new LexerModule());
+    public void testGenerate() throws IOException {
+        Lexer lexer = new LexerGenerator(tdfParser.getLexerModule()).generate();
 
         //Success tests
         {

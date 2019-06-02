@@ -1,0 +1,591 @@
+lexis
+
+    VAR
+        "[a-z]+"
+        [priority: 1]
+
+    STRING
+        "\"[^\"]*\""
+        [priority: 1]
+
+    NEW
+        "new"
+        [priority: 2]
+
+    TYPEOF
+        "typeof"
+        [priority: 2]
+
+    HASHSET
+        "hashset"
+        [priority: 2]
+
+    ARRAYLIST
+        "arraylist"
+        [priority: 2]
+
+    GET
+        "get"
+        [priority: 2]
+
+    SIZE
+        "size"
+        [priority: 2]
+
+    PUT
+        "put"
+        [priority: 2]
+
+    REMOVE
+        "remove"
+        [priority: 2]
+
+    REWRITE
+        "rewrite"
+        [priority: 2]
+
+    PRINT
+        "print"
+        [priority: 2]
+
+    COMMA
+        ","
+        [priority: 1]
+
+    CONCAT
+        "\+\+"
+        [priority: 3]
+
+    QUOTE
+        "\""
+        [priority: 1]
+
+    DIGIT
+        "-?(0|([1-9][0-9]*))"
+        [priority: 2]
+
+    DOUBLE
+        "-?((0[.][0-9]*)|([1-9][0-9]*[.][0-9]*))"
+        [priority: 1]
+
+    ASSIGN_OP
+        "="
+        [priority: 1]
+
+    OP
+        "[\+\-\/\*]|(div)|(mod)"
+        [priority: 2]
+
+    DEL
+        ";"
+        [priority: 1]
+
+    WHILE
+        "while"
+        [priority: 2]
+
+    IF
+        "if"
+        [priority: 2]
+
+    ELSE
+        "else"
+        [priority: 2]
+
+    DO
+        "do"
+        [priority: 2]
+
+    FOR
+        "for"
+        [priority: 2]
+
+    LOP
+        "[&\|\^\!]"
+        [priority: 2]
+
+    COP
+        "[<>]|(<=)|(>=)|(==)|(!=)"
+        [priority: 2]
+
+    LB
+        "\("
+        [priority: 1]
+
+    RB
+        "\)"
+        [priority: 1]
+
+    FLB
+        "\{"
+        [priority: 1]
+
+    FRB
+        "\}"
+        [priority: 1]
+
+    EOF
+        "\$"
+        [priority: 1]
+
+    WS
+        "\s|\n|\r"
+        [priority: 1000, hidden: true]
+
+    ONE_LINE_COMMENT
+        "//.*(\n|\r|\r\n|\n\r)"
+        [priority: 1000, hidden: true]
+
+    MULTI_LINE_COMMENT
+        "/\*[^(\*/)]*\*/"
+        [priority: 1000, hidden: true]
+
+env
+
+    code "
+        private final Map<String, Integer> priority = new HashMap<String, Integer>() {{
+            put(\"new\", 10);
+            put(\"get\", 9);
+            put(\"size\", 9);
+            put(\"/\", 8);
+            put(\"*\", 8);
+            put(\"div\", 8);
+            put(\"mod\", 8);
+            put(\"+\", 7);
+            put(\"-\", 7);
+            put(\"<\", 6);
+            put(\">\", 6);
+            put(\"<=\", 6);
+            put(\">=\", 6);
+            put(\"==\", 6);
+            put(\"!\", 5);
+            put(\"&\", 4);
+            put(\"|\", 3);
+            put(\"^\", 3);
+            put(\"(\", 2);
+            put(\")\", 2);
+            put(\"++\", 2);
+            put(\"=\", 1);
+            put(\"typeof\", 1);
+            put(\"put\", 1);
+            put(\"remove\", 1);
+            put(\"rewrite\", 1);
+            put(\"print\", 1);
+        }};
+
+        private final List<String> rpn = new ArrayList<>();
+        private final Stack<String> stack = new Stack<>();
+
+        private void pushOP(final String op) {
+            switch (op) {
+                case \"(\": {
+                    stack.push(op);
+                    break;
+                }
+                case \")\": {
+                    while (!stack.peek().equals(\"(\")) {
+                        rpn.add(stack.pop());
+                    }
+                    stack.pop();
+                    break;
+                }
+                default: {
+                    while (!stack.isEmpty() && ( (int) priority.get(op) <= (int) priority.get(stack.peek()) )) {
+                        rpn.add(stack.pop());
+                    }
+                    stack.push(op);
+                    break;
+                }
+            }
+        }
+
+        @Override
+        public List<String> getRPN() {
+           return this.rpn;
+        }
+
+        private String lastValue(final AST ast) {
+           final String value = ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_LEAF).onCursor().asLeaf().token().value();
+           ast.moveCursor(ASTCursor.Movement.TO_PARENT);
+           return value;
+        }
+
+        private ASTNode lastNode(final AST ast) {
+           final ASTNode lastNode = ast.moveCursor(ASTCursor.Movement.TO_LAST_ADDED_NODE).onCursor().asNode();
+           ast.moveCursor(ASTCursor.Movement.TO_PARENT);
+           return lastNode;
+        }
+    "
+
+syntax
+
+    lang =
+            <"
+                rpn.clear();
+                stack.clear();
+            ">
+        ,   {expr}
+        ,   EOF
+        ,   <"
+                rpn.add(\"$\");
+            ">
+        ;
+
+    expr =
+        |   while_loop
+        |   for_loop
+        |   if_statement
+        |   do_while_loop
+        |   print_expr
+        |   assign_expr
+        |   init_expr
+        |   put_expr
+        |   remove_expr
+        |   rewrite_expr
+        ;
+
+    while_loop =
+            <"
+                int index1 = 0; //at a
+                int index2 = 0; //after !@p
+                int iteration = Thread.getAllStackTraces().hashCode();
+            ">
+        ,   WHILE
+        ,   LB
+        ,   <"
+                if (rpn.size() == 1 && rpn.get(0).equals(\"\")) {
+                    index1 = 0;
+                } else {
+                    index1 = rpn.size();
+                }
+            ">
+        ,   condition
+        ,   RB
+        ,   <"
+                while (stack.size() != 0) {
+                    rpn.add(stack.pop());
+                }
+                rpn.add(\"!F@p\" + iteration);
+            ">
+        ,   FLB
+        ,   {expr}
+        ,   FRB
+        ,   <"
+                rpn.add(\"!@p\" + iteration);
+                index2 = rpn.size();
+                rpn.set(rpn.indexOf(\"!F@p\" + iteration), \"!F@\" + index2);
+                rpn.set(rpn.indexOf(\"!@p\" + iteration), \"!@\" + index1);
+            ">
+        ;
+
+    for_loop =
+            <"
+                int iteration = Thread.getAllStackTraces().hashCode();
+                int index1; //at i
+                int index2; //after !@p
+            ">
+        ,   FOR
+        ,   LB
+        ,   assign_expr_without_del
+        ,   del
+        ,   <"
+                index1 = rpn.size();
+            ">
+        ,   condition
+        ,   del
+        ,   <"
+                rpn.add(\"!F@p\" + iteration);
+                final List<String> rpnCopy = new ArrayList<>(rpn);
+                rpn.clear();
+            ">
+        ,   assign_expr_without_del
+        ,   <"
+                while (stack.size() != 0) {
+                    rpn.add(stack.pop());
+                }
+
+                final List<String> increment = new ArrayList<>(rpn);
+                rpn.clear();
+                rpn.addAll(rpnCopy);
+            ">
+        ,   RB
+        ,   FLB
+        ,   {expr}
+        ,   FRB
+        ,   <"
+                while (stack.size() != 0) {
+                    rpn.add(stack.pop());
+                }
+
+                rpn.addAll(increment);
+
+                rpn.add(\"!@p\" + iteration);
+                index2 = rpn.size();
+                rpn.set(rpn.indexOf(\"!F@p\" + iteration), \"!F@\" + index2);
+                rpn.set(rpn.indexOf(\"!@p\" + iteration), \"!@\" + index1);
+            ">
+        ;
+
+    if_statement =
+            <"
+                int index1 = 0;
+                int index2 = 0;
+                int iteration = Thread.getAllStackTraces().hashCode();
+            ">
+        ,   IF
+        ,   LB
+        ,   condition
+        ,   RB
+        ,   <"
+                while (stack.size() != 0) {
+                    rpn.add(stack.pop());
+                }
+                rpn.add(\"!F@p\" + iteration);
+            ">
+        ,   FLB
+        ,   {expr}
+        ,   FRB
+        ,   <"
+                rpn.add(\"!@p\" + iteration);
+                index1 = rpn.size();
+                index2 = index1;
+            ">
+        ,   [else_stmt]
+        ,   <"
+                if(lastNode(ast).tag().equals(\"else_stmt\")) {
+                   index2 = rpn.size();
+                }
+                rpn.set(rpn.indexOf(\"!F@p\" + iteration), \"!F@\" + index1);
+                rpn.set(rpn.indexOf(\"!@p\" + iteration), \"!@\" + index2);
+            ">
+        ;
+
+    else_stmt =
+            ELSE
+        ,   FLB
+        ,   {expr}
+        ,   FRB
+        ;
+
+    assign_expr =
+            VAR
+        ,   <"
+                rpn.add(\"#\" + lastValue(ast));
+            ">
+        ,   ASSIGN_OP
+        ,   <"
+                stack.push(lastValue(ast));
+            ">
+        ,   value_expr
+        , del
+        ;
+
+    assign_expr_without_del =
+            VAR
+        ,   <"
+                rpn.add(\"#\" + lastValue(ast));
+            ">
+        ,   ASSIGN_OP
+        ,   <"
+                stack.push(lastValue(ast));
+            ">
+        ,   value_expr
+        ;
+
+    do_while_loop =
+            <"
+                int iteration = Thread.getAllStackTraces().hashCode();
+                int index1 = 0;
+            ">
+        ,   DO
+        ,   FLB
+        ,   <"
+                index1 = rpn.size();
+            ">
+        ,   {expr}
+        ,   FRB
+        ,   WHILE
+        ,   LB
+        ,   condition
+        ,   RB
+        ,   <"
+                while (stack.size() != 0) {
+                    rpn.add(stack.pop());
+                }
+                rpn.add(\"!T@p\" + iteration);
+                rpn.set(rpn.indexOf(\"!T@p\" + iteration), \"!T@\" + index1);
+            ">
+        ;
+
+    print_expr =
+            PRINT
+        ,   <"
+                pushOP(lastValue(ast));
+            ">
+        ,   LB
+        ,   print_parameters
+        ,   RB
+        ,   del
+        ;
+
+    print_parameters =
+            value_expr
+        ,   {CONCAT, <"pushOP(lastValue(ast));">, print_parameters}
+        ;
+
+    put_expr =
+            PUT
+        ,   <"
+                pushOP(lastValue(ast));
+            ">
+        ,   LB
+        ,   VAR
+        ,   <"
+                rpn.add(\"#\" + lastValue(ast));
+            ">
+        ,   COMMA
+        ,   | (VAR, <"rpn.add(\"#\" + lastValue(ast));">)
+            | value
+        ,   RB
+        ,   del
+        ;
+
+    remove_expr =
+            REMOVE
+        ,   <"
+                pushOP(lastValue(ast));
+            ">
+        ,   LB
+        ,   VAR
+        ,   <"
+                rpn.add(\"#\" + lastValue(ast));
+            ">
+        ,   COMMA
+        ,   | (VAR, <"rpn.add(\"#\" + lastValue(ast));">)
+            | value
+        ,   RB
+        ,   del
+        ;
+
+    rewrite_expr =
+            REWRITE
+        ,   <"
+                pushOP(lastValue(ast));
+            ">
+        ,   LB
+        ,   VAR
+        ,   <"
+                rpn.add(\"#\" + lastValue(ast));
+            ">
+        ,   COMMA
+        ,   | (VAR, <"rpn.add(\"#\" + lastValue(ast));">)
+            | value
+        ,   COMMA
+        ,   value_expr
+        ,   RB
+        ,   del
+        ;
+
+    init_expr =
+            NEW
+        ,   <"
+                pushOP(lastValue(ast));
+            ">
+        ,   VAR
+        ,   <"
+                rpn.add(\"#\" + lastValue(ast));
+            ">
+        ,   [inst_expr]
+        ,   del
+        ;
+
+    inst_expr =
+        |   (ASSIGN_OP, <"pushOP(lastValue(ast));">, value_expr)
+        |   (TYPEOF, <"pushOP(lastValue(ast));">, type)
+        ;
+
+    type =
+        |   ARRAYLIST
+        |   HASHSET
+        ,   <"
+                rpn.add(\"#\" + lastValue(ast));
+            ">
+        ;
+
+    condition =
+        |   (LB, <"pushOP(lastValue(ast));">, condition, RB, <"pushOP(lastValue(ast));">)
+        |   compare_expr
+        ,   {LOP, <"pushOP(lastValue(ast));">, condition}
+        ;
+
+    compare_expr =
+            value_expr
+        ,   COP
+        ,   <"
+                pushOP(lastValue(ast));
+            ">
+        ,   value_expr
+        ;
+
+    value_expr =
+        |   (LB, <"pushOP(lastValue(ast));">, value_expr, RB, <"pushOP(lastValue(ast));">)
+        |   value_expr_1
+        ,   {OP, <"pushOP(lastValue(ast));">, value_expr}
+        ;
+
+    value_expr_1 =
+        |   (VAR, <"rpn.add(\"%\" + lastValue(ast));">)
+        |   value
+        |   get_expr
+        |   size_expr
+        ,   {OP, <"pushOP(lastValue(ast));">, value_expr}
+        ;
+
+    value =
+        |   DIGIT
+        |   DOUBLE
+        |   STRING
+        ,   <"
+                rpn.add(lastValue(ast));
+            ">
+        ;
+
+    get_expr =
+            GET
+        ,   <"
+                pushOP(lastValue(ast));
+            ">
+        ,   LB
+        ,   VAR
+        ,   <"
+                rpn.add(\"#\" + lastValue(ast));
+            ">
+        ,   COMMA
+        ,   | (VAR, <"rpn.add(\"#\" + lastValue(ast));">)
+            | value
+        ,   RB
+        ;
+
+    size_expr =
+            SIZE
+        ,   <"
+                pushOP(lastValue(ast));
+            ">
+        ,   LB
+        ,   VAR
+        ,   <"
+                rpn.add(\"#\" + lastValue(ast));
+            ">
+        ,   RB
+        ;
+
+    del =
+            DEL
+        ,   <"
+                while (stack.size() != 0) {
+                    rpn.add(stack.pop());
+                }
+            ">
+        ;
+
+$

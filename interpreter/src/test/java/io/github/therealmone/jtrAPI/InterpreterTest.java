@@ -7,6 +7,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+
 import static org.junit.Assert.*;
 
 public class InterpreterTest {
@@ -19,6 +21,7 @@ public class InterpreterTest {
             @Override
             protected void configure() {
                 bind(Interpreter.class).to(InterpreterImpl.class);
+                bind(InputStream.class).toInstance(Thread.currentThread().getContextClassLoader().getResourceAsStream("grammar.tdf"));
             }
         }).getInstance(Interpreter.class);
         out = new ByteArrayOutputStream();
@@ -210,7 +213,7 @@ public class InterpreterTest {
         out.reset();
         interpreter.process("new a = hashset;$", out);
         assertEquals(
-                "Unexpected token: Token{tag=HASHSET, value=hashset}\r\n",
+                "Unexpected token: Token{tag=HASHSET, value=hashset, row=1, column=8}\r\n",
                 out.toString()
         );
 
@@ -218,7 +221,7 @@ public class InterpreterTest {
         out.reset();
         interpreter.process("get(a, 1);$", out);
         assertEquals(
-                "Unexpected token: Token{tag=GET, value=get}\r\n",
+                "Unexpected token: Token{tag=GET, value=get, row=1, column=0}\r\n",
                 out.toString()
         );
 
@@ -226,7 +229,7 @@ public class InterpreterTest {
         out.reset();
         interpreter.process("while(a & b);$", out);
         assertEquals(
-                "Unexpected token: Token{tag=LOP, value=&}\r\n",
+                "Unexpected token: Token{tag=LOP, value=&, row=1, column=8}\r\n",
                 out.toString()
         );
 

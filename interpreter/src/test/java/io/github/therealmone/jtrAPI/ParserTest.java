@@ -2,23 +2,37 @@ package io.github.therealmone.jtrAPI;
 
 import io.github.therealmone.jtrAPI.utils.RPNOptimizer;
 import io.github.therealmone.tdf4j.commons.Stream;
-import io.github.therealmone.tdf4j.commons.Token;
-import io.github.therealmone.tdf4j.generator.LexerGenerator;
-import io.github.therealmone.tdf4j.generator.ParserGenerator;
+import io.github.therealmone.tdf4j.generator.impl.LexerGenerator;
+import io.github.therealmone.tdf4j.generator.impl.ParserGenerator;
 import io.github.therealmone.tdf4j.lexer.Lexer;
+import io.github.therealmone.tdf4j.model.Token;
+import io.github.therealmone.tdf4j.tdfparser.TdfParser;
+import io.github.therealmone.tdf4j.tdfparser.TdfParserGenerator;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 
+import java.io.IOException;
 import java.util.List;
 
 public class ParserTest {
+    private static TdfParser tdfParser;
+
+    @BeforeClass
+    public static void beforeClass() {
+        try {
+            tdfParser = new TdfParserGenerator(Thread.currentThread().getContextClassLoader().getResourceAsStream("grammar.tdf")).generate();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Test
     public void parserTests() {
-        final Lexer lexer = LexerGenerator.newInstance().generate(new LexerModule());
-        final Parser parser = ParserGenerator.newInstance().generate(new ParserModule(), Parser.class);
+        final Lexer lexer = new LexerGenerator(tdfParser.getLexerModule()).generate();
+        final Parser parser = new ParserGenerator(tdfParser.getParserModule()).generate(Parser.class);
 
         //while tests
         {
@@ -202,8 +216,8 @@ public class ParserTest {
 
     @Test
     public void converterTests() {
-        final Lexer lexer = LexerGenerator.newInstance().generate(new LexerModule());
-        final Parser parser = ParserGenerator.newInstance().generate(new ParserModule(), Parser.class);
+        final Lexer lexer = new LexerGenerator(tdfParser.getLexerModule()).generate();
+        final Parser parser = new ParserGenerator(tdfParser.getParserModule()).generate(Parser.class);
 
         //while tests
         parser.parse(lexer.stream("while(a < b) {a = a + 1;}$"));
@@ -245,8 +259,8 @@ public class ParserTest {
 
     @Test
     public void testOptimizer() {
-        final Lexer lexer = LexerGenerator.newInstance().generate(new LexerModule());
-        final Parser parser = ParserGenerator.newInstance().generate(new ParserModule(), Parser.class);
+        final Lexer lexer = new LexerGenerator(tdfParser.getLexerModule()).generate();
+        final Parser parser = new ParserGenerator(tdfParser.getParserModule()).generate(Parser.class);
         final RPNOptimizer optimizer = new RPNOptimizer();
 
         parser.parse(lexer.stream("print(100 / (25 + 25));$"));
